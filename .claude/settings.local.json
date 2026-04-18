@@ -1,0 +1,43 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python:*)",
+      "Bash(curl:*)",
+      "Bash(netstat:*)",
+      "Bash(find:*)",
+      "Bash(redis-server:*)",
+      "Bash(where redis-server:*)",
+      "Bash(winget install:*)",
+      "Bash(cd:*)",
+      "Bash(cat:*)",
+      "Bash(export:*)",
+      "Bash(\"/c/Program Files/Redis/redis-server.exe\")",
+      "Bash(\"/c/Program Files/Redis/redis-cli.exe\" ping)",
+      "Bash(ffmpeg:*)",
+      "Bash(pip show:*)",
+      "Bash(where chromedriver:*)",
+      "Bash(where chrome:*)",
+      "Read(//c/Program Files/Google/Chrome/Application/**)",
+      "Read(//c/Program Files \\(x86\\)/Google/Chrome/Application/**)",
+      "Bash(redis-cli ping:*)",
+      "Bash(TOKEN=\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZXhwIjoxNzc2NDk0Nzc5LCJ0eXBlIjoiYWNjZXNzIn0.DzZalUoNbk0AaXA76Vccn5Qc7u6CJeDTy52qazckXrM\"\n\necho \"=== 1. 测试添加社交账号（无效平台） ===\"\ncurl -s http://localhost:8001/api/v1/social-accounts \\\\\n  -H \"Content-Type: application/json\" \\\\\n  -H \"Authorization: Bearer $TOKEN\" \\\\\n  -d '{\"platform\":\"twitter\",\"account_name\":\"test\",\"auth_data\":{}}'\necho \"\"\n\necho \"\"\necho \"=== 2. 测试添加社交账号（有效平台，无效cookie） ===\"\ncurl -s http://localhost:8001/api/v1/social-accounts \\\\\n  -H \"Content-Type: application/json\" \\\\\n  -H \"Authorization: Bearer $TOKEN\" \\\\\n  -d '{\"platform\":\"bilibili\",\"account_name\":\"test_bili\",\"auth_data\":{\"SESSDATA\":\"fake\"}}'\necho \"\"\n\necho \"\"\necho \"=== 3. 测试列出社交账号 ===\"\ncurl -s http://localhost:8001/api/v1/social-accounts \\\\\n  -H \"Authorization: Bearer $TOKEN\"\necho \"\")",
+      "Bash(pip install:*)",
+      "WebSearch",
+      "Bash(git config:*)",
+      "Bash(gh auth:*)",
+      "Bash(git:*)",
+      "Bash(powershell -Command \"[Environment]::GetEnvironmentVariable\\('Path', 'User'\\)\" | tr ';' '\\\\n' | grep -i redis)",
+      "Bash(powershell -Command \"\\\\$current = [Environment]::GetEnvironmentVariable\\('Path', 'User'\\); [Environment]::SetEnvironmentVariable\\('Path', \\\\$current + ';C:\\\\Program Files\\\\Redis', 'User'\\); echo 'done'\")",
+      "Bash(powershell -Command '$cur = [Environment]::GetEnvironmentVariable\\(\"Path\",\"User\"\\); [Environment]::SetEnvironmentVariable\\(\"Path\", $cur + \";C:\\\\Program Files\\\\Redis\", \"User\"\\); echo \"done\"')",
+      "Bash(TOKEN=\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIzIiwiZXhwIjoxNzc2NTY5NzAyLCJ0eXBlIjoiYWNjZXNzIn0.Z0BFn3E9I19l_zE25LiULUKBSPxzVYaDPzZlEN6RqVQ\" && curl -s -X POST http://localhost:8090/api/v1/kb/analyze-video -H \"Content-Type: application/json\" -H \"Authorization: Bearer $TOKEN\" -d '{\"source_url\":\"https://www.youtube.com/watch?v=test\",\"platform\":\"youtube\"}' 2>&1)",
+      "Bash(taskkill:*)",
+      "Bash(for pid:*)",
+      "Bash(redis-cli config:*)",
+      "Bash(\"/c/Program Files/Redis/redis-cli.exe\" config set stop-writes-on-bgsave-error no 2>&1)",
+      "Bash(tasklist:*)",
+      "Bash(wmic process:*)",
+      "Bash(ls:*)",
+      "Bash(dir:*)"
+    ]
+  }
+}
