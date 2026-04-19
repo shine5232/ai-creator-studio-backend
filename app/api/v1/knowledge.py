@@ -207,6 +207,42 @@ async def get_analysis_status(
     return result
 
 
+@router.post("/cases/{case_id}/reanalyze")
+async def reanalyze_case(
+    case_id: int,
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    """Re-analyze an existing case using its extracted frames."""
+    service = KnowledgeService(db)
+    case = await service.get_case(case_id)
+    if not case:
+        raise HTTPException(status_code=404, detail="Case not found")
+    if not case.frames_dir:
+        raise HTTPException(status_code=400, detail="Case has no extracted frames, cannot reanalyze")
+
+    # Reset status
+    case.analysis_status = "pending"
+    case.analysis_progress = 0
+    await db.commit()
+
+    # Dispatch Celery task
+    from app.worker.tasks.knowledge import reanalyze_video_task
+    celery_result = reanalyze_video_task.delay(case_id=case_id)
+
+    # Save task id
+    case.celery_task_id = celery_result.id
+    await db.commit()
+
+    logger.info(f"Re-analysis task submitted: case={case_id}, task={celery_result.id}")
+
+    return {
+        "case_id": case_id,
+        "task_id": celery_result.id,
+        "status": "pending",
+    }
+
+
 @router.post("/search")
 async def search_knowledge(
     data: SearchKnowledgeRequest,

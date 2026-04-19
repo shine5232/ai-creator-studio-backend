@@ -107,6 +107,111 @@ def analyze_video_task(
         raise
 
 
+@celery_app.task(
+    bind=True,
+    name="app.worker.tasks.knowledge.reanalyze_video_task",
+    soft_time_limit=600,
+    time_limit=900,
+)
+def reanalyze_video_task(
+    self,
+    case_id: int,
+):
+    """Re-analyze a video using existing frames (skip download & frame extraction)."""
+    from app.services.video_analysis_service import VideoAnalysisService
+
+    service = VideoAnalysisService()
+
+    def update_progress(progress: int, message: str = ""):
+        self.update_state(state="PROGRESS", meta={"progress": progress, "message": message})
+        try:
+            with get_sync_session() as session:
+                kb_case = session.get(KBCase, case_id)
+                if kb_case:
+                    kb_case.analysis_progress = progress
+                    session.commit()
+        except Exception as e:
+            logger.error(f"Failed to update progress: {e}")
+
+    try:
+        # Read existing case data
+        with get_sync_session() as session:
+            kb_case = session.get(KBCase, case_id)
+            if not kb_case:
+                raise ValueError(f"KBCase {case_id} not found")
+            if not kb_case.frames_dir:
+                raise ValueError(f"KBCase {case_id} has no frames_dir")
+
+            work_dir = str(Path(kb_case.frames_dir).parent)
+            metadata = {
+                "video_path": kb_case.source_video_path or "",
+                "title": kb_case.title or "",
+                "duration": kb_case.duration_seconds or 0,
+                "uploader": kb_case.uploader or "",
+                "upload_date": kb_case.upload_date or "",
+                "view_count": kb_case.view_count,
+                "like_count": kb_case.like_count,
+                "description": "",
+                "platform": kb_case.platform or "",
+                "work_dir": work_dir,
+            }
+
+        # Run reanalysis (frames only, no download)
+        result = service.reanalyze_video(
+            work_dir,
+            metadata,
+            on_progress=update_progress,
+        )
+
+        # Update KBCase with new results
+        with get_sync_session() as session:
+            kb_case = session.get(KBCase, case_id)
+            if kb_case:
+                report = result["report"]
+
+                kb_case.analysis_report_path = result["report_path"]
+
+                kb_case.theme = report.get("theme")
+                kb_case.narrative_type = report.get("narrative_type")
+                kb_case.narrative_structure = report.get("narrative_structure")
+                kb_case.story_summary = report.get("story_summary")
+                kb_case.emotion_curve = report.get("emotion_curve")
+                kb_case.emotion_triggers = report.get("emotion_triggers")
+                kb_case.visual_style = report.get("visual_style")
+                kb_case.visual_contrast = report.get("visual_contrast")
+                kb_case.viral_elements = _to_json(report.get("viral_elements"))
+                kb_case.visual_symbols = _to_json(report.get("visual_symbols"))
+                kb_case.audience_profile = report.get("audience_profile")
+                kb_case.reusable_elements = _to_json(report.get("reusable_elements"))
+                kb_case.success_factors = _to_json(report.get("success_factors"))
+                kb_case.title_formula = report.get("title_formula")
+                kb_case.characters_ethnicity = report.get("characters_ethnicity")
+
+                kb_case.analysis_status = "completed"
+                kb_case.analysis_progress = 100
+                session.commit()
+
+                # Update elements and frameworks
+                _extract_elements(session, kb_case, report)
+                _extract_framework(session, kb_case, report)
+                session.commit()
+
+        logger.info(f"Re-analysis completed for case {case_id}")
+
+    except Exception as e:
+        logger.error(f"Re-analysis failed for case {case_id}: {e}")
+        try:
+            with get_sync_session() as session:
+                kb_case = session.get(KBCase, case_id)
+                if kb_case:
+                    kb_case.analysis_status = "failed"
+                    kb_case.analysis_report_path = f"ERROR: {e}"
+                    session.commit()
+        except Exception as db_exc:
+            logger.error(f"Failed to update KBCase on failure: {db_exc}")
+        raise
+
+
 def _to_json(value) -> str | None:
     """Convert a list/dict to JSON string for Text columns."""
     if value is None:

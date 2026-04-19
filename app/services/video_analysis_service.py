@@ -114,6 +114,65 @@ class VideoAnalysisService:
             # Clean up partial downloads on failure
             raise
 
+    # ── reanalyze (skip download & frame extraction) ─────────────────────────
+
+    def reanalyze_video(
+        self,
+        work_dir: str,
+        metadata: dict,
+        on_progress: Callable[[int, str], None] | None = None,
+    ) -> dict:
+        """Re-analyze a video using existing frames only (no download/extract).
+
+        Args:
+            work_dir: The work directory containing frames/ subdirectory.
+            metadata: Existing metadata dict with title, duration, etc.
+            on_progress: Progress callback (0-100).
+
+        Returns:
+            Same structure as analyze_video().
+        """
+        on_progress = on_progress or (lambda p, m: None)
+        on_progress(5, "Reading existing frames...")
+
+        frames_dir = Path(work_dir) / "frames"
+        frame_paths = sorted(str(p) for p in frames_dir.glob("frame_*.jpg"))
+        if not frame_paths:
+            raise FileNotFoundError(f"No frame images found in {frames_dir}")
+
+        on_progress(10, f"Found {len(frame_paths)} existing frames")
+
+        # Describe frames with GLM-4.6V-Flash (10% -> 50%)
+        descriptions = self.describe_frames(
+            frame_paths,
+            on_progress=lambda p, m: on_progress(10 + p * 0.4, m),
+        )
+        on_progress(50, "Frame descriptions complete")
+
+        # Structural analysis (50% -> 85%)
+        report = self.analyze_content(metadata, descriptions)
+        on_progress(85, "Structural analysis complete")
+
+        # Save report (both JSON and Markdown)
+        work_path = Path(work_dir)
+        report_path = work_path / "report.json"
+        report_path.write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
+
+        markdown_content = self._generate_markdown_report(metadata, descriptions, report)
+        markdown_path = work_path / "report.md"
+        markdown_path.write_text(markdown_content, encoding="utf-8")
+
+        on_progress(100, "Done")
+
+        return {
+            "metadata": metadata,
+            "frame_paths": frame_paths,
+            "report": report,
+            "work_dir": str(work_path),
+            "report_path": str(report_path),
+            "markdown_path": str(markdown_path),
+        }
+
     # ── download ──────────────────────────────────────────────────────────────
 
     def download_video(self, source_url: str, base_dir: str, platform: str = "") -> dict:
