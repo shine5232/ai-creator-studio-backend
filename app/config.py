@@ -29,6 +29,7 @@ class Settings(BaseSettings):
     GEMINI_API_KEY: str = ""
 
     ZHIPU_API_KEY: str = ""
+    DASHSCOPE_API_KEY: str = ""
 
     # Video defaults
     VIDEO_DEFAULT_WIDTH: int = 1080

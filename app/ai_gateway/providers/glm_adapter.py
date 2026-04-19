@@ -1,6 +1,7 @@
 import asyncio
+import re
 
-from zai import ZhipuAiClient
+from openai import OpenAI
 
 from app.ai_gateway.base import AIRequest, AIResponse, BaseAdapter, ServiceType
 from app.config import settings
@@ -12,17 +13,17 @@ class GLMAdapter(BaseAdapter):
     supported_services = [ServiceType.TEXT_GENERATION]
 
     def __init__(self):
-        self.api_key = settings.ZHIPU_API_KEY
+        self.api_key = settings.DASHSCOPE_API_KEY
 
     async def generate(self, request: AIRequest) -> AIResponse:
         api_key = self.api_key
         if not api_key:
-            return AIResponse(success=False, error="Zhipu API key not configured")
+            return AIResponse(success=False, error="DashScope API key not configured")
 
-        model = request.model or "glm-4-flash"
+        model = request.model or "qwen3.5-plus"
         temperature = request.params.get("temperature", 0.7)
-        max_tokens = request.params.get("max_tokens", 4096)
-        timeout = request.params.get("timeout", 240)
+        max_tokens = request.params.get("max_tokens", 8192)
+        timeout = request.params.get("timeout", 300)
 
         try:
             response = await asyncio.wait_for(
@@ -31,23 +32,29 @@ class GLMAdapter(BaseAdapter):
             )
             return response
         except asyncio.TimeoutError:
-            logger.error(f"GLM timeout after {timeout}s")
+            logger.error(f"Qwen timeout after {timeout}s")
             return AIResponse(success=False, error=f"AI generation timed out after {timeout}s")
         except Exception as e:
-            logger.error(f"GLM error: {e}")
+            logger.error(f"Qwen error: {e}")
             return AIResponse(success=False, error=str(e))
 
     @staticmethod
     def _sync_call(api_key: str, model: str, prompt: str, temperature: float, max_tokens: int) -> AIResponse:
-        client = ZhipuAiClient(api_key=api_key)
+        client = OpenAI(
+            api_key=api_key,
+            base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",
+        )
         messages = [{"role": "user", "content": prompt}]
         response = client.chat.completions.create(
             model=model,
             messages=messages,
             temperature=temperature,
             max_tokens=max_tokens,
+            extra_body={"enable_thinking": False},
         )
-        content = response.choices[0].message.content
+        content = response.choices[0].message.content or ""
+        # Strip thinking tags from Qwen3 reasoning
+        content = re.sub(r'<think\b[^>]*>.*?</think\s*>', '', content, flags=re.DOTALL).strip()
         usage = response.usage
         return AIResponse(
             success=True,
@@ -64,20 +71,13 @@ class GLMAdapter(BaseAdapter):
         )
 
     async def check_task(self, task_id: str) -> AIResponse:
-        # GLM text generation is synchronous
-        return AIResponse(success=False, error="GLM does not support async tasks")
+        return AIResponse(success=False, error="Qwen text generation is synchronous")
 
     def get_models(self) -> list[dict]:
         return [
             {
-                "model_id": "glm-4-flash",
-                "name": "GLM-4 Flash (Fast)",
-                "capabilities": ["text_generation"],
-                "params": {"temperature": {"min": 0, "max": 1, "default": 0.7}},
-            },
-            {
-                "model_id": "glm-4-plus",
-                "name": "GLM-4 Plus (High Quality)",
+                "model_id": "qwen3.5-plus",
+                "name": "Qwen 3.5 Plus (Default)",
                 "capabilities": ["text_generation"],
                 "params": {"temperature": {"min": 0, "max": 1, "default": 0.7}},
             },

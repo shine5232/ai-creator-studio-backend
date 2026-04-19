@@ -4,6 +4,7 @@ from pathlib import Path
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
+from fastapi.staticfiles import StaticFiles
 
 from app.database import init_db
 from app.utils.logger import logger
@@ -114,3 +115,7 @@ app.include_router(knowledge_router, prefix="/api/v1")
 app.include_router(analytics_router, prefix="/api/v1")
 app.include_router(ai_gateway_router, prefix="/api/v1/ai")
 app.include_router(cookies_router, prefix="/api/v1")
+
+# Static files for analysis thumbnails and reports
+Path("data/analysis").mkdir(parents=True, exist_ok=True)
+app.mount("/static/analysis", StaticFiles(directory="data/analysis"), name="analysis_static")

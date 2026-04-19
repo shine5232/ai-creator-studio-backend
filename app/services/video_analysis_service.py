@@ -347,17 +347,23 @@ class VideoAnalysisService:
         logger.info(f"Successfully extracted {len(frame_paths)}/{idx - 1} frames")
         return frame_paths
 
-    # ── GLM-4.6V-Flash frame description ──────────────────────────────────────
+    # ── Qwen 3.5 Plus frame description ──────────────────────────────────────
+
+    @staticmethod
+    def _get_qwen_client():
+        from openai import OpenAI
+        return OpenAI(
+            api_key=settings.DASHSCOPE_API_KEY,
+            base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",
+        )
 
     def describe_frames(
         self,
         frame_paths: list[str],
         on_progress: Callable[[int, str], None] | None = None,
     ) -> list[str]:
-        """Use GLM-4.6V-Flash to describe each frame with retry mechanism."""
-        from zai import ZhipuAiClient
-
-        client = ZhipuAiClient(api_key=settings.ZHIPU_API_KEY)
+        """Use Qwen 3.5 Plus to describe each frame with retry mechanism."""
+        client = self._get_qwen_client()
         descriptions: list[str] = []
         total_frames = len(frame_paths)
         on_progress = on_progress or (lambda p, m: None)
@@ -365,75 +371,57 @@ class VideoAnalysisService:
         for idx, path in enumerate(frame_paths, 1):
             img_b64 = base64.b64encode(Path(path).read_bytes()).decode()
 
-            # Retry loop for each frame
             for attempt in range(FRAME_DESC_MAX_RETRIES):
                 try:
-                    # Add timeout to the client call
-                    import signal
-
-                    def timeout_handler(signum, frame):
-                        raise TimeoutError(f"Request timeout after {FRAME_DESC_TIMEOUT}s")
-
-                    # Use the client with timeout consideration
                     resp = client.chat.completions.create(
-                        model="glm-4.6v-flash",
+                        model="qwen3.5-plus",
                         messages=[
                             {
                                 "role": "user",
                                 "content": [
                                     {
                                         "type": "image_url",
-                                        "image_url": {"url": img_b64},
+                                        "image_url": {"url": f"data:image/jpeg;base64,{img_b64}"},
                                     },
                                     {
                                         "type": "text",
                                         "text": (
-                                            "请详细描述这个视频帧的画面内容，包括：人物外貌和表情、"
-                                            "场景和背景、色调和光影、文字或标志、整体氛围。用中文回答。"
+                                            "请详细描述这个视频帧的画面内容，包括：\n"
+                                            "1. 人物外貌特征（性别、年龄、种族、穿着、配饰、表情、动作姿态）\n"
+                                            "2. 场景环境（室内/室外、具体场所、背景细节）\n"
+                                            "3. 色调和光影（整体色调倾向、光源方向、明暗对比）\n"
+                                            "4. 画面中的文字、标志或特殊视觉元素\n"
+                                            "5. 整体氛围和情绪\n"
+                                            "请用中文详细回答，不少于100字。"
                                         ),
                                     },
                                 ],
                             }
                         ],
                         temperature=0.3,
-                        max_tokens=500,
-                        timeout=FRAME_DESC_TIMEOUT,
+                        max_tokens=800,
+                        extra_body={"enable_thinking": False},
                     )
-                    descriptions.append(resp.choices[0].message.content)
+                    content = resp.choices[0].message.content or ""
+                    # Strip thinking tags from Qwen3 reasoning
+                    content = re.sub(r'<think\b[^>]*>.*?</think\s*>', '', content, flags=re.DOTALL).strip()
+                    descriptions.append(content)
                     logger.info(f"Frame {idx}/{total_frames} described successfully")
 
-                    # Update progress after each frame
                     progress = int((idx / total_frames) * 100)
                     on_progress(progress, f"Analyzing frame {idx}/{total_frames}")
-                    break  # Success, exit retry loop
-
-                except TimeoutError as e:
-                    logger.warning(f"Frame {idx} timeout on attempt {attempt + 1}/{FRAME_DESC_MAX_RETRIES}: {e}")
-                    if attempt < FRAME_DESC_MAX_RETRIES - 1:
-                        time.sleep(FRAME_DESC_RETRY_DELAY * (attempt + 1))  # Exponential backoff
-                    else:
-                        error_msg = f"[描述超时: {e}]"
-                        descriptions.append(error_msg)
-                        logger.error(f"Frame {idx} failed after {FRAME_DESC_MAX_RETRIES} retries: timeout")
-
-                        # Still update progress even on failure
-                        progress = int((idx / total_frames) * 100)
-                        on_progress(progress, f"Frame {idx}/{total_frames} timed out")
+                    break
 
                 except Exception as e:
                     logger.warning(f"Frame {idx} failed on attempt {attempt + 1}/{FRAME_DESC_MAX_RETRIES}: {e}")
                     if attempt < FRAME_DESC_MAX_RETRIES - 1:
-                        time.sleep(FRAME_DESC_RETRY_DELAY * (attempt + 1))  # Exponential backoff
+                        time.sleep(FRAME_DESC_RETRY_DELAY * (attempt + 1))
                     else:
-                        error_msg = f"[描述失败: {e}]"
-                        descriptions.append(error_msg)
+                        descriptions.append(f"[描述失败: {e}]")
                         logger.error(f"Frame {idx} failed after {FRAME_DESC_MAX_RETRIES} retries: {e}")
-
-                        # Still update progress even on failure
                         progress = int((idx / total_frames) * 100)
                         on_progress(progress, f"Frame {idx}/{total_frames} failed")
 
-        # Log summary
         success_count = sum(1 for d in descriptions if not d.startswith("["))
         logger.info(f"Frame description complete: {success_count}/{total_frames} successful")
 
@@ -442,10 +430,8 @@ class VideoAnalysisService:
     # ── structural analysis ───────────────────────────────────────────────────
 
     def analyze_content(self, metadata: dict, frame_descriptions: list[str]) -> dict:
-        """Use GLM-4-Flash to produce structured analysis JSON with retry mechanism."""
-        from zai import ZhipuAiClient
-
-        client = ZhipuAiClient(api_key=settings.ZHIPU_API_KEY)
+        """Use Qwen 3.5 Plus to produce structured analysis JSON with retry mechanism."""
+        client = self._get_qwen_client()
 
         meta_text = (
             f"标题: {metadata['title']}\n"
@@ -474,54 +460,50 @@ class VideoAnalysisService:
             '  "emotion_triggers": "情感触发点分析，包括：哭点是什么、燃点是什么、爽点是什么（标注核心情感）",\n'
             '  "story_summary": "用800-1200字详细描述整个视频的故事情节，按时间线逐段描述：开头场景的环境氛围、人物状态；情节发展中的关键动作和转折点；高潮部分的视觉冲击和情感释放；结局的呈现方式和整体感受",\n'
             '  "visual_style": "视觉风格分析，包括：整体色调（如灰暗vs明亮）、光影特点、画面质感",\n'
-            '  "visual_contrast": "视觉对比分析，包括：场景对比（贫困场景vs富裕场景）、色彩对比（前期色调vs后期色调）、服饰对比、人物状态对比",\n'
-            '  "visual_symbols": "视觉符号列表，每个符号要说明其象征意义，如：钻石=命运转折、雨中棚屋=贫困困境、豪宅=成功标志等",\n'
+            '  "visual_contrast": "视觉对比分析，包括：场景对比、色彩对比、服饰对比、人物状态对比",\n'
+            '  "visual_symbols": [{"symbol": "符号名称", "meaning": "象征意义"}],\n'
             '  "audience_profile": "受众画像分析，包括：核心受众是谁、次要受众是谁、他们的情感需求是什么",\n'
             '  "viral_elements": {\n'
-            '    "topic_layer": ["话题层爆点：争议性话题、共鸣性话题、好奇心驱动、悬念标题要素等"],\n'
-            '    "emotion_layer": ["情感层爆点：强烈情感反差、逆袭爽感、正能量结局、情感释放等"],\n'
-            '    "execution_layer": ["执行层亮点：视觉对比极致、节奏紧凑、核心符号突出、无废话叙事等"]\n'
+            '    "topic_layer": ["话题层爆点"],\n'
+            '    "emotion_layer": ["情感层爆点"],\n'
+            '    "execution_layer": ["执行层亮点"]\n'
             '  },\n'
             '  "reusable_elements": {\n'
-            '    "narrative_template": "可复用的叙事模板，如：贫困环境铺垫→辛苦付出探索→发现宝物转折→富裕幸福结局",\n'
-            '    "visual_template": "可复用的视觉模板，如：灰暗场景+劳动画面+宝物特写+明亮场景",\n'
-            '    "title_formula": "标题公式/套路总结，如：{物品}彻底改写了{角色}的命运！"\n'
+            '    "narrative_template": "可复用的叙事模板",\n'
+            '    "visual_template": "可复用的视觉模板",\n'
+            '    "title_formula": "标题公式/套路总结"\n'
             '  },\n'
-            '  "success_factors": ["成功因素1：强对比叙事制造爽感", "成功因素2：普世价值观励志内核", "成功因素3：紧凑节奏52秒完成叙事", "成功因素4：悬念标题吸引点击", "成功因素5：异域风情增加传播性"],\n'
-            '  "title_formula": "标题公式总结，分析标题的套路模式",\n'
-            '  "characters_ethnicity": "人物外貌、种族、地域特征描述"\n'
+            '  "success_factors": ["成功因素1", "成功因素2", "..."],\n'
+            '  "title_formula": "标题公式总结",\n'
+            '  "characters_ethnicity": "详细描述人物外貌、种族、年龄、地域特征、穿着风格，要尽可能详细"\n'
             "}\n"
             "```\n\n"
             "注意事项：\n"
-            "1. story_summary 要详细具体，不要泛泛而谈\n"
-            "2. visual_symbols 要标注每个符号的象征意义\n"
-            "3. viral_elements 要分三个层次分析\n"
-            "4. emotion_curve 要标注情感触发点\n"
-            "5. 确保 JSON 格式正确，可以被直接解析"
+            "1. story_summary 要详细具体，800字以上，不要泛泛而谈\n"
+            "2. visual_symbols 必须是数组格式，每个元素是 {\"symbol\": \"名称\", \"meaning\": \"意义\"}\n"
+            "3. viral_elements 要分三个层次，每层至少2个具体分析点\n"
+            "4. characters_ethnicity 要详细描述所有出现的人物特征\n"
+            "5. narrative_structure、visual_style、visual_contrast、emotion_triggers、audience_profile 都必须是纯文本字符串，不要用字典格式\n"
+            "6. 所有字符串值必须是纯文本，不要返回 Python 字典格式\n"
+            "7. 确保 JSON 格式正确，可以被直接解析"
         )
 
         for attempt in range(STRUCTURAL_MAX_RETRIES):
             try:
                 logger.info(f"Structural analysis attempt {attempt + 1}/{STRUCTURAL_MAX_RETRIES}")
                 resp = client.chat.completions.create(
-                    model="glm-4-flash",
+                    model="qwen3.5-plus",
                     messages=[{"role": "user", "content": prompt}],
                     temperature=0.3,
-                    max_tokens=5000,
-                    timeout=STRUCTURAL_TIMEOUT,
+                    max_tokens=8000,
+                    extra_body={"enable_thinking": False},
                 )
-                text = resp.choices[0].message.content
+                text = resp.choices[0].message.content or ""
+                # Strip thinking tags from Qwen3 reasoning
+                text = re.sub(r'<think\b[^>]*>.*?</think\s*>', '', text, flags=re.DOTALL).strip()
                 result = self._parse_json_response(text)
                 logger.info("Structural analysis completed successfully")
                 return result
-
-            except TimeoutError as e:
-                logger.warning(f"Structural analysis timeout on attempt {attempt + 1}/{STRUCTURAL_MAX_RETRIES}: {e}")
-                if attempt < STRUCTURAL_MAX_RETRIES - 1:
-                    time.sleep(STRUCTURAL_RETRY_DELAY * (attempt + 1))
-                else:
-                    logger.error(f"Structural analysis failed after {STRUCTURAL_MAX_RETRIES} retries: timeout")
-                    return self._default_report()
 
             except Exception as e:
                 logger.warning(f"Structural analysis failed on attempt {attempt + 1}/{STRUCTURAL_MAX_RETRIES}: {e}")

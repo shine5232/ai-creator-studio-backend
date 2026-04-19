@@ -28,6 +28,7 @@ def analyze_video_task(
 
     def update_progress(progress: int, message: str = ""):
         """Update KBCase progress directly."""
+        progress = int(progress)
         self.update_state(state="PROGRESS", meta={"progress": progress, "message": message})
         try:
             with get_sync_session() as session:
@@ -124,6 +125,7 @@ def reanalyze_video_task(
     service = VideoAnalysisService()
 
     def update_progress(progress: int, message: str = ""):
+        progress = int(progress)
         self.update_state(state="PROGRESS", meta={"progress": progress, "message": message})
         try:
             with get_sync_session() as session:

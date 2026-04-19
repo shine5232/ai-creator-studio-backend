@@ -50,12 +50,9 @@ async def list_cases(
 ):
     service = KnowledgeService(db)
     cases, total = await service.list_cases(platform, theme, page, page_size)
-    base = str(request.base_url).rstrip("/")
     items = []
     for c in cases:
         data = KBCaseResponse.model_validate(c).model_dump()
-        if data.get("thumbnail_url"):
-            data["thumbnail_url"] = base + data["thumbnail_url"]
         items.append(data)
     return {
         "items": items,
@@ -90,9 +87,6 @@ async def get_case(
     if not case:
         raise HTTPException(status_code=404, detail="Case not found")
     data = KBCaseResponse.model_validate(case).model_dump()
-    if data.get("thumbnail_url"):
-        base = str(request.base_url).rstrip("/")
-        data["thumbnail_url"] = base + data["thumbnail_url"]
     return data
 
 
@@ -108,6 +102,8 @@ async def get_case_thumbnail(
         raise HTTPException(status_code=404, detail="Thumbnail not found")
 
     thumb = Path(case.frames_dir) / "frame_001.jpg"
+    if not thumb.exists():
+        thumb = Path(case.frames_dir) / "frame_002.jpg"
     if not thumb.exists():
         raise HTTPException(status_code=404, detail="Thumbnail file not found")
 

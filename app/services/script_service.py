@@ -674,7 +674,17 @@ class ScriptService:
         if not generated:
             raise RuntimeError("Failed to parse AI generated script")
 
-        # 7. 组合 content：可读正文 + 结构化 JSON（供下游分镜解析）
+        # 7. 计算版本号
+        await self.db.execute(
+            update(Script).where(Script.project_id == project_id).values(is_current=False)
+        )
+        result = await self.db.execute(
+            select(Script).where(Script.project_id == project_id).order_by(Script.version.desc())
+        )
+        latest = result.scalar_one_or_none()
+        next_version = (latest.version + 1) if latest else 1
+
+        # 8. 组合 content：可读正文 + 结构化 JSON（供下游分镜解析）
         structured = {
             "character_profiles": generated.get("character_profiles", []),
             "acts": generated.get("acts", []),
@@ -686,22 +696,13 @@ class ScriptService:
         structured_block = json.dumps(structured, ensure_ascii=False)
         enriched_content += "\n\n---STRUCTURED_DATA---\n" + structured_block
 
-        # 8. 生成 Markdown 格式脚本并保存到文件
+        # 9. 生成 Markdown 格式脚本并保存到文件
         markdown_content = _convert_to_markdown(generated, project_id, next_version)
         script_path = await _save_script_to_file(
             project_id, next_version, markdown_content, generated.get("title", "script")
         )
 
-        # 8. 入库（复用版本管理逻辑）
-        await self.db.execute(
-            update(Script).where(Script.project_id == project_id).values(is_current=False)
-        )
-        result = await self.db.execute(
-            select(Script).where(Script.project_id == project_id).order_by(Script.version.desc())
-        )
-        latest = result.scalar_one_or_none()
-        next_version = (latest.version + 1) if latest else 1
-
+        # 10. 入库
         script = Script(
             project_id=project_id,
             title=generated.get("title", data.title),

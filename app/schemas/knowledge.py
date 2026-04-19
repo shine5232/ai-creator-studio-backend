@@ -74,9 +74,12 @@ class KBCaseResponse(BaseModel):
     def parse_json_list(cls, v):
         if isinstance(v, str):
             try:
-                return json_loads(v)
+                v = json_loads(v)
             except (ValueError, TypeError):
                 return []
+        if isinstance(v, dict):
+            # LLM returned dict instead of list, convert [{key: val}] or [val1, val2, ...]
+            return [{"name": k, "meaning": m} if isinstance(m, str) else k for k, m in v.items()]
         return v if v is not None else []
 
     @field_validator("reusable_elements", mode="before")
@@ -93,9 +96,16 @@ class KBCaseResponse(BaseModel):
     def compute_thumbnail(self):
         if self.frames_dir:
             from pathlib import Path
-            thumb = Path(self.frames_dir) / "frame_002.jpg"
-            if thumb.exists():
-                self.thumbnail_url = f"/api/v1/kb/cases/{self.id}/thumbnail"
+            frames = Path(self.frames_dir)
+            for candidate in ["frame_001.jpg", "frame_002.jpg"]:
+                thumb = frames / candidate
+                if thumb.exists():
+                    # Convert data/analysis/.../frames/frame_001.jpg → /static/analysis/.../frames/frame_001.jpg
+                    rel = str(thumb).replace("\\", "/")
+                    if rel.startswith("data/"):
+                        rel = rel[len("data/"):]
+                    self.thumbnail_url = f"/static/{rel}"
+                    break
         return self
 
 
