@@ -1,18 +1,41 @@
+import json
+
 from fastapi import APIRouter, Depends, HTTPException, Request
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, Response
+from sqlalchemy import select, func
 from sqlalchemy.ext.asyncio import AsyncSession
 from pathlib import Path
 
+from app.config import settings
 from app.database import get_db
 from app.api.deps import get_current_user
 from app.models.user import User
+from app.models.knowledge import KBCase
 from app.schemas.knowledge import (
     AnalyzeVideoRequest, KBCaseResponse, KBElementResponse, KBFrameworkResponse,
     KBReferenceContext, KBScriptTemplateResponse, RecommendThemesRequest, SearchKnowledgeRequest,
 )
 from app.services.knowledge_service import KnowledgeService
+from app.utils.logger import logger
 
 router = APIRouter(prefix="/kb", tags=["Knowledge Base"])
+
+
+# 测试端点 - 验证后端是否正常工作
+@router.get("/test-db")
+async def test_database(db: AsyncSession = Depends(get_db)):
+    """测试数据库连接和内容（无需认证）"""
+    count_result = await db.execute(select(func.count(KBCase.id)))
+    total_count = count_result.scalar()
+
+    all_ids_result = await db.execute(select(KBCase.id))
+    all_ids = list(all_ids_result.scalars().all())
+
+    return {
+        "database": settings.DATABASE_URL,
+        "total_cases": total_count,
+        "case_ids": all_ids
+    }
 
 
 @router.get("/cases")
@@ -141,9 +164,6 @@ async def get_analysis_status(
     db: AsyncSession = Depends(get_db),
 ):
     """Query analysis progress and results for a given KBCase."""
-    from app.models.knowledge import KBCase
-    from app.models.project import WorkflowStep
-
     service = KnowledgeService(db)
     case = await service.get_case(case_id)
     if not case:
@@ -152,32 +172,26 @@ async def get_analysis_status(
     result = {
         "case_id": case.id,
         "analysis_status": case.analysis_status,
+        "analysis_progress": case.analysis_progress or 0,
         "title": case.title,
     }
-
-    # Include progress from WorkflowStep if available
-    if case.celery_task_id:
-        from sqlalchemy import select as sa_select
-        step_result = await db.execute(
-            sa_select(WorkflowStep).where(
-                WorkflowStep.celery_task_id == case.celery_task_id
-            )
-        )
-        step = step_result.scalar_one_or_none()
-        if step:
-            result["progress"] = step.progress
-            result["step_status"] = step.status
-            result["error_message"] = step.error_message
 
     # Include analysis results if completed
     if case.analysis_status == "completed":
         result.update({
             "theme": case.theme,
             "narrative_type": case.narrative_type,
+            "narrative_structure": case.narrative_structure,
+            "story_summary": case.story_summary,
             "emotion_curve": case.emotion_curve,
+            "emotion_triggers": case.emotion_triggers,
             "visual_style": case.visual_style,
+            "visual_contrast": case.visual_contrast,
             "viral_elements": case.viral_elements,
             "visual_symbols": case.visual_symbols,
+            "audience_profile": case.audience_profile,
+            "reusable_elements": case.reusable_elements,
+            "success_factors": case.success_factors,
             "title_formula": case.title_formula,
             "characters_ethnicity": case.characters_ethnicity,
             "report_path": case.analysis_report_path,
@@ -185,6 +199,10 @@ async def get_analysis_status(
             "view_count": case.view_count,
             "like_count": case.like_count,
         })
+
+    # Include error message if failed
+    if case.analysis_status == "failed" and case.analysis_report_path:
+        result["error_message"] = case.analysis_report_path
 
     return result
 
@@ -268,3 +286,52 @@ async def get_reference_context(
     if not ctx:
         raise HTTPException(status_code=404, detail="Case not found or not analyzed")
     return ctx
+
+
+@router.get("/cases/{case_id}/markdown")
+async def get_case_markdown(
+    case_id: int,
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    """获取案例的 Markdown 分析报告"""
+    # 调试：检查数据库中的案例数量
+    count_result = await db.execute(select(func.count(KBCase.id)))
+    total_count = count_result.scalar()
+    logger.info(f"[DEBUG] Total cases in DB: {total_count}")
+
+    # 列出所有案例 ID
+    all_ids_result = await db.execute(select(KBCase.id))
+    all_ids = all_ids_result.scalars().all()
+    logger.info(f"[DEBUG] All case IDs: {list(all_ids)}")
+
+    service = KnowledgeService(db)
+    case = await service.get_case(case_id)
+
+    logger.info(f"[DEBUG] Requested case_id={case_id}, case_found={case is not None}")
+
+    if not case:
+        raise HTTPException(status_code=404, detail=f"Case {case_id} not found. Available IDs: {list(all_ids)}")
+
+    if not case.analysis_report_path:
+        raise HTTPException(status_code=404, detail="Analysis report not found")
+
+    # Try markdown file first, fall back to json
+    report_path = Path(case.analysis_report_path)
+    md_path = report_path.parent / "report.md"
+
+    logger.info(f"[DEBUG] report_path exists={report_path.exists()}, md_exists={md_path.exists()}")
+
+    if md_path.exists():
+        return FileResponse(
+            md_path,
+            media_type="text/markdown",
+            filename="report.md",
+        )
+    elif report_path.exists():
+        # Fallback: if only json exists, convert it on the fly
+        data = json.loads(report_path.read_text(encoding="utf-8"))
+        markdown = service._json_to_markdown(data)
+        return Response(content=markdown, media_type="text/markdown")
+    else:
+        raise HTTPException(status_code=404, detail="Analysis report file not found on disk")
