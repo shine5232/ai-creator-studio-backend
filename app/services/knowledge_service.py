@@ -45,17 +45,13 @@ class KnowledgeService:
         case = await self.get_case(case_id)
         if not case:
             return False
-        # Clean up associated files
+        # Clean up entire work directory (video, frames, reports)
         if case.frames_dir:
-            from pathlib import Path, shutil
-            frames_path = Path(case.frames_dir)
-            if frames_path.exists():
-                shutil.rmtree(frames_path, ignore_errors=True)
-        if case.analysis_report_path:
+            import shutil
             from pathlib import Path
-            report_path = Path(case.analysis_report_path)
-            if report_path.exists():
-                report_path.unlink(missing_ok=True)
+            work_dir = Path(case.frames_dir).parent
+            if work_dir.exists():
+                shutil.rmtree(work_dir, ignore_errors=True)
         await self.db.delete(case)
         await self.db.commit()
         return True

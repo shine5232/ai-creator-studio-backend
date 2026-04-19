@@ -97,7 +97,7 @@ class VideoAnalysisService:
             report_path.write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
 
             markdown_path = work_dir / "report.md"
-            markdown_content = self._generate_markdown_report(metadata, descriptions, report)
+            markdown_content = self._generate_markdown_report(video_info, descriptions, report)
             markdown_path.write_text(markdown_content, encoding="utf-8")
 
             on_progress(100, "Done")

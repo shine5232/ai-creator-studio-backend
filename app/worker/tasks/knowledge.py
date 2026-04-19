@@ -1,6 +1,7 @@
 """Celery tasks for knowledge-base video analysis."""
 
 import json
+from pathlib import Path
 
 from app.models.knowledge import KBCase, KBElement, KBFramework
 from app.utils.logger import logger
@@ -62,21 +63,21 @@ def analyze_video_task(
                 kb_case.frames_dir = str(result["work_dir"]) + "/frames"
                 kb_case.analysis_report_path = result["report_path"]
 
-                kb_case.theme = report.get("theme")
-                kb_case.narrative_type = report.get("narrative_type")
-                kb_case.narrative_structure = report.get("narrative_structure")
-                kb_case.story_summary = report.get("story_summary")
-                kb_case.emotion_curve = report.get("emotion_curve")
-                kb_case.emotion_triggers = report.get("emotion_triggers")
-                kb_case.visual_style = report.get("visual_style")
-                kb_case.visual_contrast = report.get("visual_contrast")
+                kb_case.theme = _to_json(report.get("theme"))
+                kb_case.narrative_type = _to_json(report.get("narrative_type"))
+                kb_case.narrative_structure = _to_json(report.get("narrative_structure"))
+                kb_case.story_summary = _to_json(report.get("story_summary"))
+                kb_case.emotion_curve = _to_json(report.get("emotion_curve"))
+                kb_case.emotion_triggers = _to_json(report.get("emotion_triggers"))
+                kb_case.visual_style = _to_json(report.get("visual_style"))
+                kb_case.visual_contrast = _to_json(report.get("visual_contrast"))
                 kb_case.viral_elements = _to_json(report.get("viral_elements"))
                 kb_case.visual_symbols = _to_json(report.get("visual_symbols"))
-                kb_case.audience_profile = report.get("audience_profile")
+                kb_case.audience_profile = _to_json(report.get("audience_profile"))
                 kb_case.reusable_elements = _to_json(report.get("reusable_elements"))
                 kb_case.success_factors = _to_json(report.get("success_factors"))
-                kb_case.title_formula = report.get("title_formula")
-                kb_case.characters_ethnicity = report.get("characters_ethnicity")
+                kb_case.title_formula = _to_json(report.get("title_formula"))
+                kb_case.characters_ethnicity = _to_json(report.get("characters_ethnicity"))
 
                 kb_case.analysis_status = "completed"
                 kb_case.analysis_progress = 100
@@ -171,21 +172,21 @@ def reanalyze_video_task(
 
                 kb_case.analysis_report_path = result["report_path"]
 
-                kb_case.theme = report.get("theme")
-                kb_case.narrative_type = report.get("narrative_type")
-                kb_case.narrative_structure = report.get("narrative_structure")
-                kb_case.story_summary = report.get("story_summary")
-                kb_case.emotion_curve = report.get("emotion_curve")
-                kb_case.emotion_triggers = report.get("emotion_triggers")
-                kb_case.visual_style = report.get("visual_style")
-                kb_case.visual_contrast = report.get("visual_contrast")
+                kb_case.theme = _to_json(report.get("theme"))
+                kb_case.narrative_type = _to_json(report.get("narrative_type"))
+                kb_case.narrative_structure = _to_json(report.get("narrative_structure"))
+                kb_case.story_summary = _to_json(report.get("story_summary"))
+                kb_case.emotion_curve = _to_json(report.get("emotion_curve"))
+                kb_case.emotion_triggers = _to_json(report.get("emotion_triggers"))
+                kb_case.visual_style = _to_json(report.get("visual_style"))
+                kb_case.visual_contrast = _to_json(report.get("visual_contrast"))
                 kb_case.viral_elements = _to_json(report.get("viral_elements"))
                 kb_case.visual_symbols = _to_json(report.get("visual_symbols"))
-                kb_case.audience_profile = report.get("audience_profile")
+                kb_case.audience_profile = _to_json(report.get("audience_profile"))
                 kb_case.reusable_elements = _to_json(report.get("reusable_elements"))
                 kb_case.success_factors = _to_json(report.get("success_factors"))
-                kb_case.title_formula = report.get("title_formula")
-                kb_case.characters_ethnicity = report.get("characters_ethnicity")
+                kb_case.title_formula = _to_json(report.get("title_formula"))
+                kb_case.characters_ethnicity = _to_json(report.get("characters_ethnicity"))
 
                 kb_case.analysis_status = "completed"
                 kb_case.analysis_progress = 100

@@ -107,7 +107,7 @@ async def get_case_thumbnail(
     if not case or not case.frames_dir:
         raise HTTPException(status_code=404, detail="Thumbnail not found")
 
-    thumb = Path(case.frames_dir) / "frame_002.jpg"
+    thumb = Path(case.frames_dir) / "frame_001.jpg"
     if not thumb.exists():
         raise HTTPException(status_code=404, detail="Thumbnail file not found")
 
