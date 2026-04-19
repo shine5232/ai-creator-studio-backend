@@ -52,6 +52,8 @@ class ProjectResponse(BaseModel):
     source_url: str | None
     source_platform: str | None
     reference_case_id: int | None
+    output_video_path: str | None
+    cover_image_path: str | None = None
     output_duration: int | None
     settings: dict | None
     created_at: datetime | None

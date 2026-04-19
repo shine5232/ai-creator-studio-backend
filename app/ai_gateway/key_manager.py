@@ -72,7 +72,7 @@ async def get_key(db: AsyncSession, provider_name: str) -> str | None:
         "wanx": settings.WANX_API_KEY,
         "seedance": settings.SEEDANCE_API_KEY,
         "nano_banana": settings.GEMINI_API_KEY,
-        "glm": settings.ZHIPU_API_KEY,
+        "qwen": settings.DASHSCOPE_API_KEY,
     }
     return env_map.get(provider_name)
 

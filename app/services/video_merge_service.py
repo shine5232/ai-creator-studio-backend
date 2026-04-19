@@ -112,6 +112,7 @@ class VideoMergeService:
         project_id: int,
         add_music: bool,
         music_path: str | None,
+        shot_ids: list[int] | None = None,
         on_progress=None,
     ) -> str:
         """Full merge pipeline: query → probe → normalise → concat → mix.
@@ -122,6 +123,7 @@ class VideoMergeService:
             project_id: Project to merge.
             add_music: Whether to mix in background music.
             music_path: Path to the music file (required when add_music is True).
+            shot_ids: Optional list of specific shot IDs to merge. If None, merge all completed.
             on_progress: Callback ``(progress_pct, message)`` for progress updates.
         """
         if on_progress is None:
@@ -129,7 +131,7 @@ class VideoMergeService:
 
         # 5% — query shots ------------------------------------------------
         on_progress(5, "Querying project shots…")
-        shots = self._query_project_shots(project_id)
+        shots = self._query_project_shots(project_id, shot_ids)
         if not shots:
             raise ValueError(f"No completed shot videos found for project {project_id}")
 
@@ -211,7 +213,7 @@ class VideoMergeService:
 
     # ── internal helpers ──────────────────────────────────────────────────
 
-    def _query_project_shots(self, project_id: int) -> list[Shot]:
+    def _query_project_shots(self, project_id: int, shot_ids: list[int] | None = None) -> list[Shot]:
         """Query shots for a project via proper JOIN chain: Shot→Storyboard→Script→Project."""
         with get_sync_session() as session:
             stmt = (
@@ -222,6 +224,8 @@ class VideoMergeService:
                 .where(Shot.video_status == "completed")
                 .order_by(Shot.shot_number)
             )
+            if shot_ids:
+                stmt = stmt.where(Shot.id.in_(shot_ids))
             result = session.execute(stmt)
             # expire_on_commit=False, but we need attrs after session close
             shots = result.scalars().all()

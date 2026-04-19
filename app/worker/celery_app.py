@@ -48,13 +48,13 @@ def setup_providers(sender, **kwargs):
     from app.ai_gateway.providers.wanx_adapter import WanxAdapter
     from app.ai_gateway.providers.seedance_adapter import SeedanceAdapter
     from app.ai_gateway.providers.nano_banana_adapter import NanoBananaAdapter
-    from app.ai_gateway.providers.glm_adapter import GLMAdapter
+    from app.ai_gateway.providers.glm_adapter import QwenAdapter
 
     registry.register(DoubaoAdapter())
     registry.register(WanxAdapter())
     registry.register(SeedanceAdapter())
     registry.register(NanoBananaAdapter())
-    registry.register(GLMAdapter())
+    registry.register(QwenAdapter())
 
     # Register publish adapters
     from app.services.publishers.registry import publisher_registry

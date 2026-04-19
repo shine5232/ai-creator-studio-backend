@@ -35,6 +35,7 @@ class DoubaoAdapter(BaseAdapter):
             "n": request.params.get("n", 1),
             "size": request.params.get("size", "1024x1024"),
             "response_format": "b64_json",
+            "watermark": False,
         }
 
         # Image-to-image

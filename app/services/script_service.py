@@ -1,4 +1,5 @@
 import json
+import re
 from pathlib import Path
 
 from sqlalchemy import select, update
@@ -6,7 +7,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.ai_gateway.base import AIRequest, ServiceType
 from app.ai_gateway.registry import registry
-from app.models.script import Script
+from app.models.character import Character, CharacterPeriod
+from app.models.script import Script, Storyboard, Shot
 from app.schemas.script import CreateScriptRequest, GenerateScriptRequest, UpdateScriptRequest
 from app.utils.logger import logger
 
@@ -288,6 +290,19 @@ def _parse_script_json(text: str) -> dict | None:
     return None
 
 
+def _parse_duration(time_range: str) -> float:
+    """Parse duration from time range string like '0-3s' or '3s'."""
+    if not time_range:
+        return 3.0
+    match = re.match(r"(\d+(?:\.\d+)?)\s*[-–]\s*(\d+(?:\.\d+)?)\s*s?", time_range)
+    if match:
+        return round(float(match.group(2)) - float(match.group(1)), 1)
+    match = re.match(r"(\d+(?:\.\d+)?)\s*s", time_range)
+    if match:
+        return float(match.group(1))
+    return 3.0
+
+
 class ScriptService:
     def __init__(self, db: AsyncSession):
         self.db = db
@@ -560,6 +575,7 @@ class ScriptService:
             '      "body_type": "体型描述（身高、胖瘦、姿态）",\n'
             '      "special_marks": "特殊标记（疤痕、老茧等）",\n'
             '      "personality": "性格特点",\n'
+            '      "reference_prompt": "人物肖像文生图提示词，用中文描述该角色的完整外貌（年龄、性别、种族、肤色、眼睛、发型、面部特征、体型、特殊标记、穿着），结尾加：竖屏构图，全身或半身肖像，高质量人物肖像，面部细节丰富，电影级光影",\n'
             '      "clothing_phases": [\n'
             '        {"phase": "前期", "description": "前期穿着描述"},\n'
             '        {"phase": "中期", "description": "中期穿着描述"},\n'
@@ -582,9 +598,10 @@ class ScriptService:
             '          "characters": "人物动作与表情（含年龄、外貌细节）",\n'
             '          "environment": "环境描写（时代背景、具体地点、光线、细节）",\n'
             '          "event": "发生的事件/动作",\n'
-            '          "dialog": "台词或旁白（如有）",\n'
             '          "tone": "画面色调（如：暗黄色，整体偏暗）",\n'
-            '          "mood": "情感氛围关键词"\n'
+            '          "mood": "情感氛围关键词",\n'
+            '          "image_prompt": "Seedream文生图提示词（中文为主，专业术语用英文），格式：先写景别，再写画面主体（含完整人物外貌细节），再写人物动作表情，再写环境描写，再写美学短词（色调、光影、构图、氛围），结尾固定：电影感，真实照片风格，8K高清，竖屏9:16",\n'
+            '          "video_prompt": "图生视频提示词（中文为主，英文不超过50词），描述画面中的动态变化、运动和镜头运动，1-3句话，如：主体缓缓转头，微风吹动头发，固定镜头，柔光，暖色调"\n'
             '        }\n'
             '      ]\n'
             '    }\n'
@@ -721,4 +738,121 @@ class ScriptService:
         await self.db.commit()
         await self.db.refresh(script)
         logger.info(f"AI generated script: {script.id} v{script.version}")
+
+        # 10.5 Auto-create Character + CharacterPeriod from character_profiles
+        try:
+            char_profiles = generated.get("character_profiles", [])
+            if char_profiles:
+                # 先清除该项目已有的人物（新生成脚本时覆盖旧人物）
+                existing_chars = await self.db.execute(
+                    select(Character).where(Character.project_id == project_id)
+                )
+                for old_char in existing_chars.scalars().all():
+                    await self.db.delete(old_char)
+                await self.db.flush()
+
+                for idx, cp in enumerate(char_profiles):
+                    # 拼接 appearance：eyes + hair + facial_features + body_type + special_marks
+                    appearance_parts = []
+                    for key in ("eyes", "hair", "facial_features", "body_type"):
+                        if cp.get(key):
+                            appearance_parts.append(str(cp[key]))
+                    appearance = "；".join(appearance_parts) if appearance_parts else None
+
+                    # 拼接 clothing_phases 整体描述
+                    clothing_parts = []
+                    for phase in cp.get("clothing_phases", []):
+                        clothing_parts.append(f"{phase.get('phase', '')}: {phase.get('description', '')}")
+                    clothing = "；".join(clothing_parts) if clothing_parts else None
+
+                    character = Character(
+                        project_id=project_id,
+                        name=cp.get("role_name", f"角色{idx + 1}"),
+                        age=cp.get("age"),
+                        gender=cp.get("gender"),
+                        nationality=cp.get("race_ethnicity"),
+                        skin_tone=cp.get("skin_color"),
+                        appearance=appearance,
+                        personality=cp.get("personality"),
+                        clothing=clothing,
+                        ethnic_features=cp.get("special_marks"),
+                        reference_prompt_cn=cp.get("reference_prompt"),
+                    )
+                    self.db.add(character)
+                    await self.db.flush()  # 拿到 character.id
+
+                    # 创建 CharacterPeriod 记录
+                    for order, phase in enumerate(cp.get("clothing_phases", [])):
+                        period = CharacterPeriod(
+                            character_id=character.id,
+                            period_name=phase.get("phase", f"阶段{order + 1}"),
+                            clothing_delta=phase.get("description"),
+                            sort_order=order,
+                        )
+                        self.db.add(period)
+
+                await self.db.commit()
+                logger.info(f"Auto-created {len(char_profiles)} characters for project {project_id}")
+        except Exception as e:
+            logger.error(f"Failed to auto-create characters: {e}")
+            # 不影响主流程，继续
+
+        # 11. Auto-create storyboard + shots from structured acts data
+        acts = generated.get("acts", [])
+        if acts:
+            all_shot_data: list[tuple[dict, dict]] = []
+            for act in acts:
+                for shot_data in act.get("shots", []):
+                    all_shot_data.append((act, shot_data))
+
+            total_shots = len(all_shot_data)
+
+            storyboard = Storyboard(
+                script_id=script.id,
+                total_shots=total_shots,
+                total_duration=0,
+            )
+            self.db.add(storyboard)
+            await self.db.flush()
+
+            shot_num = 0
+            total_duration = 0.0
+            for act, shot_data in all_shot_data:
+                shot_num += 1
+                act_name = act.get("act_name", f"第{act.get('act_number', 1)}幕")
+
+                # Compose description from shot fields
+                desc_parts = []
+                if shot_data.get("characters"):
+                    desc_parts.append(f"人物: {shot_data['characters']}")
+                if shot_data.get("environment"):
+                    desc_parts.append(f"环境: {shot_data['environment']}")
+                if shot_data.get("event"):
+                    desc_parts.append(f"事件: {shot_data['event']}")
+                description = "；".join(desc_parts) if desc_parts else f"镜头 {shot_num}"
+
+                duration = _parse_duration(shot_data.get("time_range", ""))
+                total_duration += duration
+
+                shot = Shot(
+                    storyboard_id=storyboard.id,
+                    shot_number=shot_num,
+                    act_name=act_name,
+                    time_range=shot_data.get("time_range"),
+                    shot_type=shot_data.get("shot_type"),
+                    description=description,
+                    tone=shot_data.get("tone"),
+                    mood=shot_data.get("mood"),
+                    image_prompt=shot_data.get("image_prompt"),
+                    video_prompt=shot_data.get("video_prompt"),
+                    video_duration=duration,
+                )
+                self.db.add(shot)
+
+            storyboard.total_duration = int(total_duration)
+            await self.db.commit()
+            logger.info(
+                f"Auto-created storyboard {storyboard.id} with {total_shots} shots for script {script.id}"
+            )
+
         return script

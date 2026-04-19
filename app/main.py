@@ -25,13 +25,13 @@ async def lifespan(app: FastAPI):
     from app.ai_gateway.providers.wanx_adapter import WanxAdapter
     from app.ai_gateway.providers.seedance_adapter import SeedanceAdapter
     from app.ai_gateway.providers.nano_banana_adapter import NanoBananaAdapter
-    from app.ai_gateway.providers.glm_adapter import GLMAdapter
+    from app.ai_gateway.providers.glm_adapter import QwenAdapter
 
     registry.register(DoubaoAdapter())
     registry.register(WanxAdapter())
     registry.register(SeedanceAdapter())
     registry.register(NanoBananaAdapter())
-    registry.register(GLMAdapter())
+    registry.register(QwenAdapter())
     logger.info(f"Registered {len(registry.list_providers())} AI providers")
 
     yield
@@ -119,3 +119,4 @@ app.include_router(cookies_router, prefix="/api/v1")
 # Static files for analysis thumbnails and reports
 Path("data/analysis").mkdir(parents=True, exist_ok=True)
 app.mount("/static/analysis", StaticFiles(directory="data/analysis"), name="analysis_static")
+app.mount("/static/uploads", StaticFiles(directory="data/uploads"), name="uploads_static")

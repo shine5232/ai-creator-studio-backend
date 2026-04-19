@@ -16,6 +16,7 @@ class BatchGenerateVideosRequest(BaseModel):
 
 
 class MergeVideosRequest(BaseModel):
+    shot_ids: list[int] = []
     add_background_music: bool = False
     music_path: str | None = None
 

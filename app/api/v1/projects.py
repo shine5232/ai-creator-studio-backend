@@ -1,9 +1,12 @@
 from fastapi import APIRouter, Depends, HTTPException
+from sqlalchemy import select, func
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database import get_db
 from app.api.deps import get_current_user
 from app.models.user import User
+from app.models.project import Project, WorkflowStep
+from app.models.script import Script, Storyboard, Shot
 from app.schemas.project import (
     CreateProjectRequest, ProjectDetailResponse, ProjectResponse,
     StartWorkflowRequest, UpdateProjectRequest, WorkflowStepResponse,
@@ -22,11 +25,60 @@ async def list_projects(
 ):
     service = ProjectService(db)
     projects, total = await service.list_projects(current_user.id, page, page_size)
+
+    # 批量查询每个项目的第一个分镜图片作为封面
+    project_ids = [p.id for p in projects]
+    cover_map: dict[int, str | None] = {}
+    if project_ids:
+        cover_result = await db.execute(
+            select(Script.project_id, Shot.image_path)
+            .join(Storyboard, Storyboard.script_id == Script.id)
+            .join(Shot, Shot.storyboard_id == Storyboard.id)
+            .where(Script.project_id.in_(project_ids))
+            .where(Shot.image_path != None)  # noqa: E711
+            .where(Shot.image_path != "")
+            .order_by(Script.project_id, Shot.shot_number)
+        )
+        for pid, img_path in cover_result.all():
+            if pid not in cover_map:
+                cover_map[pid] = img_path
+
+    items = []
+    for p in projects:
+        d = ProjectResponse.model_validate(p).model_dump()
+        d["cover_image_path"] = cover_map.get(p.id)
+        items.append(d)
+
+    # 统计数据
+    video_count_result = await db.execute(
+        select(func.count(Shot.id))
+        .join(Storyboard, Shot.storyboard_id == Storyboard.id)
+        .join(Script, Storyboard.script_id == Script.id)
+        .join(Project, Project.id == Script.project_id)
+        .where(Project.user_id == current_user.id)
+        .where(Shot.video_status == "completed")
+    )
+    video_count = video_count_result.scalar() or 0
+
+    workflow_count_result = await db.execute(
+        select(func.count(WorkflowStep.id))
+        .join(Project, Project.id == WorkflowStep.project_id)
+        .where(Project.user_id == current_user.id)
+        .where(WorkflowStep.status == "completed")
+    )
+    workflow_count = workflow_count_result.scalar() or 0
+
     return {
-        "items": [ProjectResponse.model_validate(p).model_dump() for p in projects],
+        "items": items,
         "total": total,
         "page": page,
         "page_size": page_size,
+        "stats": {
+            "projects": total,
+            "videos": video_count,
+            "aiCalls": workflow_count,
+            "cost": "0.00",
+        },
     }
 
 

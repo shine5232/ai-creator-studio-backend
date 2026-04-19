@@ -29,6 +29,7 @@ class RegenerateImageRequest(BaseModel):
     provider: str | None = None
     model: str | None = None
     image_prompt: str | None = None
+    aspect_ratio: str | None = "9:16"
 
 
 class RegenerateVideoRequest(BaseModel):
@@ -36,6 +37,10 @@ class RegenerateVideoRequest(BaseModel):
     model: str | None = None
     video_prompt: str | None = None
     duration: float | None = None
+
+
+class BatchShotRequest(BaseModel):
+    shot_ids: list[int] | None = None
 
 
 # --- Responses ---

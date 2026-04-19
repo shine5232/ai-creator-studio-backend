@@ -91,6 +91,21 @@ async def delete_character(
     return {"message": "Character deleted"}
 
 
+@router.post("/characters/{character_id}/generate-prompt")
+async def generate_char_prompt(
+    character_id: int,
+    data: GenerateReferenceRequest | None = None,
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    service = CharacterService(db)
+    try:
+        aspect_ratio = data.aspect_ratio if data else "9:16"
+        return await service.generate_prompt_only(character_id, aspect_ratio)
+    except ValueError as e:
+        raise HTTPException(status_code=404, detail=str(e))
+
+
 @router.post("/characters/{character_id}/generate-reference")
 async def generate_reference(
     character_id: int,
@@ -101,6 +116,7 @@ async def generate_reference(
     service = CharacterService(db)
     try:
         provider = data.provider if data else None
-        return await service.generate_reference_image(character_id, provider)
+        aspect_ratio = data.aspect_ratio if data else "9:16"
+        return await service.generate_reference_image(character_id, provider, aspect_ratio)
     except ValueError as e:
         raise HTTPException(status_code=404, detail=str(e))

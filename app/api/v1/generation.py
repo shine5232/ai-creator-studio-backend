@@ -51,7 +51,7 @@ async def batch_generate_videos(
 @router.post("/projects/{project_id}/generate/merge")
 async def merge_videos(
     project_id: int,
-    data: MergeVideosRequest,
+    data: MergeVideosRequest | None = None,
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
@@ -59,7 +59,10 @@ async def merge_videos(
     if not project or project.user_id != current_user.id:
         raise HTTPException(status_code=404, detail="Project not found")
     service = GenerationService(db)
-    return await service.merge_videos(project_id, data.add_background_music, data.music_path)
+    add_bg = data.add_background_music if data else False
+    music = data.music_path if data else None
+    shot_ids = data.shot_ids if data else []
+    return await service.merge_videos(project_id, add_bg, music, shot_ids or None)
 
 
 @router.post("/projects/{project_id}/generate/music")
@@ -222,6 +225,7 @@ async def retry_generation_task(
             project_id=step.project_id,
             add_music=params.get("add_music", False),
             music_path=params.get("music_path"),
+            shot_ids=params.get("shot_ids"),
             workflow_step_id=new_step.id,
         )
     else:

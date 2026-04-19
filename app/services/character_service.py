@@ -57,7 +57,50 @@ class CharacterService:
         await self.db.commit()
         return True
 
-    async def generate_reference_image(self, character_id: int, provider: str | None = None) -> dict:
+    async def generate_prompt_only(self, character_id: int, aspect_ratio: str = "9:16") -> dict:
+        """Generate and save reference prompt from character attributes (no image)."""
+        character = await self.get_character(character_id)
+        if not character:
+            raise ValueError("Character not found")
+
+        cn_parts = [f"{character.name}的人物肖像"]
+        if character.gender:
+            cn_parts.append(character.gender)
+        if character.age:
+            cn_parts.append(f"{character.age}岁")
+        if character.nationality:
+            cn_parts.append(character.nationality)
+        if character.skin_tone:
+            cn_parts.append(character.skin_tone)
+        if character.appearance:
+            cn_parts.append(character.appearance)
+        if character.ethnic_features:
+            cn_parts.append(character.ethnic_features)
+        if character.clothing:
+            cn_parts.append(f"穿着{character.clothing}")
+        prompt_cn = "，".join(cn_parts)
+
+        # 根据宽高比添加构图描述
+        if aspect_ratio == "9:16":
+            prompt_cn += "，竖屏构图，全身或半身肖像，高质量人物肖像，面部细节丰富，电影级光影"
+        elif aspect_ratio == "16:9":
+            prompt_cn += "，横屏构图，全身或环境肖像，高质量人物肖像，面部细节丰富，电影级光影"
+        else:
+            prompt_cn += "，高质量人物肖像，面部细节丰富，电影级光影"
+
+        character.reference_prompt_cn = prompt_cn
+        await self.db.commit()
+        await self.db.refresh(character)
+
+        logger.info(f"Generated prompt for character {character_id}")
+        return {
+            "character_id": character_id,
+            "reference_prompt_cn": prompt_cn,
+        }
+
+    async def generate_reference_image(
+        self, character_id: int, provider: str | None = None, aspect_ratio: str = "9:16"
+    ) -> dict:
         """Generate character reference image using AI. Returns result info."""
         character = await self.get_character(character_id)
         if not character:
@@ -71,27 +114,36 @@ class CharacterService:
             else:
                 raise ValueError("No AI provider found for image generation")
 
-        # Build prompt from character attributes
-        prompt_parts = [f"Character portrait of {character.name}"]
+        # Build Chinese prompt from character attributes
+        cn_parts = [f"{character.name}的人物肖像"]
         if character.gender:
-            prompt_parts.append(character.gender)
+            cn_parts.append(character.gender)
         if character.age:
-            prompt_parts.append(f"age {character.age}")
-        if character.appearance:
-            prompt_parts.append(character.appearance)
-        if character.clothing:
-            prompt_parts.append(f"wearing {character.clothing}")
-        if character.ethnic_features:
-            prompt_parts.append(character.ethnic_features)
+            cn_parts.append(f"{character.age}岁")
+        if character.nationality:
+            cn_parts.append(character.nationality)
         if character.skin_tone:
-            prompt_parts.append(f"{character.skin_tone} skin")
+            cn_parts.append(character.skin_tone)
+        if character.appearance:
+            cn_parts.append(character.appearance)
+        if character.ethnic_features:
+            cn_parts.append(character.ethnic_features)
+        if character.clothing:
+            cn_parts.append(f"穿着{character.clothing}")
+        prompt_cn = "，".join(cn_parts)
+        prompt_cn += "，高质量人物肖像，面部细节丰富，电影级光影"
 
-        prompt = ", ".join(prompt_parts)
-        prompt += ", high quality portrait, detailed face, cinematic lighting"
+        # Use reference_prompt_cn if already set, otherwise use auto-generated
+        prompt = character.reference_prompt_cn or prompt_cn
+
+        # Map aspect_ratio to size
+        size_map = {"9:16": "1088x1920", "16:9": "1920x1088", "1:1": "1440x1440"}
+        size = size_map.get(aspect_ratio, "1088x1920")
 
         request = AIRequest(
             prompt=prompt,
             service_type=ServiceType.TEXT_TO_IMAGE,
+            params={"size": size},
         )
 
         response = await adapter.generate(request)
@@ -104,25 +156,26 @@ class CharacterService:
             upload_dir = __import__("pathlib").Path("data/uploads")
             upload_dir.mkdir(parents=True, exist_ok=True)
 
-            if "url" in response.data:
+            if "url" in response.data or "image_url" in response.data:
                 import httpx
-                img_url = response.data["url"]
+                img_url = response.data.get("url") or response.data.get("image_url")
                 img_resp = httpx.get(img_url, timeout=60)
                 filename = f"char_{character_id}_{int(time.time())}.png"
                 filepath = upload_dir / filename
                 filepath.write_bytes(img_resp.content)
                 character.reference_image_path = str(filepath)
-            elif "base64" in response.data:
+            elif "base64" in response.data or "image_b64" in response.data:
                 import base64
+                b64_data = response.data.get("base64") or response.data.get("image_b64")
                 filename = f"char_{character_id}_{int(time.time())}.png"
                 filepath = upload_dir / filename
-                filepath.write_bytes(base64.b64decode(response.data["base64"]))
+                filepath.write_bytes(base64.b64decode(b64_data))
                 character.reference_image_path = str(filepath)
             elif "local_path" in response.data:
                 character.reference_image_path = response.data["local_path"]
 
-            # Store the prompt used
-            character.reference_prompt_en = prompt
+            # Store prompts
+            character.reference_prompt_cn = prompt_cn
             await self.db.commit()
 
         logger.info(f"Reference image generated for character {character_id}")

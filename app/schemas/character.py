@@ -32,11 +32,11 @@ class UpdateCharacterRequest(BaseModel):
     clothing: str | None = None
     symbol_meaning: str | None = None
     reference_prompt_cn: str | None = None
-    reference_prompt_en: str | None = None
 
 
 class GenerateReferenceRequest(BaseModel):
     provider: str | None = None
+    aspect_ratio: str | None = "9:16"  # "9:16" or "16:9"
 
 
 # --- Responses ---
@@ -69,7 +69,6 @@ class CharacterResponse(BaseModel):
     symbol_meaning: str | None
     reference_image_path: str | None
     reference_prompt_cn: str | None
-    reference_prompt_en: str | None
     periods: list[CharacterPeriodResponse] = []
     created_at: datetime | None
     updated_at: datetime | None

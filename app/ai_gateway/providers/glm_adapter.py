@@ -8,8 +8,8 @@ from app.config import settings
 from app.utils.logger import logger
 
 
-class GLMAdapter(BaseAdapter):
-    provider_name = "glm"
+class QwenAdapter(BaseAdapter):
+    provider_name = "qwen"
     supported_services = [ServiceType.TEXT_GENERATION]
 
     def __init__(self):

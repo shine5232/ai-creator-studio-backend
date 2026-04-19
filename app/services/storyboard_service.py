@@ -29,7 +29,10 @@ class StoryboardService:
         # Check if storyboard already exists
         existing = await self.get_storyboard(script_id)
         if existing:
-            # Update existing
+            # If storyboard already has shots (auto-created during script generation), return as-is
+            if existing.shots:
+                return existing
+            # Otherwise update tone_mapping only
             if data.tone_mapping:
                 existing.tone_mapping = json.dumps(data.tone_mapping)
             await self.db.commit()
@@ -128,8 +131,6 @@ class StoryboardService:
                                 f"    环境: {shot.get('environment', '')}\n"
                                 f"    事件: {shot.get('event', '')}\n"
                             )
-                            if shot.get("dialog"):
-                                scene_context += f"    台词: {shot['dialog']}\n"
                             scene_context += (
                                 f"    色调: {shot.get('tone', '')} | 氛围: {shot.get('mood', '')}\n"
                             )
