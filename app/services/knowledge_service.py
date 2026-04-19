@@ -164,18 +164,26 @@ class KnowledgeService:
         case = await self.get_case(case_id)
         if not case or case.analysis_status != "completed":
             return None
-        viral = json.loads(case.viral_elements) if case.viral_elements else []
+        viral = json.loads(case.viral_elements) if case.viral_elements else {}
         symbols = json.loads(case.visual_symbols) if case.visual_symbols else []
+        reusable = json.loads(case.reusable_elements) if case.reusable_elements else {}
+        success = json.loads(case.success_factors) if case.success_factors else []
         return {
             "case_id": case.id,
             "title": case.title,
             "theme": case.theme,
             "narrative_type": case.narrative_type,
+            "narrative_structure": case.narrative_structure,
             "story_summary": case.story_summary,
             "emotion_curve": case.emotion_curve,
+            "emotion_triggers": case.emotion_triggers,
             "visual_style": case.visual_style,
+            "visual_contrast": case.visual_contrast,
             "viral_elements": viral,
             "visual_symbols": symbols,
+            "audience_profile": case.audience_profile,
+            "reusable_elements": reusable,
+            "success_factors": success,
             "title_formula": case.title_formula,
             "characters_ethnicity": case.characters_ethnicity,
             "like_rate": case.like_rate,
@@ -208,3 +216,92 @@ class KnowledgeService:
         query = query.order_by(KBCase.like_rate.desc().nullslast()).limit(limit)
         result = await self.db.execute(query)
         return result.scalars().all()
+
+    @staticmethod
+    def _json_to_markdown(data: dict) -> str:
+        """Convert JSON analysis report to Markdown format (fallback)."""
+        lines = []
+
+        if data.get('title'):
+            lines.append(f"# {data['title']}\n")
+
+        if data.get('theme'):
+            lines.append(f"## 主题\n\n{data['theme']}\n")
+
+        if data.get('narrative_type'):
+            lines.append(f"## 叙事类型\n\n{data['narrative_type']}\n")
+
+        if data.get('story_summary'):
+            lines.append(f"## 故事内容\n\n{data['story_summary']}\n")
+
+        if data.get('narrative_structure'):
+            lines.append(f"## 叙事结构\n\n{data['narrative_structure']}\n")
+
+        if data.get('emotion_curve'):
+            lines.append(f"## 情感曲线\n\n{data['emotion_curve']}\n")
+
+        if data.get('emotion_triggers'):
+            lines.append(f"## 情感触发点\n\n{data['emotion_triggers']}\n")
+
+        if data.get('visual_style'):
+            lines.append(f"## 视觉风格\n\n{data['visual_style']}\n")
+
+        if data.get('visual_contrast'):
+            lines.append(f"## 视觉对比\n\n{data['visual_contrast']}\n")
+
+        if data.get('visual_symbols'):
+            lines.append("## 视觉符号\n")
+            symbols = data['visual_symbols']
+            if isinstance(symbols, list):
+                for symbol in symbols:
+                    if isinstance(symbol, dict):
+                        lines.append(f"- **{symbol.get('symbol', '')}**: {symbol.get('meaning', '')}")
+                    else:
+                        lines.append(f"- {symbol}")
+            lines.append("")
+
+        viral = data.get('viral_elements', {})
+        if isinstance(viral, dict):
+            lines.append("## 爆款元素\n")
+            if viral.get('topic_layer'):
+                lines.append("### 话题层")
+                for item in viral['topic_layer']:
+                    lines.append(f"- {item}")
+                lines.append("")
+            if viral.get('emotion_layer'):
+                lines.append("### 情感层")
+                for item in viral['emotion_layer']:
+                    lines.append(f"- {item}")
+                lines.append("")
+            if viral.get('execution_layer'):
+                lines.append("### 执行层")
+                for item in viral['execution_layer']:
+                    lines.append(f"- {item}")
+                lines.append("")
+
+        if data.get('audience_profile'):
+            lines.append(f"## 受众画像\n\n{data['audience_profile']}\n")
+
+        reusable = data.get('reusable_elements', {})
+        if isinstance(reusable, dict):
+            lines.append("## 可复用元素\n")
+            if reusable.get('narrative_template'):
+                lines.append(f"### 叙事模板\n\n{reusable['narrative_template']}\n")
+            if reusable.get('visual_template'):
+                lines.append(f"### 视觉模板\n\n{reusable['visual_template']}\n")
+            if reusable.get('title_formula'):
+                lines.append(f"### 标题公式\n\n{reusable['title_formula']}\n")
+
+        if data.get('success_factors'):
+            lines.append("## 成功因素\n")
+            for factor in data['success_factors']:
+                lines.append(f"- {factor}")
+            lines.append("")
+
+        if data.get('title_formula'):
+            lines.append(f"## 标题公式\n\n{data['title_formula']}\n")
+
+        if data.get('characters_ethnicity'):
+            lines.append(f"## 人物特征\n\n{data['characters_ethnicity']}\n")
+
+        return "\n".join(lines)

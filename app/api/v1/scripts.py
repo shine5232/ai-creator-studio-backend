@@ -1,5 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
+from fastapi.responses import FileResponse
 from sqlalchemy.ext.asyncio import AsyncSession
+from pathlib import Path
 
 from app.database import get_db
 from app.api.deps import get_current_user
@@ -110,3 +112,29 @@ async def check_viral(
         return await service.check_viral(script_id)
     except ValueError as e:
         raise HTTPException(status_code=404, detail=str(e))
+
+
+@router.get("/scripts/{script_id}/markdown")
+async def get_script_markdown(
+    script_id: int,
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    """获取脚本的 Markdown 文件内容"""
+    service = ScriptService(db)
+    script = await service.get_script(script_id)
+    if not script:
+        raise HTTPException(status_code=404, detail="Script not found")
+
+    if not script.script_path:
+        raise HTTPException(status_code=404, detail="Script markdown file not found")
+
+    file_path = Path(script.script_path)
+    if not file_path.exists():
+        raise HTTPException(status_code=404, detail="Script markdown file not found on disk")
+
+    return FileResponse(
+        file_path,
+        media_type="text/markdown",
+        filename=file_path.name,
+    )

@@ -6,12 +6,10 @@ from app.models.knowledge import KBCase, KBElement, KBFramework
 from app.utils.logger import logger
 from app.worker.celery_app import celery_app
 from app.worker.db import get_sync_session
-from app.worker.tasks.base import BaseWorkflowTask
 
 
 @celery_app.task(
     bind=True,
-    base=BaseWorkflowTask,
     name="app.worker.tasks.knowledge.analyze_video_task",
     soft_time_limit=600,
     time_limit=900,
@@ -21,18 +19,29 @@ def analyze_video_task(
     source_url: str,
     platform: str,
     case_id: int,
-    workflow_step_id: int = 0,
 ):
     """Download, extract frames and run GLM analysis on a video."""
     from app.services.video_analysis_service import VideoAnalysisService
 
     service = VideoAnalysisService()
 
+    def update_progress(progress: int, message: str = ""):
+        """Update KBCase progress directly."""
+        self.update_state(state="PROGRESS", meta={"progress": progress, "message": message})
+        try:
+            with get_sync_session() as session:
+                kb_case = session.get(KBCase, case_id)
+                if kb_case:
+                    kb_case.analysis_progress = progress
+                    session.commit()
+        except Exception as e:
+            logger.error(f"Failed to update progress: {e}")
+
     try:
         result = service.analyze_video(
             source_url,
             platform,
-            on_progress=lambda p, m: self.update_progress(workflow_step_id, p, m),
+            on_progress=update_progress,
         )
 
         # Persist results to KBCase
@@ -55,15 +64,22 @@ def analyze_video_task(
 
                 kb_case.theme = report.get("theme")
                 kb_case.narrative_type = report.get("narrative_type")
+                kb_case.narrative_structure = report.get("narrative_structure")
                 kb_case.story_summary = report.get("story_summary")
                 kb_case.emotion_curve = report.get("emotion_curve")
+                kb_case.emotion_triggers = report.get("emotion_triggers")
                 kb_case.visual_style = report.get("visual_style")
+                kb_case.visual_contrast = report.get("visual_contrast")
                 kb_case.viral_elements = _to_json(report.get("viral_elements"))
                 kb_case.visual_symbols = _to_json(report.get("visual_symbols"))
+                kb_case.audience_profile = report.get("audience_profile")
+                kb_case.reusable_elements = _to_json(report.get("reusable_elements"))
+                kb_case.success_factors = _to_json(report.get("success_factors"))
                 kb_case.title_formula = report.get("title_formula")
                 kb_case.characters_ethnicity = report.get("characters_ethnicity")
 
                 kb_case.analysis_status = "completed"
+                kb_case.analysis_progress = 100
                 session.commit()
 
                 # --- 拆分入库：viral_elements / visual_symbols → kb_elements ---
@@ -100,39 +116,71 @@ def _to_json(value) -> str | None:
 
 def _extract_elements(session, kb_case: KBCase, report: dict):
     """拆分 viral_elements / visual_symbols → kb_elements，去重并累加 impact_score。"""
-    # viral_elements
-    viral_list = report.get("viral_elements", [])
-    for elem_name in viral_list:
-        if not elem_name or not isinstance(elem_name, str):
-            continue
-        existing = session.query(KBElement).filter_by(name=elem_name).first()
-        if existing:
-            existing.impact_score = (existing.impact_score or 0) + 1
-        else:
-            session.add(KBElement(
-                element_type="viral",
-                name=elem_name,
-                description=f"来自案例: {kb_case.title}",
-                impact_score=1.0,
-                examples=_to_json([kb_case.title]),
-            ))
+    # viral_elements - new format is a dict with topic_layer, emotion_layer, execution_layer
+    viral_data = report.get("viral_elements", {})
+    if isinstance(viral_data, dict):
+        # Extract from each layer
+        for layer_name, layer_list in viral_data.items():
+            if isinstance(layer_list, list):
+                for elem_name in layer_list:
+                    if not elem_name or not isinstance(elem_name, str):
+                        continue
+                    existing = session.query(KBElement).filter_by(
+                        name=elem_name, element_type=f"viral_{layer_name}"
+                    ).first()
+                    if existing:
+                        existing.impact_score = (existing.impact_score or 0) + 1
+                    else:
+                        session.add(KBElement(
+                            element_type=f"viral_{layer_name}",
+                            name=elem_name,
+                            description=f"来自案例 [{layer_name}]: {kb_case.title}",
+                            impact_score=1.0,
+                            examples=_to_json([kb_case.title]),
+                        ))
+    elif isinstance(viral_data, list):
+        # Legacy format - list of strings
+        for elem_name in viral_data:
+            if not elem_name or not isinstance(elem_name, str):
+                continue
+            existing = session.query(KBElement).filter_by(name=elem_name).first()
+            if existing:
+                existing.impact_score = (existing.impact_score or 0) + 1
+            else:
+                session.add(KBElement(
+                    element_type="viral",
+                    name=elem_name,
+                    description=f"来自案例: {kb_case.title}",
+                    impact_score=1.0,
+                    examples=_to_json([kb_case.title]),
+                ))
 
-    # visual_symbols
-    symbols = report.get("visual_symbols", [])
-    for sym_name in symbols:
-        if not sym_name or not isinstance(sym_name, str):
-            continue
-        existing = session.query(KBElement).filter_by(name=sym_name).first()
-        if existing:
-            existing.impact_score = (existing.impact_score or 0) + 1
-        else:
-            session.add(KBElement(
-                element_type="visual_symbol",
-                name=sym_name,
-                description=f"来自案例: {kb_case.title}",
-                impact_score=1.0,
-                examples=_to_json([kb_case.title]),
-            ))
+    # visual_symbols - new format may include descriptions
+    symbols_data = report.get("visual_symbols", [])
+    if isinstance(symbols_data, list):
+        for sym_data in symbols_data:
+            if isinstance(sym_data, str):
+                sym_name = sym_data
+                sym_desc = f"来自案例: {kb_case.title}"
+            elif isinstance(sym_data, dict):
+                sym_name = sym_data.get("name", "")
+                sym_desc = sym_data.get("meaning", f"来自案例: {kb_case.title}")
+            else:
+                continue
+
+            if not sym_name:
+                continue
+            existing = session.query(KBElement).filter_by(name=sym_name).first()
+            if existing:
+                existing.impact_score = (existing.impact_score or 0) + 1
+            else:
+                session.add(KBElement(
+                    element_type="visual_symbol",
+                    name=sym_name,
+                    description=sym_desc,
+                    impact_score=1.0,
+                    examples=_to_json([kb_case.title]),
+                ))
 
 
 def _extract_framework(session, kb_case: KBCase, report: dict):

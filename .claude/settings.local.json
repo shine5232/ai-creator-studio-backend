@@ -37,7 +37,25 @@
       "Bash(tasklist:*)",
       "Bash(wmic process:*)",
       "Bash(ls:*)",
-      "Bash(dir:*)"
+      "Bash(dir:*)",
+      "Bash(pip index:*)",
+      "Bash(pip download:*)",
+      "Bash(unzip -q -c zhipuai-2.1.5.20250825-py3-none-any.whl *.metadata)",
+      "Bash(unzip -q -c zhipuai-2.1.5.20250825-py3-none-any.whl zhipuai-2.1.5.20250825.dist-info/METADATA)",
+      "Bash(/dev/null sleep:*)",
+      "Bash(powershell -Command \"Get-NetTCPConnection -LocalPort 8090 -State Listen | Select-Object -ExpandProperty OwningProcess | ForEach-Object { Stop-Process -Id $_orce }\" 2)",
+      "Bash(powershell -Command \"Stop-Process -Name python -Force -ErrorAction SilentlyContinue\" sleep 5 echo \"Port 8090 status:\" netstat -ano)",
+      "Bash(mysql --version)",
+      "Bash(docker --version)",
+      "Bash(celery -A app.worker.celery_app inspect active)",
+      "Bash(sqlite3:*)",
+      "Bash(npm install:*)",
+      "Bash(npm list:*)",
+      "Bash(npm uninstall:*)",
+      "Bash(iconv -f gbk -t utf-8)",
+      "Bash(python -c \":*)",
+      "Bash(del:*)",
+      "Bash(powershell -Command \"Get-NetTCPConnection -LocalPort 8000,8001,8090 -State Listen -ErrorAction SilentlyContinue | Select-Object LocalPort, State, OwningProcess\")"
     ]
   }
 }

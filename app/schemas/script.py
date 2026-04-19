@@ -54,6 +54,7 @@ class ScriptResponse(BaseModel):
     content: str
     viral_elements: dict | list | str | None
     source_case_id: int | None
+    script_path: str | None = None
     version: int
     is_current: bool
     created_at: datetime | None

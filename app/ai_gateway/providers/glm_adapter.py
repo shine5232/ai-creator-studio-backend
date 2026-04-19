@@ -1,6 +1,6 @@
 import asyncio
 
-from zhipuai import ZhipuAI
+from zai import ZhipuAiClient
 
 from app.ai_gateway.base import AIRequest, AIResponse, BaseAdapter, ServiceType
 from app.config import settings
@@ -39,7 +39,7 @@ class GLMAdapter(BaseAdapter):
 
     @staticmethod
     def _sync_call(api_key: str, model: str, prompt: str, temperature: float, max_tokens: int) -> AIResponse:
-        client = ZhipuAI(api_key=api_key)
+        client = ZhipuAiClient(api_key=api_key)
         messages = [{"role": "user", "content": prompt}]
         response = client.chat.completions.create(
             model=model,

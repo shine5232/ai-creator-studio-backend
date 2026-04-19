@@ -21,18 +21,25 @@ class KBCase(Base, TimestampMixin):
 
     theme: Mapped[str | None] = mapped_column(String(100))
     narrative_type: Mapped[str | None] = mapped_column(String(50))
+    narrative_structure: Mapped[str | None] = mapped_column(Text)
     story_summary: Mapped[str | None] = mapped_column(Text)
     emotion_curve: Mapped[str | None] = mapped_column(Text)
+    emotion_triggers: Mapped[str | None] = mapped_column(Text)
     visual_style: Mapped[str | None] = mapped_column(Text)
+    visual_contrast: Mapped[str | None] = mapped_column(Text)
 
     viral_elements: Mapped[str | None] = mapped_column(Text)
     visual_symbols: Mapped[str | None] = mapped_column(Text)
+    audience_profile: Mapped[str | None] = mapped_column(Text)
+    reusable_elements: Mapped[str | None] = mapped_column(Text)
+    success_factors: Mapped[str | None] = mapped_column(Text)
     title_formula: Mapped[str | None] = mapped_column(String(200))
 
     characters_ethnicity: Mapped[str | None] = mapped_column(Text)
     analysis_report_path: Mapped[str | None] = mapped_column(String(500))
     frames_dir: Mapped[str | None] = mapped_column(String(500))
     analysis_status: Mapped[str | None] = mapped_column(String(20), default="pending")
+    analysis_progress: Mapped[int | None] = mapped_column(Integer, default=0)
     celery_task_id: Mapped[str | None] = mapped_column(String(100))
 
 

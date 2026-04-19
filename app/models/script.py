@@ -17,6 +17,7 @@ class Script(Base, TimestampMixin):
     content: Mapped[str] = mapped_column(Text, nullable=False)
     viral_elements: Mapped[str | None] = mapped_column(Text)
     source_case_id: Mapped[int | None] = mapped_column(Integer)
+    script_path: Mapped[str | None] = mapped_column(String(500))  # Markdown file path
     version: Mapped[int] = mapped_column(Integer, default=1)
     is_current: Mapped[bool] = mapped_column(Boolean, default=True)
 

@@ -1,4 +1,5 @@
 import json
+from pathlib import Path
 
 from sqlalchemy import select, update
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -8,6 +9,199 @@ from app.ai_gateway.registry import registry
 from app.models.script import Script
 from app.schemas.script import CreateScriptRequest, GenerateScriptRequest, UpdateScriptRequest
 from app.utils.logger import logger
+
+
+def _convert_to_markdown(generated: dict, project_id: int, version: int) -> str:
+    """Convert generated script JSON to Markdown format based on template."""
+    title = generated.get("title", "未命名脚本")
+    theme = generated.get("theme", "")
+    narrative_type = generated.get("narrative_type", "")
+    duration = generated.get("duration_seconds", 60)
+    source_case = generated.get("source_case_id")
+
+    # Get reference case info
+    ref_info = ""
+    if source_case:
+        ref_info = f"\n> 基于 Case {source_case} 爆款逻辑创作"
+
+    # Build character profiles section
+    char_profiles = generated.get("character_profiles", [])
+    chars_md = ""
+    for char in char_profiles:
+        role = char.get("role_name", "角色")
+        chars_md += f"""
+### 角色：{role}
+
+- **年龄**：{char.get("age", "")}
+- **性别**：{char.get("gender", "")}
+- **国籍/种族**：{char.get("race_ethnicity", "")} ⭐ 必填，必须与原视频保持一致
+- **肤色**：{char.get("skin_color", "")} ⭐ 必填，必须与原视频保持一致
+- **眼睛**：{char.get("eyes", "")}
+- **发型**：{char.get("hair", "")}
+- **面部特征**：{char.get("facial_features", "")} ⭐ 必填
+- **体型**：{char.get("body_type", "")}
+- **特殊标记**：{char.get("special_marks", "")}
+- **性格特点**：{char.get("personality", "")}
+- **穿着**：
+"""
+        for phase in char.get("clothing_phases", []):
+            chars_md += f'  - {phase.get("phase", "")}：{phase.get("description", "")}\n'
+
+    # Build storyboard section
+    acts = generated.get("acts", [])
+    storyboard_md = ""
+    for act in acts:
+        act_num = act.get("act_number", 1)
+        act_name = act.get("act_name", f"第{act_num}幕")
+        time_range = act.get("time_range", "")
+        storyboard_md += f"""
+### 第{act_num}幕：{act_name}（{time_range}）
+
+"""
+        shots = act.get("shots", [])
+        for shot in shots:
+            shot_num = shot.get("shot_number", 1)
+            shot_time = shot.get("time_range", "")
+            shot_type = shot.get("shot_type", "")
+            location = shot.get("location", "")
+            characters = shot.get("characters", "")
+            environment = shot.get("environment", "")
+            event = shot.get("event", "")
+            dialog = shot.get("dialog", "")
+            tone = shot.get("tone", "")
+            mood = shot.get("mood", "")
+
+            storyboard_md += f"""**镜头 {shot_num} | {shot_time} | {location}**
+| 项目 | 描述 |
+|------|------|
+| **镜头** | {shot_type} |
+| **人物** | {characters} |
+| **环境** | {environment} |
+| **事件** | {event} |
+"""
+            if dialog:
+                storyboard_md += f"| **台词** | {dialog} |\n"
+            storyboard_md += f"""| **色调** | {tone} |
+| **氛围** | {mood} |
+
+"""
+
+    # Build visual design section
+    visual = generated.get("visual_design", {})
+    visual_md = """
+## 🎨 视觉对比设计
+
+### 场景对比
+"""
+    contrasts = visual.get("contrasts", [])
+    if contrasts:
+        visual_md += "| 前期场景 | 后期场景 | 象征意义 |\n"
+        visual_md += "|----------|----------|----------|\n"
+        for c in contrasts:
+            visual_md += f"| {c.get('before', '')} | {c.get('after', '')} | {c.get('symbol', '')} |\n"
+
+    color_prog = visual.get("color_progression", "")
+    visual_md += f"""
+### 色调变化
+- **整体色调变化**：{color_prog}
+
+### 视觉符号
+"""
+    symbols = visual.get("visual_symbols", [])
+    if symbols:
+        visual_md += "| 符号 | 象征意义 |\n"
+        visual_md += "|------|----------|\n"
+        for s in symbols:
+            visual_md += f"| {s.get('symbol', '')} | {s.get('meaning', '')} |\n"
+
+    # Build viral elements section
+    viral = generated.get("viral_elements", [])
+    viral_md = """
+## ✅ 爆款元素检查
+
+### 话题层
+"""
+    for v in viral:
+        viral_md += f"- ✅ {v}\n"
+
+    # Build title suggestions
+    titles = generated.get("title_suggestions", [])
+    titles_md = """
+## 📝 标题建议
+
+### 推荐标题
+"""
+    for t in titles:
+        if t.get("recommended"):
+            titles_md += f"- **{t.get('title', '')}** ⭐ 推荐\n"
+        else:
+            titles_md += f"- {t.get('title', '')}\n"
+
+    # Content section
+    content = generated.get("content", "")
+
+    # Combine all sections
+    md = f"""# 🎬 脚本大纲：{title}
+
+{ref_info}
+> 主题：{theme}
+> 时长：{duration}秒
+
+---
+
+## 📊 创作说明
+
+### 核心要素
+- **主题**：{theme}
+- **叙事类型**：{narrative_type}
+- **时长**：{duration}秒
+
+---
+
+## 🎭 人物设定
+{chars_md}
+---
+
+## 📝 故事梗概
+
+{content}
+
+---
+
+## 📝 分镜脚本
+{storyboard_md}
+{visual_md}
+{viral_md}
+{titles_md}
+---
+
+*创作时间：{Path.cwd().name}*
+*项目ID：{project_id}*
+*脚本版本：v{version}*
+"""
+    return md
+
+
+async def _save_script_to_file(project_id: int, version: int, markdown_content: str, title: str) -> str:
+    """Save script markdown to project directory."""
+    # Create project scripts directory
+    scripts_dir = Path(f"data/projects/{project_id}/scripts")
+    scripts_dir.mkdir(parents=True, exist_ok=True)
+
+    # Sanitize title for filename
+    safe_title = "".join(c for c in title if c.isalnum() or c in (' ', '-', '_')).strip()
+    if not safe_title:
+        safe_title = "script"
+
+    # Generate filename
+    filename = f"{safe_title}_v{version}.md"
+    file_path = scripts_dir / filename
+
+    # Write markdown content
+    file_path.write_text(markdown_content, encoding="utf-8")
+
+    logger.info(f"Script saved to: {file_path}")
+    return str(file_path)
 
 
 def _parse_script_json(text: str) -> dict | None:
@@ -270,16 +464,44 @@ class ScriptService:
             if ctx:
                 story_part = f"故事梗概: {ctx['story_summary']}\n" if ctx.get("story_summary") else ""
                 chars_part = f"人物外貌特征: {ctx['characters_ethnicity']}\n" if ctx.get("characters_ethnicity") else ""
+                narrative_part = f"叙事结构: {ctx['narrative_structure']}\n" if ctx.get("narrative_structure") else ""
+                emotion_part = f"情感触发点: {ctx['emotion_triggers']}\n" if ctx.get("emotion_triggers") else ""
+                contrast_part = f"视觉对比: {ctx['visual_contrast']}\n" if ctx.get("visual_contrast") else ""
+                audience_part = f"受众画像: {ctx['audience_profile']}\n" if ctx.get("audience_profile") else ""
+                reusable = ctx.get('reusable_elements', {})
+                reusable_part = ""
+                if isinstance(reusable, dict):
+                    if reusable.get("narrative_template"):
+                        reusable_part += f"叙事模板: {reusable['narrative_template']}\n"
+                    if reusable.get("visual_template"):
+                        reusable_part += f"视觉模板: {reusable['visual_template']}\n"
+
+                # Handle viral_elements which may be a dict with layers
+                viral_list = ctx.get('viral_elements', [])
+                if isinstance(viral_list, dict):
+                    viral_str = []
+                    for layer, items in viral_list.items():
+                        if isinstance(items, list):
+                            viral_str.append(f"{layer}: {', '.join(items)}")
+                    viral_part = f"爆款元素:\n" + "\n".join(viral_str) + "\n"
+                else:
+                    viral_part = f"爆款元素: {', '.join(viral_list)}\n"
+
                 kb_reference = (
                     f"\n\n【参考爆款案例】\n"
                     f"标题: {ctx['title']} (点赞率: {ctx['like_rate']})\n"
                     f"主题: {ctx['theme']}\n"
                     f"叙事类型: {ctx['narrative_type']}\n"
+                    f"{narrative_part}"
                     f"{story_part}"
-                    f"视觉风格: {ctx['visual_style']}\n"
-                    f"视觉符号: {', '.join(ctx['visual_symbols'])}\n"
                     f"情感曲线: {ctx['emotion_curve']}\n"
-                    f"爆款元素: {', '.join(ctx['viral_elements'])}\n"
+                    f"{emotion_part}"
+                    f"视觉风格: {ctx['visual_style']}\n"
+                    f"{contrast_part}"
+                    f"视觉符号: {', '.join(ctx['visual_symbols'])}\n"
+                    f"{viral_part}"
+                    f"{audience_part}"
+                    f"{reusable_part}"
                     f"标题公式: {ctx['title_formula']}\n"
                     f"{chars_part}"
                     f"请严格参考以上案例的风格、人物外貌、视觉风格和结构来创作。"
@@ -464,6 +686,12 @@ class ScriptService:
         structured_block = json.dumps(structured, ensure_ascii=False)
         enriched_content += "\n\n---STRUCTURED_DATA---\n" + structured_block
 
+        # 8. 生成 Markdown 格式脚本并保存到文件
+        markdown_content = _convert_to_markdown(generated, project_id, next_version)
+        script_path = await _save_script_to_file(
+            project_id, next_version, markdown_content, generated.get("title", "script")
+        )
+
         # 8. 入库（复用版本管理逻辑）
         await self.db.execute(
             update(Script).where(Script.project_id == project_id).values(is_current=False)
@@ -484,6 +712,7 @@ class ScriptService:
             content=enriched_content,
             viral_elements=json.dumps(generated.get("viral_elements"), ensure_ascii=False),
             source_case_id=data.source_case_id,
+            script_path=script_path,
             version=next_version,
             is_current=True,
         )
