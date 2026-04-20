@@ -110,6 +110,68 @@ async def get_case_thumbnail(
     return FileResponse(thumb, media_type="image/jpeg")
 
 
+@router.get("/cases/{case_id}/video")
+async def get_case_video(
+    case_id: int,
+    request: Request,
+    db: AsyncSession = Depends(get_db),
+):
+    """Serve the source video file with Range request support for browser playback."""
+    service = KnowledgeService(db)
+    case = await service.get_case(case_id)
+    if not case or not case.source_video_path:
+        raise HTTPException(status_code=404, detail="Video not found")
+
+    video_path = Path(case.source_video_path)
+    if not video_path.exists():
+        raise HTTPException(status_code=404, detail="Video file not found on disk")
+
+    file_size = video_path.stat().st_size
+    range_header = request.headers.get("range")
+
+    if range_header:
+        # Parse Range header: bytes=start-end
+        range_match = range_header.strip().split("=")[-1]
+        start_str, end_str = range_match.split("-", 1)
+        start = int(start_str) if start_str else 0
+        end = int(end_str) if end_str else file_size - 1
+        end = min(end, file_size - 1)
+
+        content_length = end - start + 1
+        content_type = _video_media_type(video_path)
+
+        with open(video_path, "rb") as f:
+            f.seek(start)
+            data = f.read(content_length)
+
+        return Response(
+            content=data,
+            status_code=206,
+            media_type=content_type,
+            headers={
+                "Content-Range": f"bytes {start}-{end}/{file_size}",
+                "Accept-Ranges": "bytes",
+                "Content-Length": str(content_length),
+            },
+        )
+
+    # No Range header — return full file
+    content_type = _video_media_type(video_path)
+    return FileResponse(video_path, media_type=content_type)
+
+
+def _video_media_type(path: Path) -> str:
+    suffix = path.suffix.lower()
+    return {
+        ".mp4": "video/mp4",
+        ".webm": "video/webm",
+        ".mkv": "video/x-matroska",
+        ".avi": "video/x-msvideo",
+        ".mov": "video/quicktime",
+        ".flv": "video/x-flv",
+    }.get(suffix, "video/mp4")
+
+
 @router.get("/elements")
 async def list_elements(
     element_type: str | None = None,
@@ -264,6 +326,8 @@ async def recommend_themes(
         d = KBCaseResponse.model_validate(c).model_dump()
         if d.get("thumbnail_url"):
             d["thumbnail_url"] = base + d["thumbnail_url"]
+        if d.get("video_url"):
+            d["video_url"] = base + d["video_url"]
         results.append(d)
     return results
 
@@ -288,6 +352,8 @@ async def recommend_cases(
         d = KBCaseResponse.model_validate(c).model_dump()
         if d.get("thumbnail_url"):
             d["thumbnail_url"] = base + d["thumbnail_url"]
+        if d.get("video_url"):
+            d["video_url"] = base + d["video_url"]
         results.append(d)
     return results
 

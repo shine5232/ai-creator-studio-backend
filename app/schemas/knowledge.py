@@ -53,8 +53,10 @@ class KBCaseResponse(BaseModel):
     characters_ethnicity: str | None
     analysis_status: str | None
     analysis_progress: int | None = None
+    source_video_path: str | None
     frames_dir: str | None
     thumbnail_url: str | None = None
+    video_url: str | None = None
     created_at: datetime | None
 
     model_config = {"from_attributes": True}
@@ -106,6 +108,14 @@ class KBCaseResponse(BaseModel):
                         rel = rel[len("data/"):]
                     self.thumbnail_url = f"/static/{rel}"
                     break
+        if self.source_video_path:
+            from pathlib import Path
+            video = Path(self.source_video_path)
+            if video.exists():
+                rel = str(video).replace("\\", "/")
+                if rel.startswith("data/"):
+                    rel = rel[len("data/"):]
+                self.video_url = f"/static/{rel}"
         return self
 
 
