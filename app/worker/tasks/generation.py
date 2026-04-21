@@ -103,7 +103,7 @@ def _build_prompt_for_shot(
     visual_style: str,
 ) -> str:
     """构建用于同时生成文生图提示词和图生视频提示词的 AI 请求。"""
-    return (
+    prompt = (
         "你是一个专业的AI提示词工程师。请根据以下分镜信息，同时生成两条提示词：\n"
         "1. 文生图提示词（用于 Seedream/豆包 模型生成静态图片）\n"
         "2. 图生视频提示词（用于万相/Seedance 等图生视频模型，基于已生成的图片生成动态视频）\n\n"
@@ -137,10 +137,20 @@ def _build_prompt_for_shot(
         f"- 景别：{shot.shot_type or '未指定'}\n"
         f"- 镜头描述：{shot.description}\n"
         f"- 色调：{tone or '未指定'}\n"
-        f"- 氛围：{mood or '未指定'}\n\n"
-        f"## 视觉风格参考\n{visual_style}\n\n"
+        f"- 氛围：{mood or '未指定'}\n"
+    )
+    if shot.dialog:
+        _lang_names = {"zh": "中文", "en": "英语", "ja": "日语", "ko": "韩语", "th": "泰语", "vi": "越南语", "fr": "法语", "de": "德语", "es": "西班牙语"}
+        _lang_name = _lang_names.get(shot.dialog_lang or "zh", "中文")
+        prompt += (
+            f"- 台词：角色用{_lang_name}说\"{shot.dialog}\"\n"
+            f"注意：图生视频提示词需要体现角色正在说话的状态，口型应匹配{_lang_name}发音。\n"
+        )
+    prompt += (
+        f"\n## 视觉风格参考\n{visual_style}\n\n"
         "请生成提示词："
     )
+    return prompt
 
 
 def _parse_prompts(text: str) -> tuple[str, str]:
@@ -568,6 +578,13 @@ def generate_videos_for_shots(
                 if not prompt:
                     shot.video_status = "skipped"
                     completed += 1
+                    continue
+
+                # Inject dialog language info for lip-sync
+                if shot.dialog:
+                    _lang_names = {"zh": "中文", "en": "英语", "ja": "日语", "ko": "韩语", "th": "泰语", "vi": "越南语", "fr": "法语", "de": "德语", "es": "西班牙语"}
+                    _lang_name = _lang_names.get(shot.dialog_lang or "zh", "中文")
+                    prompt = f"角色正在用{_lang_name}说话\"{shot.dialog}\"，口型匹配{_lang_name}发音。{prompt}"
                     continue
 
                 # 读取本地图片，转为 JPEG base64 data URI 传给大模型 API
@@ -1100,6 +1117,12 @@ def auto_generate_pipeline(
                             shot.video_status = "failed"
                             completed += 1
                             continue
+
+                        # Inject dialog language info for lip-sync
+                        if shot.dialog:
+                            _lang_names = {"zh": "中文", "en": "英语", "ja": "日语", "ko": "韩语", "th": "泰语", "vi": "越南语", "fr": "法语", "de": "德语", "es": "西班牙语"}
+                            _lang_name = _lang_names.get(shot.dialog_lang or "zh", "中文")
+                            prompt = f"角色正在用{_lang_name}说话\"{shot.dialog}\"，口型匹配{_lang_name}发音。{prompt}"
 
                         # 读取图片转 JPEG base64
                         import base64

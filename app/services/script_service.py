@@ -12,6 +12,24 @@ from app.models.script import Script, Storyboard, Shot
 from app.schemas.script import CreateScriptRequest, GenerateScriptRequest, UpdateScriptRequest
 from app.utils.logger import logger
 
+LANG_RULES = {
+    "中国": "zh", "华": "zh", "汉": "zh",
+    "印度": "en", "南亚": "en", "巴基斯坦": "en", "孟加拉": "en",
+    "美国": "en", "英国": "en", "澳": "en", "加拿大": "en",
+    "日本": "ja", "韩国": "ko", "泰": "th", "越南": "vi",
+    "法国": "fr", "德国": "de", "西班牙": "es",
+}
+
+
+def _infer_dialog_lang(char_names: list[str], nationality_map: dict[str, str]) -> str:
+    for name in char_names:
+        nationality = nationality_map.get(name, "")
+        for keyword, lang in LANG_RULES.items():
+            if keyword in nationality:
+                return lang
+    return "zh"
+
+
 VIDEO_STYLE_GUIDE = {
     "cinematic": {
         "label": "电影级写实风格",
@@ -666,6 +684,8 @@ class ScriptService:
             '          "event": "发生的事件/动作",\n'
             '          "tone": "画面色调（如：暗黄色，整体偏暗）",\n'
             '          "mood": "情感氛围关键词",\n'
+            '          "dialog": "该镜头的台词（如有），无台词则为空字符串",\n'
+            '          "dialog_lang": "台词语言代码（zh/en/ja/ko等），根据人物国籍推断",\n'
             f'          "image_prompt": "Seedream文生图提示词（中文为主，专业术语用英文），格式：先写景别，再写画面主体（含完整人物外貌细节），再写人物动作表情，再写环境描写，再写美学短词（色调、光影、构图、氛围），结尾固定：{style["prompt_suffix"]}",\n'
             f'          "video_prompt": "图生视频提示词（中文为主，英文不超过50词），描述画面中的动态变化、运动和镜头运动，1-3句话，风格需符合{style["label"]}，如：主体缓缓转头，微风吹动头发，固定镜头，柔光，暖色调"\n'
             '        }\n'
@@ -884,6 +904,16 @@ class ScriptService:
 
             shot_num = 0
             total_duration = 0.0
+
+            # Build nationality map from character_profiles for lang inference
+            char_profiles = generated.get("character_profiles", [])
+            nationality_map: dict[str, str] = {}
+            for cp in char_profiles:
+                name = cp.get("role_name", "")
+                nationality = cp.get("race_ethnicity", "")
+                if name and nationality:
+                    nationality_map[name] = nationality
+
             for act, shot_data in all_shot_data:
                 shot_num += 1
                 act_name = act.get("act_name", f"第{act.get('act_number', 1)}幕")
@@ -901,6 +931,15 @@ class ScriptService:
                 duration = _parse_duration(shot_data.get("time_range", ""))
                 total_duration += duration
 
+                # Infer dialog language from characters in this shot
+                dialog_text = shot_data.get("dialog", "")
+                dialog_lang = shot_data.get("dialog_lang") or ""
+                if dialog_text and not dialog_lang:
+                    # Extract character names mentioned in this shot
+                    chars_field = shot_data.get("characters", "")
+                    matched_names = [n for n in nationality_map if n in chars_field]
+                    dialog_lang = _infer_dialog_lang(matched_names, nationality_map) if matched_names else "zh"
+
                 shot = Shot(
                     storyboard_id=storyboard.id,
                     shot_number=shot_num,
@@ -910,6 +949,8 @@ class ScriptService:
                     description=description,
                     tone=shot_data.get("tone"),
                     mood=shot_data.get("mood"),
+                    dialog=dialog_text or None,
+                    dialog_lang=dialog_lang or None,
                     image_prompt=shot_data.get("image_prompt"),
                     video_prompt=shot_data.get("video_prompt"),
                     video_duration=duration,

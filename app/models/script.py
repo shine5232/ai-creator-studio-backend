@@ -55,6 +55,8 @@ class Shot(Base, TimestampMixin):
     description: Mapped[str] = mapped_column(Text, nullable=False)
     tone: Mapped[str | None] = mapped_column(String(50))
     mood: Mapped[str | None] = mapped_column(String(50))
+    dialog: Mapped[str | None] = mapped_column(Text)
+    dialog_lang: Mapped[str | None] = mapped_column(String(10))
 
     # Image generation
     image_prompt: Mapped[str | None] = mapped_column(Text)
