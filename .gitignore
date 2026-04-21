@@ -10,9 +10,6 @@ venv/
 # Environment (contains secrets)
 .env
 
-# Data
-data/
-
 # IDE
 .idea/
 .vscode/

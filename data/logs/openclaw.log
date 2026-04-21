@@ -1,0 +1,1581 @@
+2026-04-19 00:07:58.329 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 00:08:38.631 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 00:09:41.425 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 00:09:41.508 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 00:09:44.604 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 00:09:44.701 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 00:10:41.912 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 00:10:41.994 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 01:38:36.299 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 01:38:36.382 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 01:52:55.514 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 01:52:55.700 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 01:53:01.272 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 01:53:01.383 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 01:55:34.092 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 01:55:34.197 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 01:59:35.940 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 01:59:36.060 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 02:00:49.195 | INFO     | app.services.auth_service:register:39 - User registered: admin
+2026-04-19 02:00:59.855 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 02:00:59.984 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 02:04:59.441 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 02:04:59.572 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 02:06:37.070 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 02:06:37.185 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 02:07:26.628 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 02:07:26.734 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 02:07:43.116 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 02:07:43.241 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 02:08:07.023 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 02:08:07.125 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 02:08:13.826 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 02:08:13.953 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 02:09:23.662 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 02:09:23.765 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 02:09:56.396 | INFO     | app.services.auth_service:register:39 - User registered: admin
+2026-04-19 02:10:04.641 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 02:10:04.775 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 02:10:07.994 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 02:10:08.095 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 02:10:15.510 | INFO     | app.services.auth_service:register:39 - User registered: admin
+2026-04-19 02:10:22.224 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 02:10:22.329 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 02:10:32.359 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 02:10:32.484 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 02:10:36.407 | INFO     | app.services.auth_service:register:39 - User registered: admin
+2026-04-19 02:10:47.772 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 02:10:47.874 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 02:11:02.534 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 02:11:02.633 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 02:11:39.305 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 02:11:39.429 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 02:11:54.842 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 02:11:54.964 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 02:12:05.674 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 02:12:05.820 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 02:13:19.751 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 02:13:19.862 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 02:14:49.222 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 02:14:49.324 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 02:16:19.348 | INFO     | app.services.auth_service:register:39 - User registered: tester
+2026-04-19 02:17:14.773 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 02:17:14.876 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 02:20:57.080 | INFO     | app.services.knowledge_service:analyze_video:112 - Video analysis task submitted: case=1, task=155b3e46-79f6-4241-b016-d858a9331a3f
+2026-04-19 02:29:11.363 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 02:29:11.473 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 02:29:18.955 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 02:29:19.065 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 02:37:06.528 | INFO     | app.services.knowledge_service:analyze_video:112 - Video analysis task submitted: case=1, task=e3041a84-17e2-4b26-af9d-d24e706d2f89
+2026-04-19 02:37:32.942 | ERROR    | app.services.video_analysis_service:describe_frames:218 - GLM-4.6V-Flash frame description failed for data\analysis\frames\frame_002.jpg: Error code: 429, with error text {"error":{"code":"1305","message":"该模型当前访问量过大，请您稍后再试"}}
+2026-04-19 02:39:23.648 | ERROR    | app.services.video_analysis_service:describe_frames:218 - GLM-4.6V-Flash frame description failed for data\analysis\frames\frame_012.jpg: Error code: 429, with error text {"error":{"code":"1305","message":"该模型当前访问量过大，请您稍后再试"}}
+2026-04-19 02:40:56.019 | WARNING  | app.services.video_analysis_service:_parse_json_response:295 - Failed to parse JSON response: ```json
+{
+  "theme": "励志",
+  "narrative_type": "反转",
+  "story_summary": "视频以一位贫困女孩的破旧房间为起点，展示了她的生活环境。随着视频的展开，我们看到一位神秘的建设者开始对女孩的房间进行改造。镜头逐渐揭示出，这位建设者通过巧妙的创意和辛勤的工作，将女孩的房间变成了一个梦幻般的海洋宫殿。视频的开头，女孩坐在破旧的床上，面带无
+2026-04-19 02:40:56.082 | INFO     | app.worker.tasks.knowledge:analyze_video_task:77 - Video analysis completed for case 1
+2026-04-19 02:44:15.572 | ERROR    | app.services.video_analysis_service:describe_frames:218 - GLM-4.6V-Flash frame description failed for data\analysis\frames\frame_015.jpg: Error code: 429, with error text {"error":{"code":"1305","message":"该模型当前访问量过大，请您稍后再试"}}
+2026-04-19 02:44:48.095 | ERROR    | app.services.video_analysis_service:describe_frames:218 - GLM-4.6V-Flash frame description failed for data\analysis\frames\frame_018.jpg: Error code: 429, with error text {"error":{"code":"1305","message":"该模型当前访问量过大，请您稍后再试"}}
+2026-04-19 02:45:26.085 | INFO     | app.worker.tasks.knowledge:analyze_video_task:77 - Video analysis completed for case 1
+2026-04-19 02:49:17.278 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 02:49:17.385 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 02:49:25.236 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 02:49:25.328 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 02:49:35.681 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 02:49:35.788 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 02:49:43.666 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 02:49:43.771 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 02:49:47.610 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 02:49:47.689 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 02:50:03.222 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 02:50:03.321 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 02:50:06.653 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 02:50:06.738 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 02:50:16.405 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 02:50:16.504 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 02:50:23.432 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 02:50:23.528 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 02:57:20.266 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 02:57:20.362 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 02:57:32.281 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 02:57:32.375 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 02:57:34.305 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 02:57:34.386 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 02:57:46.325 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 02:57:46.430 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 03:32:48.102 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 03:32:48.196 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 03:32:52.278 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 03:32:52.358 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 03:33:08.327 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 03:33:08.428 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 03:33:13.731 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 03:33:13.830 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 04:11:42.109 | INFO     | app.services.knowledge_service:analyze_video:112 - Video analysis task submitted: case=2, task=49f3d297-6f1c-4703-a5fd-391089dec3c2
+2026-04-19 04:11:44.346 | ERROR    | app.worker.tasks.knowledge:analyze_video_task:80 - Video analysis failed for case 2: ERROR: [youtube] iDkZ0bg0jpc: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies
+2026-04-19 04:14:21.613 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 04:14:21.711 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 04:17:13.003 | INFO     | app.services.knowledge_service:analyze_video:112 - Video analysis task submitted: case=2, task=dd346512-fc58-479d-b149-17c3201f18ba
+2026-04-19 04:17:39.068 | INFO     | app.services.video_analysis_service:extract_frames:283 - Successfully extracted 19/19 frames
+2026-04-19 04:17:46.531 | INFO     | app.services.video_analysis_service:describe_frames:339 - Frame 1/19 described successfully
+2026-04-19 04:17:54.944 | INFO     | app.services.video_analysis_service:describe_frames:339 - Frame 2/19 described successfully
+2026-04-19 04:18:01.168 | INFO     | app.services.video_analysis_service:describe_frames:339 - Frame 3/19 described successfully
+2026-04-19 04:18:06.941 | INFO     | app.services.video_analysis_service:describe_frames:339 - Frame 4/19 described successfully
+2026-04-19 04:18:16.603 | INFO     | app.services.video_analysis_service:describe_frames:339 - Frame 5/19 described successfully
+2026-04-19 04:18:25.360 | INFO     | app.services.video_analysis_service:describe_frames:339 - Frame 6/19 described successfully
+2026-04-19 04:18:31.782 | INFO     | app.services.video_analysis_service:describe_frames:339 - Frame 7/19 described successfully
+2026-04-19 04:18:44.243 | INFO     | app.services.video_analysis_service:describe_frames:339 - Frame 8/19 described successfully
+2026-04-19 04:18:52.474 | INFO     | app.services.video_analysis_service:describe_frames:339 - Frame 9/19 described successfully
+2026-04-19 04:19:00.072 | INFO     | app.services.video_analysis_service:describe_frames:339 - Frame 10/19 described successfully
+2026-04-19 04:19:06.640 | INFO     | app.services.video_analysis_service:describe_frames:339 - Frame 11/19 described successfully
+2026-04-19 04:19:17.251 | INFO     | app.services.video_analysis_service:describe_frames:339 - Frame 12/19 described successfully
+2026-04-19 04:19:25.195 | INFO     | app.services.video_analysis_service:describe_frames:339 - Frame 13/19 described successfully
+2026-04-19 04:19:35.641 | INFO     | app.services.video_analysis_service:describe_frames:339 - Frame 14/19 described successfully
+2026-04-19 04:19:42.005 | INFO     | app.services.video_analysis_service:describe_frames:339 - Frame 15/19 described successfully
+2026-04-19 04:19:52.157 | INFO     | app.services.video_analysis_service:describe_frames:339 - Frame 16/19 described successfully
+2026-04-19 04:19:59.227 | INFO     | app.services.video_analysis_service:describe_frames:339 - Frame 17/19 described successfully
+2026-04-19 04:20:05.845 | INFO     | app.services.video_analysis_service:describe_frames:339 - Frame 18/19 described successfully
+2026-04-19 04:20:12.890 | INFO     | app.services.video_analysis_service:describe_frames:339 - Frame 19/19 described successfully
+2026-04-19 04:20:12.892 | INFO     | app.services.video_analysis_service:describe_frames:374 - Frame description complete: 19/19 successful
+2026-04-19 04:20:13.927 | INFO     | app.services.video_analysis_service:analyze_content:421 - Structural analysis attempt 1/3
+2026-04-19 04:20:22.327 | INFO     | app.services.video_analysis_service:analyze_content:431 - Structural analysis completed successfully
+2026-04-19 04:20:22.362 | INFO     | app.worker.tasks.knowledge:analyze_video_task:77 - Video analysis completed for case 2
+2026-04-19 04:23:11.255 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 04:23:11.367 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 04:23:15.230 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 04:23:15.324 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 04:23:24.131 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 04:23:24.243 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 04:23:30.255 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 04:23:30.367 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 04:23:32.480 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 04:23:32.574 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 04:23:42.933 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 04:23:43.050 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 04:23:57.875 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 04:23:57.991 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 04:25:09.640 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 04:25:09.735 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 04:26:11.191 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 04:26:11.283 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 04:31:28.616 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 04:31:28.732 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 04:31:34.948 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 04:31:35.063 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 04:31:41.567 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 04:31:41.676 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 04:31:49.429 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 04:31:49.545 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 04:32:16.054 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 04:32:16.164 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 04:32:21.930 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 04:32:22.038 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 04:32:28.584 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 04:32:28.695 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 04:32:30.839 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 04:32:30.932 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 04:32:37.364 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 04:32:37.471 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 04:32:40.693 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 04:32:40.784 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 04:32:44.950 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 04:32:45.043 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 04:32:49.787 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 04:32:49.879 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 04:32:53.276 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 04:32:53.380 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 04:48:03.375 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 04:48:03.487 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 04:48:21.605 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 04:48:21.715 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 04:48:36.500 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 04:48:36.610 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 04:48:39.273 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 04:48:39.366 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 04:48:48.338 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 04:48:48.446 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 04:48:52.835 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 04:48:52.926 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 04:48:56.433 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 04:48:56.532 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 04:49:08.619 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 04:49:08.729 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 08:23:27.231 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 08:23:27.331 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 08:23:29.268 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 08:23:29.350 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 08:23:45.310 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 08:23:45.406 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 08:23:53.991 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 08:23:54.088 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 08:24:12.341 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 08:24:12.435 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 09:32:17.674 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 09:32:17.777 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 09:32:26.276 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 09:32:26.377 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 09:32:34.327 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 09:32:34.426 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 09:32:50.830 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 09:32:50.925 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 09:35:44.437 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 09:35:44.543 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 09:35:58.096 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 09:35:58.198 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 09:36:06.953 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 09:36:07.046 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 09:36:30.626 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 09:36:30.731 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 09:36:39.172 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 09:36:39.268 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 09:36:45.681 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 09:36:45.781 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 09:36:55.252 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 09:36:55.337 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 09:37:02.438 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 09:37:02.545 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 09:37:06.509 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 09:37:06.596 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 09:38:53.152 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 09:38:53.253 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 09:38:59.423 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 09:38:59.525 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 09:39:21.981 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 09:39:22.081 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 09:39:27.700 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 09:39:27.783 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 09:39:38.944 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 09:39:39.046 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 09:39:46.788 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 09:39:46.890 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 09:39:52.930 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 09:39:53.013 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 09:40:18.953 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 09:40:19.052 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 09:40:26.844 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 09:40:26.951 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 09:40:37.403 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 09:40:37.497 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 09:42:02.644 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 09:42:02.744 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 09:42:18.331 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 09:42:18.425 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 09:42:35.853 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 09:42:35.952 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 09:43:21.647 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 09:43:21.724 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 09:44:32.475 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 09:44:32.569 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 09:44:38.632 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 09:44:38.726 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 09:45:30.231 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 09:45:30.308 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 09:46:49.014 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 09:46:49.114 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 09:47:06.949 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 09:47:07.060 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 09:48:43.807 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 09:48:43.886 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 09:48:51.325 | ERROR    | app.main:unhandled_exception_handler:60 - Unhandled exception on GET /api/v1/kb/cases/2/markdown: name 'select' is not defined
+Traceback (most recent call last):
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\cors.py", line 96, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\cors.py", line 154, in simple_response
+    await self.app(scope, receive, send)
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\fastapi\middleware\asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\routing.py", line 660, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\routing.py", line 680, in app
+    await route.handle(scope, receive, send)
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\routing.py", line 276, in handle
+    await self.app(scope, receive, send)
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\fastapi\routing.py", line 134, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\fastapi\routing.py", line 120, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\fastapi\routing.py", line 674, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\fastapi\routing.py", line 328, in run_endpoint_function
+    return await dependant.call(**values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\ai-creator-studio-backend\app\api\v1\knowledge.py", line 305, in get_case_markdown
+    count_result = await db.execute(select(func.count(KBCase.id)))
+                                    ^^^^^^
+NameError: name 'select' is not defined. Did you forget to import 'select'
+
+2026-04-19 09:48:53.070 | ERROR    | app.main:unhandled_exception_handler:60 - Unhandled exception on GET /api/v1/kb/cases/2/markdown: name 'select' is not defined
+Traceback (most recent call last):
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\cors.py", line 96, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\cors.py", line 154, in simple_response
+    await self.app(scope, receive, send)
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\fastapi\middleware\asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\routing.py", line 660, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\routing.py", line 680, in app
+    await route.handle(scope, receive, send)
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\routing.py", line 276, in handle
+    await self.app(scope, receive, send)
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\fastapi\routing.py", line 134, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\fastapi\routing.py", line 120, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\fastapi\routing.py", line 674, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\fastapi\routing.py", line 328, in run_endpoint_function
+    return await dependant.call(**values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\ai-creator-studio-backend\app\api\v1\knowledge.py", line 305, in get_case_markdown
+    count_result = await db.execute(select(func.count(KBCase.id)))
+                                    ^^^^^^
+NameError: name 'select' is not defined. Did you forget to import 'select'
+
+2026-04-19 09:50:53.360 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 09:50:53.462 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 09:51:09.567 | ERROR    | app.main:unhandled_exception_handler:60 - Unhandled exception on GET /api/v1/kb/cases/2/markdown: name 'select' is not defined
+Traceback (most recent call last):
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\cors.py", line 96, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\cors.py", line 154, in simple_response
+    await self.app(scope, receive, send)
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\fastapi\middleware\asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\routing.py", line 660, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\routing.py", line 680, in app
+    await route.handle(scope, receive, send)
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\routing.py", line 276, in handle
+    await self.app(scope, receive, send)
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\fastapi\routing.py", line 134, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\fastapi\routing.py", line 120, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\fastapi\routing.py", line 674, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\fastapi\routing.py", line 328, in run_endpoint_function
+    return await dependant.call(**values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\ai-creator-studio-backend\app\api\v1\knowledge.py", line 305, in get_case_markdown
+    count_result = await db.execute(select(func.count(KBCase.id)))
+                                    ^^^^^^
+NameError: name 'select' is not defined. Did you forget to import 'select'
+
+2026-04-19 09:51:54.836 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 09:51:54.914 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 09:57:13.914 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 09:57:13.993 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 09:57:56.031 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 09:57:56.125 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 09:58:30.620 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 09:58:30.714 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 09:58:38.744 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 09:58:38.838 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 10:00:17.461 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 10:00:17.562 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 10:00:19.325 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 10:00:19.405 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 10:00:21.392 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 10:00:21.473 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 10:00:24.206 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 10:00:24.288 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 10:00:42.838 | INFO     | app.api.v1.knowledge:get_case_markdown:301 - [DEBUG] Total cases in DB: 2
+2026-04-19 10:00:42.840 | INFO     | app.api.v1.knowledge:get_case_markdown:306 - [DEBUG] All case IDs: [1, 2]
+2026-04-19 10:00:42.842 | INFO     | app.api.v1.knowledge:get_case_markdown:311 - [DEBUG] Requested case_id=2, case_found=True
+2026-04-19 10:00:42.843 | INFO     | app.api.v1.knowledge:get_case_markdown:323 - [DEBUG] report_path exists=True, md_exists=True
+2026-04-19 10:01:03.827 | INFO     | app.api.v1.knowledge:get_case_markdown:301 - [DEBUG] Total cases in DB: 2
+2026-04-19 10:01:03.829 | INFO     | app.api.v1.knowledge:get_case_markdown:306 - [DEBUG] All case IDs: [1, 2]
+2026-04-19 10:01:03.830 | INFO     | app.api.v1.knowledge:get_case_markdown:311 - [DEBUG] Requested case_id=1, case_found=True
+2026-04-19 10:01:03.831 | INFO     | app.api.v1.knowledge:get_case_markdown:323 - [DEBUG] report_path exists=True, md_exists=True
+2026-04-19 10:16:59.335 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 10:16:59.430 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 10:17:33.434 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 10:17:33.530 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 10:17:59.923 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 10:18:00.018 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 11:05:31.837 | INFO     | app.api.v1.knowledge:reanalyze_case:237 - Re-analysis task submitted: case=2, task=c847e9b1-9533-4d45-821b-6c4d82ebad2d
+2026-04-19 11:06:31.642 | ERROR    | app.worker.tasks.knowledge:reanalyze_video_task:202 - Re-analysis failed for case 2: name 'Path' is not defined
+2026-04-19 11:08:10.210 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 11:08:10.308 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 11:08:57.287 | INFO     | app.api.v1.knowledge:reanalyze_case:237 - Re-analysis task submitted: case=2, task=f38bd7d1-b19f-4689-b9e2-f5de111df628
+2026-04-19 11:09:05.712 | INFO     | app.services.video_analysis_service:describe_frames:403 - Frame 1/19 described successfully
+2026-04-19 11:09:13.162 | INFO     | app.services.video_analysis_service:describe_frames:403 - Frame 2/19 described successfully
+2026-04-19 11:09:18.919 | INFO     | app.services.video_analysis_service:describe_frames:403 - Frame 3/19 described successfully
+2026-04-19 11:09:32.607 | INFO     | app.services.video_analysis_service:describe_frames:403 - Frame 4/19 described successfully
+2026-04-19 11:09:39.920 | INFO     | app.services.video_analysis_service:describe_frames:403 - Frame 5/19 described successfully
+2026-04-19 11:09:47.874 | INFO     | app.services.video_analysis_service:describe_frames:403 - Frame 6/19 described successfully
+2026-04-19 11:09:55.606 | INFO     | app.services.video_analysis_service:describe_frames:403 - Frame 7/19 described successfully
+2026-04-19 11:10:01.458 | INFO     | app.services.video_analysis_service:describe_frames:403 - Frame 8/19 described successfully
+2026-04-19 11:10:08.768 | INFO     | app.services.video_analysis_service:describe_frames:403 - Frame 9/19 described successfully
+2026-04-19 11:10:16.001 | WARNING  | app.services.video_analysis_service:describe_frames:424 - Frame 10 failed on attempt 1/3: Error code: 429, with error text {"error":{"code":"1305","message":"该模型当前访问量过大，请您稍后再试"}}
+2026-04-19 11:10:27.040 | INFO     | app.services.video_analysis_service:describe_frames:403 - Frame 10/19 described successfully
+2026-04-19 11:10:33.864 | INFO     | app.services.video_analysis_service:describe_frames:403 - Frame 11/19 described successfully
+2026-04-19 11:10:40.237 | INFO     | app.services.video_analysis_service:describe_frames:403 - Frame 12/19 described successfully
+2026-04-19 11:10:48.349 | INFO     | app.services.video_analysis_service:describe_frames:403 - Frame 13/19 described successfully
+2026-04-19 11:10:55.716 | INFO     | app.services.video_analysis_service:describe_frames:403 - Frame 14/19 described successfully
+2026-04-19 11:11:03.667 | INFO     | app.services.video_analysis_service:describe_frames:403 - Frame 15/19 described successfully
+2026-04-19 11:11:11.319 | INFO     | app.services.video_analysis_service:describe_frames:403 - Frame 16/19 described successfully
+2026-04-19 11:11:18.368 | INFO     | app.services.video_analysis_service:describe_frames:403 - Frame 17/19 described successfully
+2026-04-19 11:11:26.095 | INFO     | app.services.video_analysis_service:describe_frames:403 - Frame 18/19 described successfully
+2026-04-19 11:11:33.727 | INFO     | app.services.video_analysis_service:describe_frames:403 - Frame 19/19 described successfully
+2026-04-19 11:11:33.737 | INFO     | app.services.video_analysis_service:describe_frames:438 - Frame description complete: 19/19 successful
+2026-04-19 11:11:34.590 | INFO     | app.services.video_analysis_service:analyze_content:505 - Structural analysis attempt 1/3
+2026-04-19 11:12:04.952 | INFO     | app.services.video_analysis_service:analyze_content:515 - Structural analysis completed successfully
+2026-04-19 11:12:04.971 | ERROR    | app.worker.tasks.knowledge:reanalyze_video_task:203 - Re-analysis failed for case 2: (sqlite3.ProgrammingError) Error binding parameter 3: type 'dict' is not supported
+[SQL: UPDATE kb_cases SET theme=?, narrative_type=?, narrative_structure=?, story_summary=?, emotion_curve=?, emotion_triggers=?, visual_style=?, visual_contrast=?, viral_elements=?, visual_symbols=?, audience_profile=?, reusable_elements=?, success_factors=?, title_formula=?, characters_ethnicity=?, analysis_report_path=?, analysis_status=?, updated_at=CURRENT_TIMESTAMP WHERE kb_cases.id = ?]
+[parameters: ('逆袭/励志', '线性叙事', {'开端': {'时间范围': '0-10秒', '内容': '一个被欺负的工人坐在破旧的办公室里，表情沮丧，周围环境昏暗，暗示他的困境和无力感'}, '发展': {'时间范围': '10-40秒', '内容': '工人通过科技改造自己，逐渐变得强大，办公室环境变得明亮，动作和特效展示他的力量和转变'}, '高潮': {'时间范围': '40-59秒', '内容': '工人最终成为机械霸主，展示出强大的力量和自信，办公室环境达到高潮，特效和动作达到顶峰'}, '结局': {'时间范围': '59秒', '内容': '工人站在办公室中央，背景是胜利的姿势，表情自豪，暗示他的成功和逆袭'}}, '视频讲述了一个被欺负的工人通过科技改造自己，最终逆袭成为机械霸主的故事。一开始，我们看到工人坐在破旧的办公室里，表情沮丧，周围环境昏暗，暗示他的困境和无力感。随着故事的发展，工人开始通过科技改造自己，办公室环境逐渐变得明亮，动作和特效展示他的力量和转变。在高潮部分，工人最终成为机械霸主，展示出强大的力量和自信，办公室环境达到高潮，特效和动作达到顶峰。最后，工人站在办公室中央，背景是胜利的姿势，表情自豪，暗示他的成功和逆袭。', '压抑→期待→紧张→狂喜→圆满', {'哭点': '工人最初的困境和被欺负的场景', '燃点': '工人通过科技改造自己，逐渐变得强大的过程', '爽点': '工人最终成为机械霸主，展示出强大的力量和自信'}, {'整体色调': '前期灰暗，后期明亮', '光影特点': '前期昏暗，后期明亮，突出对比', '画面质感': '前期粗糙，后期光滑，展示科技感'}, {'场景对比': '贫困场景vs富裕场景', '色彩对比': '前期色调vs后期色调', '服饰对比': '破旧服饰vs高科技装备', '人物状态对比': '沮丧状态vs自信状态'}, '{"topic_layer": ["争议性话题、共鸣性话题、好奇心驱动、悬念标题要素等"], "emotion_layer": ["强烈情感反差、逆袭爽感、正能量结局、情感释放等"], "execution_layer": ["视觉对比极致、节奏紧凑、核心符号突出、无废话叙事等"]}', '{"办公室": "代表工人的工作环境和困境", "科技装备": "代表工人的力量和逆袭", "明亮的环境": "代表成功和希望"}', {'核心受众': '喜欢科技和逆袭故事的观众', '次要受众': '所有喜欢励志故事的观众', '情感需求': '希望看到弱者逆袭，追求科技感和视觉冲击'}, '{"narrative_template": "贫困环境铺垫→辛苦付出探索→发现宝物转折→富裕幸福结局", "visual_template": "灰暗场景+劳动画面+宝物特写+明亮场景", "title_formula": "{物品}彻底改写了{角色}的命运！"}', '["成功因素1：强对比叙事制造爽感", "成功因素2：普世价值观励志内核", "成功因素3：紧凑节奏52秒完成叙事", "成功因素4：悬念标题吸引点击", "成功因素5：异域风情增加传播性"]', '{物品}彻底改写了{角色}的命运！', '工人外貌普通，种族和地域特征不明显', 'data\\analysis\\youtube\\From_Crippled_Worker_to_Mecha_Overlord!_🤖_The_Bullied_Worker_is_Back_with_Laser_Arms!🦾\\report.json', 'completed', 2)]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2026-04-19 11:30:06.408 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 11:30:06.518 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 11:34:48.736 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 11:34:48.833 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 11:50:12.747 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 11:50:12.842 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 11:59:06.432 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 11:59:06.529 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 12:43:03.858 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 12:43:03.947 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 12:44:10.543 | INFO     | app.api.v1.knowledge:get_case_markdown:337 - [DEBUG] Total cases in DB: 1
+2026-04-19 12:44:10.545 | INFO     | app.api.v1.knowledge:get_case_markdown:342 - [DEBUG] All case IDs: [2]
+2026-04-19 12:44:10.547 | INFO     | app.api.v1.knowledge:get_case_markdown:347 - [DEBUG] Requested case_id=2, case_found=True
+2026-04-19 12:44:10.549 | INFO     | app.api.v1.knowledge:get_case_markdown:359 - [DEBUG] report_path exists=False, md_exists=False
+2026-04-19 12:45:39.083 | INFO     | app.services.knowledge_service:analyze_video:108 - Video analysis task submitted: case=1, task=c9d43b39-7368-411f-b599-138b5a0b4434
+2026-04-19 12:45:42.889 | ERROR    | app.worker.tasks.knowledge:analyze_video_task:97 - Video analysis failed for case 1: ERROR: [youtube] iDkZ0bg0jpc: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies
+2026-04-19 12:46:53.312 | INFO     | app.services.knowledge_service:analyze_video:108 - Video analysis task submitted: case=1, task=de06d62a-cf9a-4582-8091-ea9a56e51cd1
+2026-04-19 12:47:28.689 | INFO     | app.services.video_analysis_service:extract_frames:347 - Successfully extracted 19/19 frames
+2026-04-19 12:47:37.708 | INFO     | app.services.video_analysis_service:describe_frames:403 - Frame 1/19 described successfully
+2026-04-19 12:47:51.651 | INFO     | app.services.video_analysis_service:describe_frames:403 - Frame 2/19 described successfully
+2026-04-19 12:48:07.466 | INFO     | app.services.video_analysis_service:describe_frames:403 - Frame 3/19 described successfully
+2026-04-19 12:48:27.669 | INFO     | app.services.video_analysis_service:describe_frames:403 - Frame 4/19 described successfully
+2026-04-19 12:48:46.738 | INFO     | app.services.video_analysis_service:describe_frames:403 - Frame 5/19 described successfully
+2026-04-19 12:48:52.444 | INFO     | app.services.video_analysis_service:describe_frames:403 - Frame 6/19 described successfully
+2026-04-19 12:48:58.265 | INFO     | app.services.video_analysis_service:describe_frames:403 - Frame 7/19 described successfully
+2026-04-19 12:49:12.596 | INFO     | app.services.video_analysis_service:describe_frames:403 - Frame 8/19 described successfully
+2026-04-19 12:49:25.596 | INFO     | app.services.video_analysis_service:describe_frames:403 - Frame 9/19 described successfully
+2026-04-19 12:49:31.348 | INFO     | app.services.video_analysis_service:describe_frames:403 - Frame 10/19 described successfully
+2026-04-19 12:49:38.100 | INFO     | app.services.video_analysis_service:describe_frames:403 - Frame 11/19 described successfully
+2026-04-19 12:49:45.771 | INFO     | app.services.video_analysis_service:describe_frames:403 - Frame 12/19 described successfully
+2026-04-19 12:49:52.777 | INFO     | app.services.video_analysis_service:describe_frames:403 - Frame 13/19 described successfully
+2026-04-19 12:50:01.700 | INFO     | app.services.video_analysis_service:describe_frames:403 - Frame 14/19 described successfully
+2026-04-19 12:50:08.231 | INFO     | app.services.video_analysis_service:describe_frames:403 - Frame 15/19 described successfully
+2026-04-19 12:50:13.623 | INFO     | app.services.video_analysis_service:describe_frames:403 - Frame 16/19 described successfully
+2026-04-19 12:50:26.256 | INFO     | app.services.video_analysis_service:describe_frames:403 - Frame 17/19 described successfully
+2026-04-19 12:50:32.917 | INFO     | app.services.video_analysis_service:describe_frames:403 - Frame 18/19 described successfully
+2026-04-19 12:50:39.442 | INFO     | app.services.video_analysis_service:describe_frames:403 - Frame 19/19 described successfully
+2026-04-19 12:50:39.451 | INFO     | app.services.video_analysis_service:describe_frames:438 - Frame description complete: 19/19 successful
+2026-04-19 12:50:40.319 | INFO     | app.services.video_analysis_service:analyze_content:505 - Structural analysis attempt 1/3
+2026-04-19 12:51:11.787 | INFO     | app.services.video_analysis_service:analyze_content:515 - Structural analysis completed successfully
+2026-04-19 12:51:11.831 | INFO     | app.worker.tasks.knowledge:analyze_video_task:94 - Video analysis completed for case 1
+2026-04-19 12:51:34.380 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 12:51:34.482 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 12:51:42.883 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 12:51:42.981 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 12:55:57.219 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 12:55:57.314 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 12:56:28.445 | INFO     | app.services.video_analysis_service:describe_frames:403 - Frame 1/19 described successfully
+2026-04-19 12:56:34.843 | INFO     | app.services.video_analysis_service:describe_frames:403 - Frame 2/19 described successfully
+2026-04-19 12:56:46.771 | INFO     | app.services.video_analysis_service:describe_frames:403 - Frame 3/19 described successfully
+2026-04-19 12:57:04.700 | INFO     | app.services.video_analysis_service:describe_frames:403 - Frame 4/19 described successfully
+2026-04-19 12:57:12.080 | INFO     | app.services.video_analysis_service:describe_frames:403 - Frame 5/19 described successfully
+2026-04-19 12:57:19.187 | INFO     | app.services.video_analysis_service:describe_frames:403 - Frame 6/19 described successfully
+2026-04-19 12:57:25.627 | INFO     | app.services.video_analysis_service:describe_frames:403 - Frame 7/19 described successfully
+2026-04-19 12:57:31.451 | INFO     | app.services.video_analysis_service:describe_frames:403 - Frame 8/19 described successfully
+2026-04-19 12:57:37.813 | INFO     | app.services.video_analysis_service:describe_frames:403 - Frame 9/19 described successfully
+2026-04-19 12:57:45.192 | INFO     | app.services.video_analysis_service:describe_frames:403 - Frame 10/19 described successfully
+2026-04-19 12:57:52.441 | INFO     | app.services.video_analysis_service:describe_frames:403 - Frame 11/19 described successfully
+2026-04-19 12:57:58.751 | INFO     | app.services.video_analysis_service:describe_frames:403 - Frame 12/19 described successfully
+2026-04-19 12:58:04.382 | INFO     | app.services.video_analysis_service:describe_frames:403 - Frame 13/19 described successfully
+2026-04-19 12:58:11.113 | INFO     | app.services.video_analysis_service:describe_frames:403 - Frame 14/19 described successfully
+2026-04-19 12:58:17.476 | INFO     | app.services.video_analysis_service:describe_frames:403 - Frame 15/19 described successfully
+2026-04-19 12:58:23.516 | INFO     | app.services.video_analysis_service:describe_frames:403 - Frame 16/19 described successfully
+2026-04-19 12:58:31.283 | INFO     | app.services.video_analysis_service:describe_frames:403 - Frame 17/19 described successfully
+2026-04-19 12:58:37.451 | INFO     | app.services.video_analysis_service:describe_frames:403 - Frame 18/19 described successfully
+2026-04-19 12:58:43.402 | INFO     | app.services.video_analysis_service:describe_frames:403 - Frame 19/19 described successfully
+2026-04-19 12:58:43.410 | INFO     | app.services.video_analysis_service:describe_frames:438 - Frame description complete: 19/19 successful
+2026-04-19 12:58:44.283 | INFO     | app.services.video_analysis_service:analyze_content:505 - Structural analysis attempt 1/3
+2026-04-19 12:59:11.820 | INFO     | app.services.video_analysis_service:analyze_content:515 - Structural analysis completed successfully
+2026-04-19 13:22:45.094 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 13:22:45.180 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 13:24:19.881 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 13:24:19.983 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 13:27:30.381 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 13:27:30.478 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 13:29:36.516 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 13:29:36.611 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 13:29:40.894 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 13:29:40.971 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 13:31:57.371 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 13:31:57.466 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 13:32:03.197 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 13:32:03.290 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 13:32:55.148 | INFO     | app.main:lifespan:20 - Database initialized
+2026-04-19 13:32:55.230 | INFO     | app.main:lifespan:34 - Registered 5 AI providers
+2026-04-19 13:34:12.425 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-19 13:34:12.522 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-19 13:34:20.020 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-19 13:34:20.113 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-19 13:34:28.506 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-19 13:34:28.604 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-19 13:51:13.293 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-19 13:51:13.374 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-19 13:51:20.377 | INFO     | app.api.v1.knowledge:get_case_markdown:333 - [DEBUG] Total cases in DB: 1
+2026-04-19 13:51:20.379 | INFO     | app.api.v1.knowledge:get_case_markdown:338 - [DEBUG] All case IDs: [1]
+2026-04-19 13:51:20.380 | INFO     | app.api.v1.knowledge:get_case_markdown:343 - [DEBUG] Requested case_id=1, case_found=True
+2026-04-19 13:51:20.381 | INFO     | app.api.v1.knowledge:get_case_markdown:355 - [DEBUG] report_path exists=True, md_exists=True
+2026-04-19 13:56:56.750 | INFO     | app.api.v1.knowledge:get_case_markdown:333 - [DEBUG] Total cases in DB: 1
+2026-04-19 13:56:56.752 | INFO     | app.api.v1.knowledge:get_case_markdown:338 - [DEBUG] All case IDs: [1]
+2026-04-19 13:56:56.754 | INFO     | app.api.v1.knowledge:get_case_markdown:343 - [DEBUG] Requested case_id=1, case_found=True
+2026-04-19 13:56:56.754 | INFO     | app.api.v1.knowledge:get_case_markdown:355 - [DEBUG] report_path exists=True, md_exists=True
+2026-04-19 14:42:01.266 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-19 14:42:01.381 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-19 14:44:09.985 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-19 14:44:10.087 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-19 14:45:51.966 | INFO     | app.services.video_analysis_service:describe_frames:408 - Frame 1/19 described successfully
+2026-04-19 14:46:12.903 | INFO     | app.services.video_analysis_service:describe_frames:408 - Frame 2/19 described successfully
+2026-04-19 14:46:35.763 | INFO     | app.services.video_analysis_service:describe_frames:408 - Frame 3/19 described successfully
+2026-04-19 14:46:57.693 | INFO     | app.services.video_analysis_service:describe_frames:408 - Frame 4/19 described successfully
+2026-04-19 14:47:20.491 | INFO     | app.services.video_analysis_service:describe_frames:408 - Frame 5/19 described successfully
+2026-04-19 14:47:43.021 | INFO     | app.services.video_analysis_service:describe_frames:408 - Frame 6/19 described successfully
+2026-04-19 14:48:06.613 | INFO     | app.services.video_analysis_service:describe_frames:408 - Frame 7/19 described successfully
+2026-04-19 14:48:27.203 | INFO     | app.services.video_analysis_service:describe_frames:408 - Frame 8/19 described successfully
+2026-04-19 14:48:53.398 | INFO     | app.services.video_analysis_service:describe_frames:408 - Frame 9/19 described successfully
+2026-04-19 14:49:15.230 | INFO     | app.services.video_analysis_service:describe_frames:408 - Frame 10/19 described successfully
+2026-04-19 14:49:38.236 | INFO     | app.services.video_analysis_service:describe_frames:408 - Frame 11/19 described successfully
+2026-04-19 14:49:58.286 | INFO     | app.services.video_analysis_service:describe_frames:408 - Frame 12/19 described successfully
+2026-04-19 14:50:26.416 | INFO     | app.services.video_analysis_service:describe_frames:408 - Frame 13/19 described successfully
+2026-04-19 14:50:49.009 | INFO     | app.services.video_analysis_service:describe_frames:408 - Frame 14/19 described successfully
+2026-04-19 14:51:13.334 | INFO     | app.services.video_analysis_service:describe_frames:408 - Frame 15/19 described successfully
+2026-04-19 14:51:37.621 | INFO     | app.services.video_analysis_service:describe_frames:408 - Frame 16/19 described successfully
+2026-04-19 14:51:59.140 | INFO     | app.services.video_analysis_service:describe_frames:408 - Frame 17/19 described successfully
+2026-04-19 14:52:21.066 | INFO     | app.services.video_analysis_service:describe_frames:408 - Frame 18/19 described successfully
+2026-04-19 14:52:48.221 | INFO     | app.services.video_analysis_service:describe_frames:408 - Frame 19/19 described successfully
+2026-04-19 14:52:48.229 | INFO     | app.services.video_analysis_service:describe_frames:425 - Frame description complete: 19/19 successful
+2026-04-19 14:52:49.148 | INFO     | app.services.video_analysis_service:analyze_content:492 - Structural analysis attempt 1/3
+2026-04-19 14:54:46.393 | INFO     | app.services.video_analysis_service:analyze_content:503 - Structural analysis completed successfully
+2026-04-19 14:57:23.875 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-19 14:57:23.964 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-19 15:00:05.248 | INFO     | app.api.v1.knowledge:reanalyze_case:233 - Re-analysis task submitted: case=1, task=40a8a1ab-7ebf-457a-a96d-d786a3e3da66
+2026-04-19 15:00:31.814 | INFO     | app.services.video_analysis_service:describe_frames:408 - Frame 1/19 described successfully
+2026-04-19 15:00:53.898 | INFO     | app.services.video_analysis_service:describe_frames:408 - Frame 2/19 described successfully
+2026-04-19 15:01:13.391 | INFO     | app.services.video_analysis_service:describe_frames:408 - Frame 3/19 described successfully
+2026-04-19 15:01:33.155 | INFO     | app.services.video_analysis_service:describe_frames:408 - Frame 4/19 described successfully
+2026-04-19 15:01:59.820 | INFO     | app.services.video_analysis_service:describe_frames:408 - Frame 5/19 described successfully
+2026-04-19 15:02:19.513 | INFO     | app.services.video_analysis_service:describe_frames:408 - Frame 6/19 described successfully
+2026-04-19 15:02:44.283 | INFO     | app.services.video_analysis_service:describe_frames:408 - Frame 7/19 described successfully
+2026-04-19 15:03:07.989 | INFO     | app.services.video_analysis_service:describe_frames:408 - Frame 8/19 described successfully
+2026-04-19 15:03:31.396 | INFO     | app.services.video_analysis_service:describe_frames:408 - Frame 9/19 described successfully
+2026-04-19 15:03:58.779 | INFO     | app.services.video_analysis_service:describe_frames:408 - Frame 10/19 described successfully
+2026-04-19 15:04:23.554 | INFO     | app.services.video_analysis_service:describe_frames:408 - Frame 11/19 described successfully
+2026-04-19 15:04:46.872 | INFO     | app.services.video_analysis_service:describe_frames:408 - Frame 12/19 described successfully
+2026-04-19 15:05:13.195 | INFO     | app.services.video_analysis_service:describe_frames:408 - Frame 13/19 described successfully
+2026-04-19 15:05:38.690 | INFO     | app.services.video_analysis_service:describe_frames:408 - Frame 14/19 described successfully
+2026-04-19 15:06:02.870 | INFO     | app.services.video_analysis_service:describe_frames:408 - Frame 15/19 described successfully
+2026-04-19 15:06:28.493 | INFO     | app.services.video_analysis_service:describe_frames:408 - Frame 16/19 described successfully
+2026-04-19 15:06:53.981 | INFO     | app.services.video_analysis_service:describe_frames:408 - Frame 17/19 described successfully
+2026-04-19 15:07:16.464 | INFO     | app.services.video_analysis_service:describe_frames:408 - Frame 18/19 described successfully
+2026-04-19 15:07:38.135 | INFO     | app.services.video_analysis_service:describe_frames:408 - Frame 19/19 described successfully
+2026-04-19 15:07:38.144 | INFO     | app.services.video_analysis_service:describe_frames:425 - Frame description complete: 19/19 successful
+2026-04-19 15:07:39.115 | INFO     | app.services.video_analysis_service:analyze_content:492 - Structural analysis attempt 1/3
+2026-04-19 15:09:38.565 | INFO     | app.services.video_analysis_service:analyze_content:503 - Structural analysis completed successfully
+2026-04-19 15:09:38.615 | INFO     | app.worker.tasks.knowledge:reanalyze_video_task:202 - Re-analysis completed for case 1
+2026-04-19 15:10:29.906 | INFO     | app.api.v1.knowledge:get_case_markdown:333 - [DEBUG] Total cases in DB: 1
+2026-04-19 15:10:29.909 | INFO     | app.api.v1.knowledge:get_case_markdown:338 - [DEBUG] All case IDs: [1]
+2026-04-19 15:10:29.910 | INFO     | app.api.v1.knowledge:get_case_markdown:343 - [DEBUG] Requested case_id=1, case_found=True
+2026-04-19 15:10:29.911 | INFO     | app.api.v1.knowledge:get_case_markdown:355 - [DEBUG] report_path exists=True, md_exists=True
+2026-04-19 15:12:27.668 | INFO     | app.api.v1.knowledge:get_case_markdown:333 - [DEBUG] Total cases in DB: 1
+2026-04-19 15:12:27.669 | INFO     | app.api.v1.knowledge:get_case_markdown:338 - [DEBUG] All case IDs: [1]
+2026-04-19 15:12:27.670 | INFO     | app.api.v1.knowledge:get_case_markdown:343 - [DEBUG] Requested case_id=1, case_found=True
+2026-04-19 15:12:27.670 | INFO     | app.api.v1.knowledge:get_case_markdown:355 - [DEBUG] report_path exists=True, md_exists=True
+2026-04-19 15:18:10.560 | INFO     | app.services.knowledge_service:analyze_video:108 - Video analysis task submitted: case=2, task=43c89b4b-1eef-4f09-9fba-82d5fba72194
+2026-04-19 15:18:22.014 | ERROR    | app.worker.tasks.knowledge:analyze_video_task:98 - Video analysis failed for case 2: ERROR: [youtube] p75lNNKTDOE: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies
+2026-04-19 15:49:38.687 | INFO     | app.services.project_service:create_project:42 - Project created: 1 - 父爱
+2026-04-19 15:55:09.431 | ERROR    | app.ai_gateway.providers.glm_adapter:generate:34 - GLM timeout after 240s
+2026-04-19 16:00:50.558 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-19 16:00:51.115 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-19 16:01:46.550 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-19 16:01:47.111 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-19 16:05:55.170 | INFO     | app.services.script_service:_parse_script_json:227 - Parsed script JSON directly (full text)
+2026-04-19 16:05:55.177 | ERROR    | app.main:unhandled_exception_handler:61 - Unhandled exception on POST /api/v1/projects/1/scripts/generate: cannot access local variable 'next_version' where it is not associated with a value
+Traceback (most recent call last):
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\cors.py", line 96, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\cors.py", line 154, in simple_response
+    await self.app(scope, receive, send)
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\fastapi\middleware\asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\routing.py", line 660, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\routing.py", line 680, in app
+    await route.handle(scope, receive, send)
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\routing.py", line 276, in handle
+    await self.app(scope, receive, send)
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\fastapi\routing.py", line 134, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\fastapi\routing.py", line 120, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\fastapi\routing.py", line 674, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\fastapi\routing.py", line 328, in run_endpoint_function
+    return await dependant.call(**values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\ai-creator-studio-backend\app\api\v1\scripts.py", line 46, in generate_script
+    return await service.generate_script(project_id, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\ai-creator-studio-backend\app\services\script_service.py", line 690, in generate_script
+    markdown_content = _convert_to_markdown(generated, project_id, next_version)
+                                                                   ^^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'next_version' where it is not associated with a value
+
+2026-04-19 16:11:53.258 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-19 16:11:53.805 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-19 16:13:12.107 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-19 16:13:12.665 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-19 16:21:05.067 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-19 16:21:05.614 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-19 16:22:31.673 | INFO     | app.services.script_service:_parse_script_json:227 - Parsed script JSON directly (full text)
+2026-04-19 16:22:31.678 | INFO     | app.services.script_service:_save_script_to_file:203 - Script saved to: data\projects\1\scripts\油污双手托起黑白琴键_v1.md
+2026-04-19 16:22:31.692 | INFO     | app.services.script_service:generate_script:723 - AI generated script: 1 v1
+2026-04-19 16:27:26.792 | INFO     | app.services.script_service:_parse_script_json:227 - Parsed script JSON directly (full text)
+2026-04-19 16:27:26.798 | INFO     | app.services.script_service:_save_script_to_file:203 - Script saved to: data\projects\1\scripts\铁手琴音孟买父亲的无声誓言_v2.md
+2026-04-19 16:27:26.808 | INFO     | app.services.script_service:generate_script:723 - AI generated script: 2 v2
+2026-04-19 17:49:58.061 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-19 17:49:58.605 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-19 17:50:00.706 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-19 17:50:01.244 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-19 17:50:07.798 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-19 17:50:08.337 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-19 17:50:24.499 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-19 17:50:25.042 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-19 17:50:34.717 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-19 17:50:35.259 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-19 18:14:25.216 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-19 18:14:25.778 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-19 18:16:22.365 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-19 18:16:22.909 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-19 18:16:49.408 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-19 18:16:49.949 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-19 18:17:11.326 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-19 18:17:11.859 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-19 18:17:37.467 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-19 18:17:38.008 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-19 18:17:56.215 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-19 18:17:56.754 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-19 18:18:30.353 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-19 18:18:30.892 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-19 18:26:31.965 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-19 18:26:32.512 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-19 18:50:30.418 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-19 18:50:30.960 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-19 18:51:29.960 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-19 18:51:30.501 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-19 18:51:42.784 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-19 18:51:43.320 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-19 18:52:11.429 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-19 18:52:11.968 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-19 18:52:24.282 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-19 18:52:24.822 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-19 18:53:54.801 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-19 18:53:55.336 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-19 20:00:01.721 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-19 20:00:02.299 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-19 20:00:35.677 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-19 20:00:36.277 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-19 20:00:41.841 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-19 20:00:42.380 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-19 20:32:21.293 | INFO     | app.api.v1.knowledge:get_case_markdown:333 - [DEBUG] Total cases in DB: 1
+2026-04-19 20:32:21.294 | INFO     | app.api.v1.knowledge:get_case_markdown:338 - [DEBUG] All case IDs: [1]
+2026-04-19 20:32:21.295 | INFO     | app.api.v1.knowledge:get_case_markdown:343 - [DEBUG] Requested case_id=1, case_found=True
+2026-04-19 20:32:21.296 | INFO     | app.api.v1.knowledge:get_case_markdown:355 - [DEBUG] report_path exists=True, md_exists=True
+2026-04-19 20:41:05.371 | INFO     | app.worker.tasks.generation:generate_image_prompts_for_shots:224 - Generated image_prompt for shot 1 (len=288)
+2026-04-19 20:44:41.340 | INFO     | app.worker.tasks.generation:generate_image_prompts_for_shots:224 - Generated image_prompt for shot 2 (len=372)
+2026-04-19 20:44:41.350 | INFO     | app.worker.tasks.generation:generate_image_prompts_for_shots:235 - Image prompt generation complete: 1/1 shots
+2026-04-19 20:47:32.576 | INFO     | app.worker.tasks.generation:generate_image_prompts_for_shots:224 - Generated image_prompt for shot 3 (len=208)
+2026-04-19 20:47:39.092 | INFO     | app.worker.tasks.generation:generate_image_prompts_for_shots:224 - Generated image_prompt for shot 4 (len=389)
+2026-04-19 20:47:44.928 | INFO     | app.worker.tasks.generation:generate_image_prompts_for_shots:224 - Generated image_prompt for shot 5 (len=335)
+2026-04-19 20:47:49.152 | INFO     | app.worker.tasks.generation:generate_image_prompts_for_shots:224 - Generated image_prompt for shot 6 (len=223)
+2026-04-19 20:47:54.747 | INFO     | app.worker.tasks.generation:generate_image_prompts_for_shots:224 - Generated image_prompt for shot 7 (len=326)
+2026-04-19 20:48:00.782 | INFO     | app.worker.tasks.generation:generate_image_prompts_for_shots:224 - Generated image_prompt for shot 8 (len=344)
+2026-04-19 20:48:06.171 | INFO     | app.worker.tasks.generation:generate_image_prompts_for_shots:224 - Generated image_prompt for shot 9 (len=250)
+2026-04-19 20:48:12.584 | INFO     | app.worker.tasks.generation:generate_image_prompts_for_shots:224 - Generated image_prompt for shot 10 (len=366)
+2026-04-19 20:48:17.106 | INFO     | app.worker.tasks.generation:generate_image_prompts_for_shots:224 - Generated image_prompt for shot 11 (len=245)
+2026-04-19 20:48:22.288 | INFO     | app.worker.tasks.generation:generate_image_prompts_for_shots:224 - Generated image_prompt for shot 12 (len=254)
+2026-04-19 20:48:28.489 | INFO     | app.worker.tasks.generation:generate_image_prompts_for_shots:224 - Generated image_prompt for shot 13 (len=380)
+2026-04-19 20:48:32.155 | INFO     | app.worker.tasks.generation:generate_image_prompts_for_shots:224 - Generated image_prompt for shot 14 (len=153)
+2026-04-19 20:48:35.478 | INFO     | app.worker.tasks.generation:generate_image_prompts_for_shots:224 - Generated image_prompt for shot 15 (len=156)
+2026-04-19 20:48:35.487 | INFO     | app.worker.tasks.generation:generate_image_prompts_for_shots:235 - Image prompt generation complete: 13/13 shots
+2026-04-19 20:49:58.120 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-19 20:49:58.663 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-19 21:07:34.699 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-19 21:07:35.233 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-19 21:07:48.305 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-19 21:07:48.846 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-19 21:08:04.951 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-19 21:08:05.483 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-19 21:09:03.942 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-19 21:09:04.479 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-19 21:09:16.265 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-19 21:09:16.796 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-19 21:15:16.800 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-19 21:15:17.339 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-19 21:19:54.833 | INFO     | app.api.v1.storyboards:generate_shot_prompt:295 - Sync generated prompt for shot 1
+2026-04-19 21:20:07.171 | INFO     | app.services.character_service:generate_prompt_only:105 - Generated prompt for character 1
+2026-04-19 21:20:41.922 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-19 21:20:42.461 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-19 21:21:45.345 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-19 21:21:45.887 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-19 21:29:00.040 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-19 21:29:00.570 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-19 21:29:06.682 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-19 21:29:07.218 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-19 21:29:27.249 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-19 21:29:27.781 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-19 21:29:51.615 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-19 21:29:52.149 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-19 21:29:59.146 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-19 21:29:59.674 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-19 21:30:45.706 | INFO     | app.services.character_service:generate_prompt_only:105 - Generated prompt for character 2
+2026-04-19 21:31:44.934 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-19 21:31:45.471 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-19 21:32:46.334 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-19 21:32:46.873 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-19 21:34:19.771 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-19 21:34:20.311 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-19 21:36:18.098 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-19 21:36:18.662 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-19 21:40:00.410 | INFO     | app.services.character_service:generate_prompt_only:88 - Generated prompt for character 2
+2026-04-19 21:40:56.448 | INFO     | app.api.v1.storyboards:generate_shot_prompt:295 - Sync generated prompt for shot 2
+2026-04-19 21:44:51.552 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-19 21:44:52.094 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-19 21:45:19.997 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-19 21:45:20.526 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-19 21:46:45.216 | INFO     | app.services.character_service:generate_prompt_only:95 - Generated prompt for character 2
+2026-04-19 21:47:27.822 | INFO     | app.services.character_service:generate_reference_image:181 - Reference image generated for character 2
+2026-04-19 21:47:57.931 | INFO     | app.services.character_service:generate_reference_image:181 - Reference image generated for character 1
+2026-04-19 21:48:53.965 | INFO     | app.services.character_service:generate_prompt_only:95 - Generated prompt for character 1
+2026-04-19 21:49:19.108 | INFO     | app.services.character_service:generate_reference_image:181 - Reference image generated for character 1
+2026-04-19 21:51:17.929 | INFO     | app.services.character_service:generate_prompt_only:95 - Generated prompt for character 1
+2026-04-19 21:51:38.861 | INFO     | app.services.character_service:generate_reference_image:181 - Reference image generated for character 1
+2026-04-19 22:14:55.485 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-19 22:14:56.037 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-19 22:15:51.172 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-19 22:15:51.709 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-19 22:15:56.895 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-19 22:15:57.438 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-19 22:16:08.931 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-19 22:16:09.461 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-19 22:16:36.193 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-19 22:16:36.725 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-19 22:16:52.434 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-19 22:16:52.974 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-19 22:24:44.669 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-19 22:24:45.208 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-19 22:35:27.074 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-19 22:35:27.629 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-19 22:36:06.515 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-19 22:36:07.050 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-19 22:43:17.483 | INFO     | app.services.generation_service:generate_images_batch:52 - Dispatched image generation task b3435219-3d15-4d29-a59e-1b2e7b123581: 2 shots for project 1
+2026-04-19 22:43:47.552 | INFO     | app.worker.tasks.generation:generate_images_for_shots:334 - Image generation complete: 2/2 shots for project 1
+2026-04-19 23:03:12.746 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-19 23:03:13.283 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-19 23:03:24.100 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-19 23:03:24.642 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-19 23:03:41.893 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-19 23:03:42.427 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-19 23:19:03.376 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-19 23:19:03.913 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-19 23:23:27.379 | INFO     | app.services.generation_service:generate_images_batch:52 - Dispatched image generation task 7bbe2b01-71b6-409d-af7a-30adff202ad3: 2 shots for project 1
+2026-04-19 23:23:59.010 | INFO     | app.worker.tasks.generation:generate_images_for_shots:462 - Image saved for shot 1: data\uploads\shot_1_1776612239.png
+2026-04-19 23:24:33.358 | INFO     | app.worker.tasks.generation:generate_images_for_shots:462 - Image saved for shot 2: data\uploads\shot_2_1776612273.png
+2026-04-19 23:24:33.374 | INFO     | app.worker.tasks.generation:generate_images_for_shots:486 - Image generation complete: 2/2 shots for project 1
+2026-04-19 23:29:56.486 | INFO     | app.api.v1.storyboards:generate_shot_prompt:296 - Sync generated prompt for shot 2
+2026-04-19 23:32:03.379 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-19 23:32:04.016 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-19 23:37:42.104 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-19 23:37:42.651 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-19 23:37:48.332 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-19 23:37:48.868 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-19 23:37:53.621 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-19 23:37:54.161 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-20 00:15:12.391 | INFO     | app.services.generation_service:generate_images_batch:52 - Dispatched image generation task e8035a2c-1b2a-4891-b09f-e6a6fe37b9af: 2 shots for project 1
+2026-04-20 00:15:37.443 | INFO     | app.worker.tasks.generation:generate_images_for_shots:462 - Image saved for shot 3: data\uploads\shot_3_1776615337.png
+2026-04-20 00:16:05.374 | INFO     | app.worker.tasks.generation:generate_images_for_shots:462 - Image saved for shot 4: data\uploads\shot_4_1776615365.png
+2026-04-20 00:16:05.388 | INFO     | app.worker.tasks.generation:generate_images_for_shots:486 - Image generation complete: 2/2 shots for project 1
+2026-04-20 00:17:28.865 | INFO     | app.services.generation_service:generate_images_batch:52 - Dispatched image generation task 467b69a9-ae3d-42b1-b9e8-133ff0147008: 11 shots for project 1
+2026-04-20 00:18:04.524 | INFO     | app.worker.tasks.generation:generate_images_for_shots:462 - Image saved for shot 5: data\uploads\shot_5_1776615484.png
+2026-04-20 00:18:29.314 | INFO     | app.worker.tasks.generation:generate_images_for_shots:462 - Image saved for shot 6: data\uploads\shot_6_1776615509.png
+2026-04-20 00:19:00.355 | INFO     | app.worker.tasks.generation:generate_images_for_shots:462 - Image saved for shot 7: data\uploads\shot_7_1776615540.png
+2026-04-20 00:19:32.626 | INFO     | app.worker.tasks.generation:generate_images_for_shots:462 - Image saved for shot 8: data\uploads\shot_8_1776615572.png
+2026-04-20 00:20:01.888 | INFO     | app.worker.tasks.generation:generate_images_for_shots:462 - Image saved for shot 9: data\uploads\shot_9_1776615601.png
+2026-04-20 00:20:17.907 | INFO     | app.worker.tasks.generation:generate_images_for_shots:462 - Image saved for shot 10: data\uploads\shot_10_1776615617.png
+2026-04-20 00:20:49.994 | INFO     | app.worker.tasks.generation:generate_images_for_shots:462 - Image saved for shot 11: data\uploads\shot_11_1776615649.png
+2026-04-20 00:21:15.085 | INFO     | app.worker.tasks.generation:generate_images_for_shots:462 - Image saved for shot 12: data\uploads\shot_12_1776615675.png
+2026-04-20 00:21:45.892 | INFO     | app.worker.tasks.generation:generate_images_for_shots:462 - Image saved for shot 13: data\uploads\shot_13_1776615705.png
+2026-04-20 00:21:59.396 | INFO     | app.worker.tasks.generation:generate_images_for_shots:462 - Image saved for shot 14: data\uploads\shot_14_1776615719.png
+2026-04-20 00:22:07.042 | INFO     | app.worker.tasks.generation:generate_images_for_shots:462 - Image saved for shot 15: data\uploads\shot_15_1776615727.png
+2026-04-20 00:22:07.057 | INFO     | app.worker.tasks.generation:generate_images_for_shots:486 - Image generation complete: 11/11 shots for project 1
+2026-04-20 00:24:42.317 | INFO     | app.api.v1.storyboards:generate_shot_image:363 - Sync generated image for shot 1
+2026-04-20 00:25:40.559 | INFO     | app.api.v1.storyboards:generate_shot_image:363 - Sync generated image for shot 2
+2026-04-20 00:26:57.483 | INFO     | app.api.v1.storyboards:generate_shot_image:363 - Sync generated image for shot 3
+2026-04-20 00:29:54.605 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-20 00:29:55.139 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-20 00:30:03.990 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-20 00:30:04.522 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-20 00:30:09.371 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-20 00:30:09.903 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-20 00:32:28.127 | INFO     | app.services.generation_service:generate_image_prompts:194 - Dispatched prompt generation task a63f1a72-6088-4674-9e6f-32022e578122: 5 shots for project 1
+2026-04-20 00:32:35.239 | INFO     | app.worker.tasks.generation:generate_image_prompts_for_shots:224 - Generated image_prompt for shot 4 (len=349)
+2026-04-20 00:32:40.732 | INFO     | app.worker.tasks.generation:generate_image_prompts_for_shots:224 - Generated image_prompt for shot 5 (len=310)
+2026-04-20 00:32:45.807 | INFO     | app.worker.tasks.generation:generate_image_prompts_for_shots:224 - Generated image_prompt for shot 6 (len=230)
+2026-04-20 00:32:52.152 | INFO     | app.worker.tasks.generation:generate_image_prompts_for_shots:224 - Generated image_prompt for shot 7 (len=334)
+2026-04-20 00:32:58.199 | INFO     | app.worker.tasks.generation:generate_image_prompts_for_shots:224 - Generated image_prompt for shot 8 (len=316)
+2026-04-20 00:32:58.207 | INFO     | app.worker.tasks.generation:generate_image_prompts_for_shots:235 - Image prompt generation complete: 5/5 shots
+2026-04-20 00:34:44.661 | INFO     | app.api.v1.storyboards:generate_shot_image:363 - Sync generated image for shot 4
+2026-04-20 00:35:22.492 | INFO     | app.api.v1.storyboards:generate_shot_image:363 - Sync generated image for shot 5
+2026-04-20 00:37:19.118 | INFO     | app.api.v1.storyboards:generate_shot_image:363 - Sync generated image for shot 6
+2026-04-20 00:37:25.553 | INFO     | app.api.v1.storyboards:generate_shot_image:363 - Sync generated image for shot 7
+2026-04-20 00:38:15.832 | INFO     | app.api.v1.storyboards:generate_shot_image:363 - Sync generated image for shot 8
+2026-04-20 00:38:24.402 | INFO     | app.api.v1.storyboards:generate_shot_image:363 - Sync generated image for shot 9
+2026-04-20 00:38:32.447 | INFO     | app.api.v1.storyboards:generate_shot_image:363 - Sync generated image for shot 10
+2026-04-20 00:39:17.947 | INFO     | app.api.v1.storyboards:generate_shot_image:363 - Sync generated image for shot 12
+2026-04-20 00:39:22.620 | INFO     | app.api.v1.storyboards:generate_shot_image:363 - Sync generated image for shot 13
+2026-04-20 00:40:26.451 | INFO     | app.api.v1.storyboards:generate_shot_image:363 - Sync generated image for shot 14
+2026-04-20 00:41:33.589 | INFO     | app.services.generation_service:generate_images_batch:52 - Dispatched image generation task 1e1e3f52-f6f5-4a37-bad8-a311acedeb5e: 1 shots for project 1
+2026-04-20 00:41:41.395 | INFO     | app.worker.tasks.generation:generate_images_for_shots:462 - Image saved for shot 15: data\uploads\shot_15_1776616901.png
+2026-04-20 00:41:41.411 | INFO     | app.worker.tasks.generation:generate_images_for_shots:486 - Image generation complete: 1/1 shots for project 1
+2026-04-20 00:42:30.135 | INFO     | app.api.v1.storyboards:generate_shot_image:363 - Sync generated image for shot 15
+2026-04-20 00:44:13.592 | INFO     | app.api.v1.storyboards:generate_shot_image:363 - Sync generated image for shot 11
+2026-04-20 00:44:49.727 | INFO     | app.api.v1.storyboards:generate_shot_prompt:296 - Sync generated prompt for shot 15
+2026-04-20 00:45:30.452 | INFO     | app.api.v1.storyboards:generate_shot_image:363 - Sync generated image for shot 15
+2026-04-20 00:54:16.572 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-20 00:54:17.240 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-20 00:59:44.512 | INFO     | app.services.generation_service:generate_videos_batch:97 - Dispatched video generation task d73223c3-9171-431c-a8db-851e128c87c6: 2 shots for project 1
+2026-04-20 00:59:47.084 | ERROR    | app.ai_gateway.providers.wanx_adapter:generate:77 - Wanx API error: 400 - {"request_id":"61e3be54-4d02-9a2d-a1e1-d32ffbf00d69","code":"InvalidParameter.DataInspection","message":"The media format is not supported or incorrect for the data inspection."}
+2026-04-20 00:59:47.086 | ERROR    | app.worker.tasks.generation:generate_videos_for_shots:577 - Error generating video for shot 1: 'generate_videos_for_shots' object has no attribute '_mark_video_failed'
+2026-04-20 01:01:11.383 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-20 01:01:12.015 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-20 01:06:03.759 | INFO     | app.services.generation_service:generate_videos_batch:97 - Dispatched video generation task 657158c1-41bd-4340-9f7e-94f67aa35d66: 2 shots for project 1
+2026-04-20 01:06:05.326 | ERROR    | app.ai_gateway.providers.wanx_adapter:generate:77 - Wanx API error: 400 - {"request_id":"8b2239fc-1478-9eea-a30f-6a224b5ee31d","code":"InvalidParameter.DataInspection","message":"The media format is not supported or incorrect for the data inspection."}
+2026-04-20 01:06:06.541 | ERROR    | app.ai_gateway.providers.wanx_adapter:generate:77 - Wanx API error: 400 - {"request_id":"7d9e44f7-8907-9585-931b-8abf351d5a47","code":"InvalidParameter.DataInspection","message":"The media format is not supported or incorrect for the data inspection."}
+2026-04-20 01:06:06.557 | INFO     | app.worker.tasks.generation:generate_videos_for_shots:581 - Video generation complete: 2/2 shots for project 1
+2026-04-20 01:11:14.849 | INFO     | app.services.generation_service:generate_videos_batch:97 - Dispatched video generation task 8c913892-49a8-4a2b-8924-73cb03c750fc: 1 shots for project 1
+2026-04-20 01:11:16.014 | ERROR    | app.ai_gateway.providers.wanx_adapter:generate:77 - Wanx API error: 400 - {"request_id":"f8cd85e9-3608-9b80-b417-319f9fe09e14","code":"InvalidParameter.DataInspection","message":"The media format is not supported or incorrect for the data inspection."}
+2026-04-20 01:11:16.032 | INFO     | app.worker.tasks.generation:generate_videos_for_shots:581 - Video generation complete: 1/1 shots for project 1
+2026-04-20 01:15:17.355 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-20 01:15:17.896 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-20 01:15:27.727 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-20 01:15:28.267 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-20 01:17:21.492 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-20 01:17:22.034 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-20 01:19:30.781 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-20 01:19:31.320 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-20 01:24:39.304 | INFO     | app.services.generation_service:generate_videos_batch:97 - Dispatched video generation task 40cddca8-4734-409f-8fde-cf55a1d84a5a: 1 shots for project 1
+2026-04-20 01:24:40.901 | ERROR    | app.ai_gateway.providers.wanx_adapter:generate:77 - Wanx API error: 400 - {"request_id":"45e2b000-9e05-9aa9-acfd-b0fc8139ce4d","code":"InvalidParameter.DataInspection","message":"The media format is not supported or incorrect for the data inspection."}
+2026-04-20 01:24:40.927 | INFO     | app.worker.tasks.generation:generate_videos_for_shots:584 - Video generation complete: 1/1 shots for project 1
+2026-04-20 01:35:07.450 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-20 01:35:07.992 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-20 01:35:13.682 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-20 01:35:14.211 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-20 02:16:27.841 | INFO     | app.services.generation_service:generate_videos_batch:97 - Dispatched video generation task 55f08c47-97f1-4b32-b929-93f15b0960ee: 1 shots for project 1
+2026-04-20 02:16:30.001 | ERROR    | app.ai_gateway.providers.wanx_adapter:generate:77 - Wanx API error: 400 - {"request_id":"6d5d56c4-79fa-9163-a17b-6c92c700fb15","code":"InvalidParameter.DataInspection","message":"The media format is not supported or incorrect for the data inspection."}
+2026-04-20 02:16:30.019 | INFO     | app.worker.tasks.generation:generate_videos_for_shots:584 - Video generation complete: 1/1 shots for project 1
+2026-04-20 02:30:03.582 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-20 02:30:04.140 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-20 02:36:39.837 | INFO     | app.services.generation_service:generate_videos_batch:97 - Dispatched video generation task 9586b46a-370f-46d8-8748-0f92baab414c: 1 shots for project 1
+2026-04-20 02:36:39.996 | INFO     | app.worker.tasks.generation:generate_videos_for_shots:553 - Loaded image for shot 1: shot_1_1776615882.png -> JPEG data URI (761632 chars)
+2026-04-20 02:37:38.112 | INFO     | app.worker.tasks.generation:_save_video_result:640 - Video saved for shot 1: data\uploads\shot_1_video_1776623858.mp4
+2026-04-20 02:37:38.131 | INFO     | app.worker.tasks.generation:generate_videos_for_shots:613 - Video generation complete: 1/1 shots for project 1
+2026-04-20 02:49:20.185 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-20 02:49:20.725 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-20 02:49:27.106 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-20 02:49:27.653 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-20 02:49:34.679 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-20 02:49:35.215 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-20 02:55:00.107 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-20 02:55:00.641 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-20 02:58:02.885 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-20 02:58:03.421 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-20 02:58:16.531 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-20 02:58:17.063 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-20 02:58:26.574 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-20 02:58:27.126 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-20 02:58:34.151 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-20 02:58:34.681 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-20 02:58:47.774 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-20 02:58:48.335 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-20 03:03:08.150 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-20 03:03:08.699 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-20 03:04:40.622 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-20 03:04:41.151 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-20 03:07:46.388 | INFO     | app.services.generation_service:generate_videos_batch:97 - Dispatched video generation task e8b41041-aa66-4018-ba9d-67d4e5330aa4: 1 shots for project 1
+2026-04-20 03:07:46.437 | INFO     | app.worker.tasks.generation:generate_videos_for_shots:553 - Loaded image for shot 1: shot_1_1776615882.png -> JPEG data URI (761632 chars)
+2026-04-20 03:08:33.556 | INFO     | app.worker.tasks.generation:_save_video_result:640 - Video saved for shot 1: data\uploads\shot_1_video_1776625713.mp4
+2026-04-20 03:08:33.571 | INFO     | app.worker.tasks.generation:generate_videos_for_shots:613 - Video generation complete: 1/1 shots for project 1
+2026-04-20 03:09:54.249 | INFO     | app.services.generation_service:generate_videos_batch:97 - Dispatched video generation task 5fd0d065-82a4-4f84-9175-a0678f80e9e3: 2 shots for project 1
+2026-04-20 03:09:54.295 | INFO     | app.worker.tasks.generation:generate_videos_for_shots:553 - Loaded image for shot 2: shot_2_1776615940.png -> JPEG data URI (886072 chars)
+2026-04-20 03:10:41.011 | INFO     | app.worker.tasks.generation:_save_video_result:640 - Video saved for shot 2: data\uploads\shot_2_video_1776625841.mp4
+2026-04-20 03:10:41.067 | INFO     | app.worker.tasks.generation:generate_videos_for_shots:553 - Loaded image for shot 3: shot_3_1776616017.png -> JPEG data URI (598596 chars)
+2026-04-20 03:11:27.639 | INFO     | app.worker.tasks.generation:_save_video_result:640 - Video saved for shot 3: data\uploads\shot_3_video_1776625887.mp4
+2026-04-20 03:11:27.653 | INFO     | app.worker.tasks.generation:generate_videos_for_shots:613 - Video generation complete: 2/2 shots for project 1
+2026-04-20 03:12:34.840 | INFO     | app.services.generation_service:generate_videos_batch:97 - Dispatched video generation task a034721b-96a4-4ec0-a1d2-261248fd4447: 5 shots for project 1
+2026-04-20 03:12:34.881 | INFO     | app.worker.tasks.generation:generate_videos_for_shots:553 - Loaded image for shot 4: shot_4_1776616484.png -> JPEG data URI (809056 chars)
+2026-04-20 03:13:32.946 | INFO     | app.worker.tasks.generation:_save_video_result:640 - Video saved for shot 4: data\uploads\shot_4_video_1776626012.mp4
+2026-04-20 03:13:32.991 | INFO     | app.worker.tasks.generation:generate_videos_for_shots:553 - Loaded image for shot 5: shot_5_1776616522.png -> JPEG data URI (725116 chars)
+2026-04-20 03:14:30.703 | INFO     | app.worker.tasks.generation:_save_video_result:640 - Video saved for shot 5: data\uploads\shot_5_video_1776626070.mp4
+2026-04-20 03:14:30.749 | INFO     | app.worker.tasks.generation:generate_videos_for_shots:553 - Loaded image for shot 6: shot_6_1776616639.png -> JPEG data URI (967484 chars)
+2026-04-20 03:15:17.590 | INFO     | app.worker.tasks.generation:_save_video_result:640 - Video saved for shot 6: data\uploads\shot_6_video_1776626117.mp4
+2026-04-20 03:15:17.633 | INFO     | app.worker.tasks.generation:generate_videos_for_shots:553 - Loaded image for shot 7: shot_7_1776616645.png -> JPEG data URI (738720 chars)
+2026-04-20 03:16:15.501 | INFO     | app.worker.tasks.generation:_save_video_result:640 - Video saved for shot 7: data\uploads\shot_7_video_1776626175.mp4
+2026-04-20 03:16:15.545 | INFO     | app.worker.tasks.generation:generate_videos_for_shots:553 - Loaded image for shot 8: shot_8_1776616695.png -> JPEG data URI (789560 chars)
+2026-04-20 03:17:02.187 | INFO     | app.worker.tasks.generation:_save_video_result:640 - Video saved for shot 8: data\uploads\shot_8_video_1776626222.mp4
+2026-04-20 03:17:02.201 | INFO     | app.worker.tasks.generation:generate_videos_for_shots:613 - Video generation complete: 5/5 shots for project 1
+2026-04-20 03:18:55.768 | INFO     | app.services.generation_service:generate_videos_batch:97 - Dispatched video generation task 6ae601f3-6a94-4ca4-a763-790dc81277d4: 7 shots for project 1
+2026-04-20 03:18:55.799 | INFO     | app.worker.tasks.generation:generate_videos_for_shots:553 - Loaded image for shot 9: shot_9_1776616704.png -> JPEG data URI (517836 chars)
+2026-04-20 03:19:53.463 | INFO     | app.worker.tasks.generation:_save_video_result:640 - Video saved for shot 9: data\uploads\shot_9_video_1776626393.mp4
+2026-04-20 03:19:53.510 | INFO     | app.worker.tasks.generation:generate_videos_for_shots:553 - Loaded image for shot 10: shot_10_1776616712.png -> JPEG data URI (862052 chars)
+2026-04-20 03:20:51.305 | INFO     | app.worker.tasks.generation:_save_video_result:640 - Video saved for shot 10: data\uploads\shot_10_video_1776626451.mp4
+2026-04-20 03:20:51.352 | INFO     | app.worker.tasks.generation:generate_videos_for_shots:553 - Loaded image for shot 11: shot_11_1776617053.png -> JPEG data URI (1028184 chars)
+2026-04-20 03:21:38.551 | INFO     | app.worker.tasks.generation:_save_video_result:640 - Video saved for shot 11: data\uploads\shot_11_video_1776626498.mp4
+2026-04-20 03:21:38.593 | INFO     | app.worker.tasks.generation:generate_videos_for_shots:553 - Loaded image for shot 12: shot_12_1776616757.png -> JPEG data URI (631592 chars)
+2026-04-20 03:22:25.033 | INFO     | app.worker.tasks.generation:_save_video_result:640 - Video saved for shot 12: data\uploads\shot_12_video_1776626545.mp4
+2026-04-20 03:22:25.077 | INFO     | app.worker.tasks.generation:generate_videos_for_shots:553 - Loaded image for shot 13: shot_13_1776616762.png -> JPEG data URI (702628 chars)
+2026-04-20 03:23:11.588 | INFO     | app.worker.tasks.generation:_save_video_result:640 - Video saved for shot 13: data\uploads\shot_13_video_1776626591.mp4
+2026-04-20 03:23:11.628 | INFO     | app.worker.tasks.generation:generate_videos_for_shots:553 - Loaded image for shot 14: shot_14_1776616826.png -> JPEG data URI (576804 chars)
+2026-04-20 03:23:58.056 | INFO     | app.worker.tasks.generation:_save_video_result:640 - Video saved for shot 14: data\uploads\shot_14_video_1776626638.mp4
+2026-04-20 03:23:58.100 | INFO     | app.worker.tasks.generation:generate_videos_for_shots:553 - Loaded image for shot 15: shot_15_1776617130.png -> JPEG data URI (721316 chars)
+2026-04-20 03:24:44.575 | INFO     | app.worker.tasks.generation:_save_video_result:640 - Video saved for shot 15: data\uploads\shot_15_video_1776626684.mp4
+2026-04-20 03:24:44.590 | INFO     | app.worker.tasks.generation:generate_videos_for_shots:613 - Video generation complete: 7/7 shots for project 1
+2026-04-20 03:27:14.982 | INFO     | app.services.generation_service:generate_videos_batch:97 - Dispatched video generation task 1f1fc09d-90d7-4103-b321-3a6ec49d3dad: 1 shots for project 1
+2026-04-20 03:27:15.020 | INFO     | app.worker.tasks.generation:generate_videos_for_shots:553 - Loaded image for shot 7: shot_7_1776616645.png -> JPEG data URI (738720 chars)
+2026-04-20 03:28:01.901 | INFO     | app.worker.tasks.generation:_save_video_result:640 - Video saved for shot 7: data\uploads\shot_7_video_1776626881.mp4
+2026-04-20 03:28:01.916 | INFO     | app.worker.tasks.generation:generate_videos_for_shots:613 - Video generation complete: 1/1 shots for project 1
+2026-04-20 03:29:03.570 | INFO     | app.api.v1.storyboards:generate_shot_prompt:295 - Sync generated prompts for shot 7: image=256, video=90
+2026-04-20 03:29:45.042 | INFO     | app.api.v1.storyboards:generate_shot_image:362 - Sync generated image for shot 7
+2026-04-20 03:31:19.516 | INFO     | app.services.generation_service:generate_images_batch:52 - Dispatched image generation task 5373e097-e0d6-4068-b875-2e93aa3c05ba: 1 shots for project 1
+2026-04-20 03:31:41.153 | INFO     | app.api.v1.storyboards:generate_shot_image:362 - Sync generated image for shot 7
+2026-04-20 03:31:51.252 | INFO     | app.worker.tasks.generation:generate_images_for_shots:462 - Image saved for shot 7: data\uploads\shot_7_1776627111.png
+2026-04-20 03:31:51.269 | INFO     | app.worker.tasks.generation:generate_images_for_shots:486 - Image generation complete: 1/1 shots for project 1
+2026-04-20 03:32:56.862 | ERROR    | app.ai_gateway.providers.doubao_adapter:generate:80 - Doubao API error: 400 - {"error":{"code":"OutputImageSensitiveContentDetected","message":"The request failed because the output image may contain sensitive information. Request id: 0217766271689344087c9e55f8b322b82cd17f72450d06e8f16c2","param":"","type":""}}
+2026-04-20 03:33:21.086 | INFO     | app.api.v1.storyboards:generate_shot_image:362 - Sync generated image for shot 7
+2026-04-20 03:34:11.760 | INFO     | app.api.v1.storyboards:generate_shot_image:362 - Sync generated image for shot 7
+2026-04-20 03:35:23.116 | INFO     | app.services.generation_service:generate_videos_batch:97 - Dispatched video generation task 822a95d3-4224-432a-bad3-bcf69cf50338: 1 shots for project 1
+2026-04-20 03:35:23.151 | INFO     | app.worker.tasks.generation:generate_videos_for_shots:553 - Loaded image for shot 7: shot_7_1776627251.png -> JPEG data URI (776884 chars)
+2026-04-20 03:36:10.473 | INFO     | app.worker.tasks.generation:_save_video_result:640 - Video saved for shot 7: data\uploads\shot_7_video_1776627370.mp4
+2026-04-20 03:36:10.489 | INFO     | app.worker.tasks.generation:generate_videos_for_shots:613 - Video generation complete: 1/1 shots for project 1
+2026-04-20 03:36:43.116 | INFO     | app.services.generation_service:generate_videos_batch:97 - Dispatched video generation task 1b1f177f-44a9-4304-9051-62e83a27fb83: 1 shots for project 1
+2026-04-20 03:36:43.158 | INFO     | app.worker.tasks.generation:generate_videos_for_shots:553 - Loaded image for shot 7: shot_7_1776627251.png -> JPEG data URI (776884 chars)
+2026-04-20 03:37:29.990 | INFO     | app.worker.tasks.generation:_save_video_result:640 - Video saved for shot 7: data\uploads\shot_7_video_1776627449.mp4
+2026-04-20 03:37:30.005 | INFO     | app.worker.tasks.generation:generate_videos_for_shots:613 - Video generation complete: 1/1 shots for project 1
+2026-04-20 03:43:00.900 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-20 03:43:01.450 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-20 03:46:15.633 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-20 03:46:16.172 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-20 03:46:19.602 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-20 03:46:20.134 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-20 03:46:30.178 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-20 03:46:30.711 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-20 03:46:37.932 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-20 03:46:38.474 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-20 03:46:47.324 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-20 03:46:47.857 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-20 03:46:56.486 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-20 03:46:57.024 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-20 03:47:13.399 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-20 03:47:13.942 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-20 03:48:11.829 | INFO     | app.services.generation_service:merge_videos:139 - Dispatched merge task 8d0dac70-4f4d-4dd7-afa8-2dce1f4ac11b for project 1
+2026-04-20 03:51:08.151 | INFO     | app.services.generation_service:merge_videos:139 - Dispatched merge task cd3c5076-341d-4117-9a35-fdb87cfc7db7 for project 1
+2026-04-20 03:52:39.072 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-20 03:52:39.628 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-20 03:53:16.053 | INFO     | app.services.generation_service:merge_videos:139 - Dispatched merge task d967e9f3-2f69-406a-8398-8f64bbe9288e for project 1
+2026-04-20 03:53:52.860 | INFO     | app.services.video_merge_service:merge_project_videos:209 - Merge complete for project 1: data\uploads\project_1_final_1776628432.mp4 (45.1s)
+2026-04-20 03:55:38.616 | INFO     | app.services.generation_service:merge_videos:139 - Dispatched merge task 1de1de9b-8317-4667-8154-90477d4b3f06 for project 1
+2026-04-20 03:56:15.621 | INFO     | app.services.video_merge_service:merge_project_videos:209 - Merge complete for project 1: data\uploads\project_1_final_1776628575.mp4 (45.1s)
+2026-04-20 03:59:01.277 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-20 03:59:01.804 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-20 03:59:42.209 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-20 03:59:42.743 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-20 04:05:39.822 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-20 04:05:40.366 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-20 04:05:46.049 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-20 04:05:46.583 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-20 04:05:55.653 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-20 04:05:56.193 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-20 04:07:45.121 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-20 04:07:45.656 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-20 04:07:55.602 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-20 04:07:56.135 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-20 04:09:10.794 | INFO     | app.api.v1.knowledge:get_case_markdown:333 - [DEBUG] Total cases in DB: 1
+2026-04-20 04:09:10.796 | INFO     | app.api.v1.knowledge:get_case_markdown:338 - [DEBUG] All case IDs: [1]
+2026-04-20 04:09:10.797 | INFO     | app.api.v1.knowledge:get_case_markdown:343 - [DEBUG] Requested case_id=1, case_found=True
+2026-04-20 04:09:10.797 | INFO     | app.api.v1.knowledge:get_case_markdown:355 - [DEBUG] report_path exists=True, md_exists=True
+2026-04-20 04:21:25.133 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-20 04:21:36.950 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-20 04:21:37.494 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-20 04:21:42.091 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-20 04:21:42.631 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-20 04:21:45.489 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-20 04:21:46.030 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-20 04:21:48.995 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-20 04:21:49.526 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-20 04:21:52.174 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-20 04:21:52.709 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-20 04:23:03.035 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-20 04:23:03.563 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-20 04:24:10.022 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-20 04:24:10.543 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-20 04:55:45.375 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-20 04:57:36.123 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-20 09:05:56.192 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-20 09:05:56.571 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-20 09:07:09.399 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-20 09:07:09.741 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-20 09:08:45.984 | INFO     | app.api.v1.knowledge:get_case_markdown:333 - [DEBUG] Total cases in DB: 1
+2026-04-20 09:08:45.985 | INFO     | app.api.v1.knowledge:get_case_markdown:338 - [DEBUG] All case IDs: [1]
+2026-04-20 09:08:45.986 | INFO     | app.api.v1.knowledge:get_case_markdown:343 - [DEBUG] Requested case_id=1, case_found=True
+2026-04-20 09:08:45.987 | INFO     | app.api.v1.knowledge:get_case_markdown:355 - [DEBUG] report_path exists=True, md_exists=True
+2026-04-20 09:17:11.065 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-20 09:17:11.426 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-20 09:17:23.688 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-20 09:17:24.034 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-20 09:17:42.214 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-20 09:17:42.561 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-20 09:18:02.568 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-20 09:18:02.914 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-20 09:53:14.597 | ERROR    | app.main:unhandled_exception_handler:61 - Unhandled exception on POST /api/v1/projects/1/batch/character-images: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+Traceback (most recent call last):
+  File "C:\Users\asus\AppData\Local\Programs\Python\Python313\Lib\site-packages\kombu\utils\functional.py", line 32, in __call__
+    return self.__value__
+           ^^^^^^^^^^^^^^
+AttributeError: 'ChannelPromise' object has no attribute '__value__'. Did you mean: '__call__'?
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\asus\AppData\Local\Programs\Python\Python313\Lib\site-packages\kombu\transport\virtual\base.py", line 951, in create_channel
+    return self._avail_channels.pop()
+           ~~~~~~~~~~~~~~~~~~~~~~~~^^
+IndexError: pop from empty list
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\asus\AppData\Local\Programs\Python\Python313\Lib\site-packages\kombu\connection.py", line 474, in _reraise_as_library_errors
+    yield
+  File "C:\Users\asus\AppData\Local\Programs\Python\Python313\Lib\site-packages\kombu\connection.py", line 461, in _ensure_connection
+    return retry_over_time(
+        self._connection_factory, self.recoverable_connection_errors,
+    ...<2 lines>...
+        callback, timeout=timeout
+    )
+  File "C:\Users\asus\AppData\Local\Programs\Python\Python313\Lib\site-packages\kombu\utils\functional.py", line 318, in retry_over_time
+    return fun(*args, **kwargs)
+  File "C:\Users\asus\AppData\Local\Programs\Python\Python313\Lib\site-packages\kombu\connection.py", line 941, in _connection_factory
+    self._connection = self._establish_connection()
+                       ~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\asus\AppData\Local\Programs\Python\Python313\Lib\site-packages\kombu\connection.py", line 863, in _establish_connection
+    conn = self.transport.establish_connection()
+  File "C:\Users\asus\AppData\Local\Programs\Python\Python313\Lib\site-packages\kombu\transport\virtual\base.py", line 975, in establish_connection
+    self._avail_channels.append(self.create_channel(self))
+                                ~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Users\asus\AppData\Local\Programs\Python\Python313\Lib\site-packages\kombu\transport\virtual\base.py", line 953, in create_channel
+    channel = self.Channel(connection)
+  File "C:\Users\asus\AppData\Local\Programs\Python\Python313\Lib\site-packages\kombu\transport\redis.py", line 757, in __init__
+    self.client.ping()
+    ~~~~~~~~~~~~~~~~^^
+  File "C:\Users\asus\AppData\Local\Programs\Python\Python313\Lib\site-packages\redis\commands\core.py", line 1250, in ping
+    return self.execute_command("PING", **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "C:\Users\asus\AppData\Local\Programs\Python\Python313\Lib\site-packages\redis\client.py", line 716, in execute_command
+    return self._execute_command(*args, **options)
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "C:\Users\asus\AppData\Local\Programs\Python\Python313\Lib\site-packages\redis\client.py", line 736, in _execute_command
+    result = conn.retry.call_with_retry(
+        lambda: self._send_command_parse_response(
+    ...<3 lines>...
+        with_failure_count=True,
+    )
+  File "C:\Users\asus\AppData\Local\Programs\Python\Python313\Lib\site-packages\redis\retry.py", line 120, in call_with_retry
+    return do()
+  File "C:\Users\asus\AppData\Local\Programs\Python\Python313\Lib\site-packages\redis\client.py", line 737, in <lambda>
+    lambda: self._send_command_parse_response(
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        conn, command_name, *args, **options
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ),
+    ^
+  File "C:\Users\asus\AppData\Local\Programs\Python\Python313\Lib\site-packages\redis\client.py", line 682, in _send_command_parse_response
+    return self.parse_response(conn, command_name, **options)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\asus\AppData\Local\Programs\Python\Python313\Lib\site-packages\redis\client.py", line 780, in parse_response
+    response = connection.read_response()
+  File "C:\Users\asus\AppData\Local\Programs\Python\Python313\Lib\site-packages\redis\connection.py", line 1364, in read_response
+    raise response
+redis.exceptions.ResponseError: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\asus\AppData\Local\Programs\Python\Python313\Lib\site-packages\starlette\middleware\errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "C:\Users\asus\AppData\Local\Programs\Python\Python313\Lib\site-packages\starlette\middleware\cors.py", line 96, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "C:\Users\asus\AppData\Local\Programs\Python\Python313\Lib\site-packages\starlette\middleware\cors.py", line 154, in simple_response
+    await self.app(scope, receive, send)
+  File "C:\Users\asus\AppData\Local\Programs\Python\Python313\Lib\site-packages\starlette\middleware\exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "C:\Users\asus\AppData\Local\Programs\Python\Python313\Lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "C:\Users\asus\AppData\Local\Programs\Python\Python313\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Users\asus\AppData\Local\Programs\Python\Python313\Lib\site-packages\fastapi\middleware\asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "C:\Users\asus\AppData\Local\Programs\Python\Python313\Lib\site-packages\starlette\routing.py", line 660, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "C:\Users\asus\AppData\Local\Programs\Python\Python313\Lib\site-packages\starlette\routing.py", line 680, in app
+    await route.handle(scope, receive, send)
+  File "C:\Users\asus\AppData\Local\Programs\Python\Python313\Lib\site-packages\starlette\routing.py", line 276, in handle
+    await self.app(scope, receive, send)
+  File "C:\Users\asus\AppData\Local\Programs\Python\Python313\Lib\site-packages\fastapi\routing.py", line 134, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "C:\Users\asus\AppData\Local\Programs\Python\Python313\Lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "C:\Users\asus\AppData\Local\Programs\Python\Python313\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Users\asus\AppData\Local\Programs\Python\Python313\Lib\site-packages\fastapi\routing.py", line 120, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "C:\Users\asus\AppData\Local\Programs\Python\Python313\Lib\site-packages\fastapi\routing.py", line 674, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "C:\Users\asus\AppData\Local\Programs\Python\Python313\Lib\site-packages\fastapi\routing.py", line 328, in run_endpoint_function
+    return await dependant.call(**values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\ai-creator-studio-backend\app\api\v1\storyboards.py", line 377, in batch_generate_character_images
+    return await service.batch_generate_character_images(project_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\ai-creator-studio-backend\app\services\generation_service.py", line 230, in batch_generate_character_images
+    celery_result = generate_character_images.delay(
+        character_ids=[c.id for c in characters],
+    ...<2 lines>...
+        workflow_step_id=step.id,
+    )
+  File "C:\Users\asus\AppData\Local\Programs\Python\Python313\Lib\site-packages\celery\app\task.py", line 463, in delay
+    return self.apply_async(args, kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "C:\Users\asus\AppData\Local\Programs\Python\Python313\Lib\site-packages\celery\app\task.py", line 627, in apply_async
+    return app.send_task(
+           ~~~~~~~~~~~~~^
+        self.name, args, kwargs, task_id=task_id, producer=producer,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+        **options
+        ^^^^^^^^^
+    )
+    ^
+  File "C:\Users\asus\AppData\Local\Programs\Python\Python313\Lib\site-packages\celery\app\base.py", line 969, in send_task
+    amqp.send_task_message(P, name, message, **options)
+    ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\asus\AppData\Local\Programs\Python\Python313\Lib\site-packages\celery\app\amqp.py", line 559, in send_task_message
+    ret = producer.publish(
+        body,
+    ...<8 lines>...
+        **properties
+    )
+  File "C:\Users\asus\AppData\Local\Programs\Python\Python313\Lib\site-packages\kombu\messaging.py", line 190, in publish
+    return _publish(
+        body, priority, content_type, content_encoding,
+        headers, properties, routing_key, mandatory, immediate,
+        exchange_name, declare, timeout, confirm_timeout, retry, retry_policy
+    )
+  File "C:\Users\asus\AppData\Local\Programs\Python\Python313\Lib\site-packages\kombu\connection.py", line 558, in _ensured
+    return fun(*args, **kwargs)
+  File "C:\Users\asus\AppData\Local\Programs\Python\Python313\Lib\site-packages\kombu\messaging.py", line 200, in _publish
+    channel = self.channel
+              ^^^^^^^^^^^^
+  File "C:\Users\asus\AppData\Local\Programs\Python\Python313\Lib\site-packages\kombu\messaging.py", line 224, in _get_channel
+    channel = self._channel = channel()
+                              ~~~~~~~^^
+  File "C:\Users\asus\AppData\Local\Programs\Python\Python313\Lib\site-packages\kombu\utils\functional.py", line 34, in __call__
+    value = self.__value__ = self.__contract__()
+                             ~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\asus\AppData\Local\Programs\Python\Python313\Lib\site-packages\kombu\messaging.py", line 240, in <lambda>
+    channel = ChannelPromise(lambda: connection.default_channel)
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\asus\AppData\Local\Programs\Python\Python313\Lib\site-packages\kombu\connection.py", line 960, in default_channel
+    self._ensure_connection(**conn_opts)
+    ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\asus\AppData\Local\Programs\Python\Python313\Lib\site-packages\kombu\connection.py", line 460, in _ensure_connection
+    with ctx():
+         ~~~^^
+  File "C:\Users\asus\AppData\Local\Programs\Python\Python313\Lib\contextlib.py", line 162, in __exit__
+    self.gen.throw(value)
+    ~~~~~~~~~~~~~~^^^^^^^
+  File "C:\Users\asus\AppData\Local\Programs\Python\Python313\Lib\site-packages\kombu\connection.py", line 478, in _reraise_as_library_errors
+    raise ConnectionError(str(exc)) from exc
+kombu.exceptions.OperationalError: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+
+2026-04-20 09:54:50.384 | INFO     | app.services.character_service:generate_reference_image:181 - Reference image generated for character 1
+2026-04-20 13:18:13.901 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-20 13:18:14.316 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-21 11:16:39.725 | INFO     | app.services.knowledge_service:analyze_video:108 - Video analysis task submitted: case=2, task=6f9cf8b6-77fa-4e35-ac15-f1b4738e325e
+2026-04-21 11:16:42.089 | ERROR    | app.worker.tasks.knowledge:analyze_video_task:98 - Video analysis failed for case 2: ERROR: [youtube] JJctiPEUlZA: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies
+2026-04-21 11:17:28.879 | INFO     | app.services.knowledge_service:analyze_video:108 - Video analysis task submitted: case=2, task=16d6f020-b549-4939-aace-cb506d10f90b
+2026-04-21 11:17:38.058 | INFO     | app.services.video_analysis_service:extract_frames:347 - Successfully extracted 19/19 frames
+2026-04-21 11:17:48.772 | INFO     | app.services.video_analysis_service:describe_frames:409 - Frame 1/19 described successfully
+2026-04-21 11:17:56.607 | INFO     | app.services.video_analysis_service:describe_frames:409 - Frame 2/19 described successfully
+2026-04-21 11:18:05.418 | INFO     | app.services.video_analysis_service:describe_frames:409 - Frame 3/19 described successfully
+2026-04-21 11:18:13.068 | INFO     | app.services.video_analysis_service:describe_frames:409 - Frame 4/19 described successfully
+2026-04-21 11:18:21.841 | INFO     | app.services.video_analysis_service:describe_frames:409 - Frame 5/19 described successfully
+2026-04-21 11:18:29.595 | INFO     | app.services.video_analysis_service:describe_frames:409 - Frame 6/19 described successfully
+2026-04-21 11:18:37.460 | INFO     | app.services.video_analysis_service:describe_frames:409 - Frame 7/19 described successfully
+2026-04-21 11:18:44.976 | INFO     | app.services.video_analysis_service:describe_frames:409 - Frame 8/19 described successfully
+2026-04-21 11:18:52.989 | INFO     | app.services.video_analysis_service:describe_frames:409 - Frame 9/19 described successfully
+2026-04-21 11:19:00.091 | INFO     | app.services.video_analysis_service:describe_frames:409 - Frame 10/19 described successfully
+2026-04-21 11:19:04.596 | INFO     | app.services.video_analysis_service:describe_frames:409 - Frame 11/19 described successfully
+2026-04-21 11:19:14.483 | INFO     | app.services.video_analysis_service:describe_frames:409 - Frame 12/19 described successfully
+2026-04-21 11:19:22.324 | INFO     | app.services.video_analysis_service:describe_frames:409 - Frame 13/19 described successfully
+2026-04-21 11:19:30.720 | INFO     | app.services.video_analysis_service:describe_frames:409 - Frame 14/19 described successfully
+2026-04-21 11:19:38.464 | INFO     | app.services.video_analysis_service:describe_frames:409 - Frame 15/19 described successfully
+2026-04-21 11:19:47.934 | INFO     | app.services.video_analysis_service:describe_frames:409 - Frame 16/19 described successfully
+2026-04-21 11:19:55.210 | INFO     | app.services.video_analysis_service:describe_frames:409 - Frame 17/19 described successfully
+2026-04-21 11:20:04.773 | INFO     | app.services.video_analysis_service:describe_frames:409 - Frame 18/19 described successfully
+2026-04-21 11:20:11.725 | INFO     | app.services.video_analysis_service:describe_frames:409 - Frame 19/19 described successfully
+2026-04-21 11:20:11.730 | INFO     | app.services.video_analysis_service:describe_frames:426 - Frame description complete: 19/19 successful
+2026-04-21 11:20:12.303 | INFO     | app.services.video_analysis_service:analyze_content:493 - Structural analysis attempt 1/3
+2026-04-21 11:20:50.072 | INFO     | app.services.video_analysis_service:analyze_content:505 - Structural analysis completed successfully
+2026-04-21 11:20:50.073 | ERROR    | app.worker.tasks.knowledge:analyze_video_task:98 - Video analysis failed for case 2: Command # 1 (SETEX celery-task-meta-16d6f020-b549-4939-aace-cb506d10f90b 3600 {"status": "PROGRESS", "result":...) of pipeline caused error: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+2026-04-21 11:28:16.404 | INFO     | app.api.v1.knowledge:get_case_markdown:399 - [DEBUG] Total cases in DB: 2
+2026-04-21 11:28:16.406 | INFO     | app.api.v1.knowledge:get_case_markdown:404 - [DEBUG] All case IDs: [1, 2]
+2026-04-21 11:28:16.406 | INFO     | app.api.v1.knowledge:get_case_markdown:409 - [DEBUG] Requested case_id=2, case_found=True
+2026-04-21 11:28:16.407 | INFO     | app.api.v1.knowledge:get_case_markdown:421 - [DEBUG] report_path exists=False, md_exists=False
+2026-04-21 12:00:22.417 | INFO     | app.services.knowledge_service:analyze_video:108 - Video analysis task submitted: case=2, task=857d79e1-f24b-4801-82e1-e195b30b38aa
+2026-04-21 12:00:24.713 | ERROR    | app.worker.tasks.knowledge:analyze_video_task:98 - Video analysis failed for case 2: ERROR: [youtube] JJctiPEUlZA: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies
+2026-04-21 12:02:07.782 | INFO     | app.services.knowledge_service:analyze_video:108 - Video analysis task submitted: case=2, task=58f9c821-b66e-4040-9ba6-073ed729c773
+2026-04-21 12:02:09.355 | ERROR    | app.worker.tasks.knowledge:analyze_video_task:98 - Video analysis failed for case 2: ERROR: [youtube] JJctiPEUlZA: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies
+2026-04-21 12:02:20.315 | INFO     | app.services.knowledge_service:analyze_video:108 - Video analysis task submitted: case=3, task=cac44520-32e3-499f-8068-a8d3bc1a14b7
+2026-04-21 12:02:21.874 | ERROR    | app.worker.tasks.knowledge:analyze_video_task:98 - Video analysis failed for case 3: ERROR: [youtube] JJctiPEUlZA: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies
+2026-04-21 13:18:04.819 | INFO     | app.api.v1.knowledge:get_case_markdown:399 - [DEBUG] Total cases in DB: 2
+2026-04-21 13:18:04.820 | INFO     | app.api.v1.knowledge:get_case_markdown:404 - [DEBUG] All case IDs: [1, 3]
+2026-04-21 13:18:04.821 | INFO     | app.api.v1.knowledge:get_case_markdown:409 - [DEBUG] Requested case_id=3, case_found=True
+2026-04-21 13:18:04.821 | INFO     | app.api.v1.knowledge:get_case_markdown:421 - [DEBUG] report_path exists=False, md_exists=False
+2026-04-21 13:18:26.152 | ERROR    | app.main:unhandled_exception_handler:61 - Unhandled exception on POST /api/v1/kb/cases/3/reanalyze: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+Traceback (most recent call last):
+  File "C:\Users\asus\AppData\Local\Programs\Python\Python313\Lib\site-packages\kombu\connection.py", line 558, in _ensured
+    return fun(*args, **kwargs)
+  File "C:\Users\asus\AppData\Local\Programs\Python\Python313\Lib\site-packages\kombu\messaging.py", line 214, in _publish
+    return channel.basic_publish(
+           ~~~~~~~~~~~~~~~~~~~~~^
+        message,
+        ^^^^^^^^
+    ...<2 lines>...
+        timeout=timeout, confirm_timeout=confirm_timeout
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\asus\AppData\Local\Programs\Python\Python313\Lib\site-packages\kombu\transport\virtual\base.py", line 614, in basic_publish
+    return self._put(routing_key, message, **kwargs)
+           ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\asus\AppData\Local\Programs\Python\Python313\Lib\site-packages\kombu\transport\redis.py", line 1039, in _put
+    client.lpush(self._q_for_pri(queue, pri), dumps(message))
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\asus\AppData\Local\Programs\Python\Python313\Lib\site-packages\redis\commands\core.py", line 3061, in lpush
+    return self.execute_command("LPUSH", name, *values)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\asus\AppData\Local\Programs\Python\Python313\Lib\site-packages\redis\client.py", line 716, in execute_command
+    return self._execute_command(*args, **options)
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "C:\Users\asus\AppData\Local\Programs\Python\Python313\Lib\site-packages\redis\client.py", line 736, in _execute_command
+    result = conn.retry.call_with_retry(
+        lambda: self._send_command_parse_response(
+    ...<3 lines>...
+        with_failure_count=True,
+    )
+  File "C:\Users\asus\AppData\Local\Programs\Python\Python313\Lib\site-packages\redis\retry.py", line 120, in call_with_retry
+    return do()
+  File "C:\Users\asus\AppData\Local\Programs\Python\Python313\Lib\site-packages\redis\client.py", line 737, in <lambda>
+    lambda: self._send_command_parse_response(
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        conn, command_name, *args, **options
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ),
+    ^
+  File "C:\Users\asus\AppData\Local\Programs\Python\Python313\Lib\site-packages\redis\client.py", line 682, in _send_command_parse_response
+    return self.parse_response(conn, command_name, **options)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\asus\AppData\Local\Programs\Python\Python313\Lib\site-packages\redis\client.py", line 780, in parse_response
+    response = connection.read_response()
+  File "C:\Users\asus\AppData\Local\Programs\Python\Python313\Lib\site-packages\redis\connection.py", line 1364, in read_response
+    raise response
+redis.exceptions.ResponseError: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\asus\AppData\Local\Programs\Python\Python313\Lib\site-packages\kombu\transport\virtual\base.py", line 951, in create_channel
+    return self._avail_channels.pop()
+           ~~~~~~~~~~~~~~~~~~~~~~~~^^
+IndexError: pop from empty list
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\asus\AppData\Local\Programs\Python\Python313\Lib\site-packages\kombu\connection.py", line 474, in _reraise_as_library_errors
+    yield
+  File "C:\Users\asus\AppData\Local\Programs\Python\Python313\Lib\site-packages\kombu\connection.py", line 580, in _ensured
+    self._ensure_connection(
+    ~~~~~~~~~~~~~~~~~~~~~~~^
+        errback,
+        ^^^^^^^^
+    ...<2 lines>...
+        reraise_as_library_errors=False,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\asus\AppData\Local\Programs\Python\Python313\Lib\site-packages\kombu\connection.py", line 461, in _ensure_connection
+    return retry_over_time(
+        self._connection_factory, self.recoverable_connection_errors,
+    ...<2 lines>...
+        callback, timeout=timeout
+    )
+  File "C:\Users\asus\AppData\Local\Programs\Python\Python313\Lib\site-packages\kombu\utils\functional.py", line 318, in retry_over_time
+    return fun(*args, **kwargs)
+  File "C:\Users\asus\AppData\Local\Programs\Python\Python313\Lib\site-packages\kombu\connection.py", line 941, in _connection_factory
+    self._connection = self._establish_connection()
+                       ~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\asus\AppData\Local\Programs\Python\Python313\Lib\site-packages\kombu\connection.py", line 863, in _establish_connection
+    conn = self.transport.establish_connection()
+  File "C:\Users\asus\AppData\Local\Programs\Python\Python313\Lib\site-packages\kombu\transport\virtual\base.py", line 975, in establish_connection
+    self._avail_channels.append(self.create_channel(self))
+                                ~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Users\asus\AppData\Local\Programs\Python\Python313\Lib\site-packages\kombu\transport\virtual\base.py", line 953, in create_channel
+    channel = self.Channel(connection)
+  File "C:\Users\asus\AppData\Local\Programs\Python\Python313\Lib\site-packages\kombu\transport\redis.py", line 757, in __init__
+    self.client.ping()
+    ~~~~~~~~~~~~~~~~^^
+  File "C:\Users\asus\AppData\Local\Programs\Python\Python313\Lib\site-packages\redis\commands\core.py", line 1250, in ping
+    return self.execute_command("PING", **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "C:\Users\asus\AppData\Local\Programs\Python\Python313\Lib\site-packages\redis\client.py", line 716, in execute_command
+    return self._execute_command(*args, **options)
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "C:\Users\asus\AppData\Local\Programs\Python\Python313\Lib\site-packages\redis\client.py", line 736, in _execute_command
+    result = conn.retry.call_with_retry(
+        lambda: self._send_command_parse_response(
+    ...<3 lines>...
+        with_failure_count=True,
+    )
+  File "C:\Users\asus\AppData\Local\Programs\Python\Python313\Lib\site-packages\redis\retry.py", line 120, in call_with_retry
+    return do()
+  File "C:\Users\asus\AppData\Local\Programs\Python\Python313\Lib\site-packages\redis\client.py", line 737, in <lambda>
+    lambda: self._send_command_parse_response(
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        conn, command_name, *args, **options
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ),
+    ^
+  File "C:\Users\asus\AppData\Local\Programs\Python\Python313\Lib\site-packages\redis\client.py", line 682, in _send_command_parse_response
+    return self.parse_response(conn, command_name, **options)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\asus\AppData\Local\Programs\Python\Python313\Lib\site-packages\redis\client.py", line 780, in parse_response
+    response = connection.read_response()
+  File "C:\Users\asus\AppData\Local\Programs\Python\Python313\Lib\site-packages\redis\connection.py", line 1364, in read_response
+    raise response
+redis.exceptions.ResponseError: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\asus\AppData\Local\Programs\Python\Python313\Lib\site-packages\starlette\middleware\errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "C:\Users\asus\AppData\Local\Programs\Python\Python313\Lib\site-packages\starlette\middleware\cors.py", line 96, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "C:\Users\asus\AppData\Local\Programs\Python\Python313\Lib\site-packages\starlette\middleware\cors.py", line 154, in simple_response
+    await self.app(scope, receive, send)
+  File "C:\Users\asus\AppData\Local\Programs\Python\Python313\Lib\site-packages\starlette\middleware\exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "C:\Users\asus\AppData\Local\Programs\Python\Python313\Lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "C:\Users\asus\AppData\Local\Programs\Python\Python313\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Users\asus\AppData\Local\Programs\Python\Python313\Lib\site-packages\fastapi\middleware\asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "C:\Users\asus\AppData\Local\Programs\Python\Python313\Lib\site-packages\starlette\routing.py", line 660, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "C:\Users\asus\AppData\Local\Programs\Python\Python313\Lib\site-packages\starlette\routing.py", line 680, in app
+    await route.handle(scope, receive, send)
+  File "C:\Users\asus\AppData\Local\Programs\Python\Python313\Lib\site-packages\starlette\routing.py", line 276, in handle
+    await self.app(scope, receive, send)
+  File "C:\Users\asus\AppData\Local\Programs\Python\Python313\Lib\site-packages\fastapi\routing.py", line 134, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "C:\Users\asus\AppData\Local\Programs\Python\Python313\Lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "C:\Users\asus\AppData\Local\Programs\Python\Python313\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Users\asus\AppData\Local\Programs\Python\Python313\Lib\site-packages\fastapi\routing.py", line 120, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "C:\Users\asus\AppData\Local\Programs\Python\Python313\Lib\site-packages\fastapi\routing.py", line 674, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "C:\Users\asus\AppData\Local\Programs\Python\Python313\Lib\site-packages\fastapi\routing.py", line 328, in run_endpoint_function
+    return await dependant.call(**values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\ai-creator-studio-backend\app\api\v1\knowledge.py", line 289, in reanalyze_case
+    celery_result = reanalyze_video_task.delay(case_id=case_id)
+  File "C:\Users\asus\AppData\Local\Programs\Python\Python313\Lib\site-packages\celery\app\task.py", line 463, in delay
+    return self.apply_async(args, kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "C:\Users\asus\AppData\Local\Programs\Python\Python313\Lib\site-packages\celery\app\task.py", line 627, in apply_async
+    return app.send_task(
+           ~~~~~~~~~~~~~^
+        self.name, args, kwargs, task_id=task_id, producer=producer,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+        **options
+        ^^^^^^^^^
+    )
+    ^
+  File "C:\Users\asus\AppData\Local\Programs\Python\Python313\Lib\site-packages\celery\app\base.py", line 969, in send_task
+    amqp.send_task_message(P, name, message, **options)
+    ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\asus\AppData\Local\Programs\Python\Python313\Lib\site-packages\celery\app\amqp.py", line 559, in send_task_message
+    ret = producer.publish(
+        body,
+    ...<8 lines>...
+        **properties
+    )
+  File "C:\Users\asus\AppData\Local\Programs\Python\Python313\Lib\site-packages\kombu\messaging.py", line 190, in publish
+    return _publish(
+        body, priority, content_type, content_encoding,
+        headers, properties, routing_key, mandatory, immediate,
+        exchange_name, declare, timeout, confirm_timeout, retry, retry_policy
+    )
+  File "C:\Users\asus\AppData\Local\Programs\Python\Python313\Lib\site-packages\kombu\connection.py", line 555, in _ensured
+    with self._reraise_as_library_errors():
+         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\asus\AppData\Local\Programs\Python\Python313\Lib\contextlib.py", line 162, in __exit__
+    self.gen.throw(value)
+    ~~~~~~~~~~~~~~^^^^^^^
+  File "C:\Users\asus\AppData\Local\Programs\Python\Python313\Lib\site-packages\kombu\connection.py", line 478, in _reraise_as_library_errors
+    raise ConnectionError(str(exc)) from exc
+kombu.exceptions.OperationalError: MISCONF Redis is configured to save RDB snapshots, but is currently not able to persist on disk. Commands that may modify the data set are disabled. Please check Redis logs for details about the error.
+
+2026-04-21 13:24:51.907 | INFO     | app.api.v1.knowledge:reanalyze_case:295 - Re-analysis task submitted: case=3, task=2637269f-50bd-4792-804f-0a604bfbb75f
+2026-04-21 13:25:00.460 | INFO     | app.services.video_analysis_service:describe_frames:409 - Frame 1/19 described successfully
+2026-04-21 13:25:08.663 | INFO     | app.services.video_analysis_service:describe_frames:409 - Frame 2/19 described successfully
+2026-04-21 13:25:16.890 | INFO     | app.services.video_analysis_service:describe_frames:409 - Frame 3/19 described successfully
+2026-04-21 13:25:23.982 | INFO     | app.services.video_analysis_service:describe_frames:409 - Frame 4/19 described successfully
+2026-04-21 13:25:33.988 | INFO     | app.services.video_analysis_service:describe_frames:409 - Frame 5/19 described successfully
+2026-04-21 13:25:40.415 | INFO     | app.services.video_analysis_service:describe_frames:409 - Frame 6/19 described successfully
+2026-04-21 13:25:46.015 | INFO     | app.services.video_analysis_service:describe_frames:409 - Frame 7/19 described successfully
+2026-04-21 13:25:50.964 | INFO     | app.services.video_analysis_service:describe_frames:409 - Frame 8/19 described successfully
+2026-04-21 13:25:58.847 | INFO     | app.services.video_analysis_service:describe_frames:409 - Frame 9/19 described successfully
+2026-04-21 13:26:05.402 | INFO     | app.services.video_analysis_service:describe_frames:409 - Frame 10/19 described successfully
+2026-04-21 13:26:10.542 | INFO     | app.services.video_analysis_service:describe_frames:409 - Frame 11/19 described successfully
+2026-04-21 13:26:18.156 | INFO     | app.services.video_analysis_service:describe_frames:409 - Frame 12/19 described successfully
+2026-04-21 13:26:26.213 | INFO     | app.services.video_analysis_service:describe_frames:409 - Frame 13/19 described successfully
+2026-04-21 13:26:33.732 | INFO     | app.services.video_analysis_service:describe_frames:409 - Frame 14/19 described successfully
+2026-04-21 13:26:38.676 | INFO     | app.services.video_analysis_service:describe_frames:409 - Frame 15/19 described successfully
+2026-04-21 13:26:45.163 | INFO     | app.services.video_analysis_service:describe_frames:409 - Frame 16/19 described successfully
+2026-04-21 13:26:51.675 | INFO     | app.services.video_analysis_service:describe_frames:409 - Frame 17/19 described successfully
+2026-04-21 13:26:58.890 | INFO     | app.services.video_analysis_service:describe_frames:409 - Frame 18/19 described successfully
+2026-04-21 13:27:04.671 | INFO     | app.services.video_analysis_service:describe_frames:409 - Frame 19/19 described successfully
+2026-04-21 13:27:04.675 | INFO     | app.services.video_analysis_service:describe_frames:426 - Frame description complete: 19/19 successful
+2026-04-21 13:27:05.271 | INFO     | app.services.video_analysis_service:analyze_content:493 - Structural analysis attempt 1/3
+2026-04-21 13:27:46.546 | INFO     | app.services.video_analysis_service:analyze_content:505 - Structural analysis completed successfully
+2026-04-21 13:27:46.570 | INFO     | app.worker.tasks.knowledge:reanalyze_video_task:202 - Re-analysis completed for case 3
+2026-04-21 13:40:31.215 | INFO     | app.api.v1.knowledge:get_case_markdown:399 - [DEBUG] Total cases in DB: 2
+2026-04-21 13:40:31.216 | INFO     | app.api.v1.knowledge:get_case_markdown:404 - [DEBUG] All case IDs: [1, 3]
+2026-04-21 13:40:31.216 | INFO     | app.api.v1.knowledge:get_case_markdown:409 - [DEBUG] Requested case_id=3, case_found=True
+2026-04-21 13:40:31.217 | INFO     | app.api.v1.knowledge:get_case_markdown:421 - [DEBUG] report_path exists=True, md_exists=True
+2026-04-21 13:43:10.576 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-21 13:43:10.931 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-21 13:48:07.091 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-21 13:48:07.445 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-21 13:52:56.799 | INFO     | app.api.v1.knowledge:get_case_markdown:399 - [DEBUG] Total cases in DB: 2
+2026-04-21 13:52:56.800 | INFO     | app.api.v1.knowledge:get_case_markdown:404 - [DEBUG] All case IDs: [1, 3]
+2026-04-21 13:52:56.801 | INFO     | app.api.v1.knowledge:get_case_markdown:409 - [DEBUG] Requested case_id=3, case_found=True
+2026-04-21 13:52:56.802 | INFO     | app.api.v1.knowledge:get_case_markdown:421 - [DEBUG] report_path exists=True, md_exists=True
+2026-04-21 14:48:24.911 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-21 14:48:25.292 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-21 14:48:49.977 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-21 14:48:50.327 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-21 15:40:13.267 | INFO     | app.api.v1.knowledge:get_case_markdown:399 - [DEBUG] Total cases in DB: 2
+2026-04-21 15:40:13.268 | INFO     | app.api.v1.knowledge:get_case_markdown:404 - [DEBUG] All case IDs: [1, 3]
+2026-04-21 15:40:13.269 | INFO     | app.api.v1.knowledge:get_case_markdown:409 - [DEBUG] Requested case_id=3, case_found=True
+2026-04-21 15:40:13.269 | INFO     | app.api.v1.knowledge:get_case_markdown:421 - [DEBUG] report_path exists=True, md_exists=True
+2026-04-21 17:20:25.439 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-21 17:20:25.832 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-21 17:27:52.593 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-21 17:27:52.938 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-21 17:28:26.570 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-21 17:28:26.903 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-21 17:28:53.705 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-21 17:28:54.043 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-21 17:29:32.397 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-21 17:29:32.736 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-21 17:29:59.980 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-21 17:30:00.341 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
