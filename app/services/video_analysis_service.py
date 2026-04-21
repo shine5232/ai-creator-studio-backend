@@ -175,11 +175,11 @@ class VideoAnalysisService:
 
     # ── download ──────────────────────────────────────────────────────────────
 
-    def download_video(self, source_url: str, base_dir: str, platform: str = "") -> dict:
+    def download_video(self, source_url: str, base_dir: str, platform: str = "", case_id: int | None = None) -> dict:
         """Download video via yt-dlp. Returns metadata dict.
 
         Directory structure:
-        {base_dir}/{platform}/{sanitized_title}/
+        {base_dir}/{platform}/{case_id}/
             ├── {video_id}.ext          (video file)
             ├── frames/                 (extracted frames)
             │   ├── frame_001.jpg
@@ -211,9 +211,12 @@ class VideoAnalysisService:
             video_id = info.get("id", "unknown")
             detected_platform = info.get("extractor_key", platform).lower()
 
-        # Create directory structure: {base_dir}/{platform}/{sanitized_title}/
-        sanitized_title = sanitize_filename(title)
-        work_dir = base_path / detected_platform / sanitized_title
+        # Create directory structure: {base_dir}/{platform}/{case_id}/
+        if case_id is not None:
+            dir_name = str(case_id)
+        else:
+            dir_name = sanitize_filename(title)
+        work_dir = base_path / detected_platform / dir_name
         work_dir.mkdir(parents=True, exist_ok=True)
 
         # Now download the video into the work directory
@@ -300,7 +303,7 @@ class VideoAnalysisService:
         # Estimate total frames
         estimated_total = int(duration / interval_seconds)
         frame_paths: list[str] = []
-        timestamp = interval_seconds
+        timestamp = 0
         idx = 1
         on_progress = on_progress or (lambda p, m: None)
 

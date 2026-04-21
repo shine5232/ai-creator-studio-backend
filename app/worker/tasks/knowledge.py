@@ -3,6 +3,7 @@
 import json
 from pathlib import Path
 
+from app.config import settings
 from app.models.knowledge import KBCase, KBElement, KBFramework
 from app.utils.logger import logger
 from app.worker.celery_app import celery_app
@@ -21,7 +22,11 @@ def analyze_video_task(
     platform: str,
     case_id: int,
 ):
-    """Download, extract frames and run GLM analysis on a video."""
+    """Download, extract frames and run analysis on a video.
+
+    Pipeline: download → extract frames → persist intermediate data →
+              describe frames → structural analysis → persist final results.
+    """
     from app.services.video_analysis_service import VideoAnalysisService
 
     service = VideoAnalysisService()
@@ -40,29 +45,60 @@ def analyze_video_task(
             logger.error(f"Failed to update progress: {e}")
 
     try:
-        result = service.analyze_video(
-            source_url,
-            platform,
-            on_progress=update_progress,
-        )
+        # 1. Download video
+        video_info = service.download_video(source_url, settings.ANALYSIS_BASE_DIR, platform, case_id=case_id)
+        work_dir = Path(video_info["work_dir"])
+        update_progress(20, f"Video downloaded to {work_dir}")
 
-        # Persist results to KBCase
+        # 2. Extract frames
+        frames_dir = work_dir / "frames"
+        frame_paths = service.extract_frames(
+            video_info["video_path"],
+            str(frames_dir),
+            interval_seconds=settings.ANALYSIS_FRAME_INTERVAL,
+            on_progress=lambda p, m: update_progress(20 + p * 0.2, m),
+        )
+        update_progress(40, f"Extracted {len(frame_paths)} frames")
+
+        # ── Persist intermediate data (video path + frames_dir) immediately ──
         with get_sync_session() as session:
             kb_case = session.get(KBCase, case_id)
             if kb_case:
-                meta = result["metadata"]
-                report = result["report"]
+                kb_case.source_video_path = video_info["video_path"]
+                kb_case.frames_dir = str(work_dir / "frames")
+                kb_case.title = video_info.get("title") or kb_case.title
+                kb_case.duration_seconds = video_info.get("duration")
+                kb_case.uploader = video_info.get("uploader")
+                kb_case.upload_date = video_info.get("upload_date")
+                kb_case.view_count = video_info.get("view_count")
+                kb_case.like_count = video_info.get("like_count")
+                kb_case.platform = video_info.get("platform") or platform
+                session.commit()
+        logger.info(f"Intermediate data persisted for case {case_id}: frames_dir={str(work_dir / 'frames')}")
 
-                kb_case.source_video_path = meta["video_path"]
-                kb_case.title = meta["title"] or kb_case.title
-                kb_case.duration_seconds = meta["duration"]
-                kb_case.uploader = meta["uploader"]
-                kb_case.upload_date = meta["upload_date"]
-                kb_case.view_count = meta["view_count"]
-                kb_case.like_count = meta["like_count"]
-                kb_case.platform = meta["platform"]
-                kb_case.frames_dir = str(result["work_dir"]) + "/frames"
-                kb_case.analysis_report_path = result["report_path"]
+        # 3. Describe frames
+        descriptions = service.describe_frames(
+            frame_paths,
+            on_progress=lambda p, m: update_progress(40 + p * 0.2, m),
+        )
+        update_progress(60, "Frame descriptions complete")
+
+        # 4. Structural analysis
+        report = service.analyze_content(video_info, descriptions)
+        update_progress(85, "Structural analysis complete")
+
+        # 5. Save report files
+        report_path = work_dir / "report.json"
+        report_path.write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
+        markdown_path = work_dir / "report.md"
+        markdown_content = service._generate_markdown_report(video_info, descriptions, report)
+        markdown_path.write_text(markdown_content, encoding="utf-8")
+
+        # 6. Persist final analysis results
+        with get_sync_session() as session:
+            kb_case = session.get(KBCase, case_id)
+            if kb_case:
+                kb_case.analysis_report_path = str(report_path)
 
                 kb_case.theme = _to_json(report.get("theme"))
                 kb_case.narrative_type = _to_json(report.get("narrative_type"))
