@@ -7,7 +7,7 @@ from app.api.deps import get_current_user
 from app.models.user import User
 from app.models.project import Project, WorkflowStep
 from app.schemas.generation import (
-    AddMusicRequest, BatchGenerateImagesRequest, BatchGenerateVideosRequest,
+    AddMusicRequest, AutoGenerateRequest, BatchGenerateImagesRequest, BatchGenerateVideosRequest,
     MergeVideosRequest, RetryTaskRequest,
 )
 from app.services.generation_service import GenerationService
@@ -240,4 +240,60 @@ async def retry_generation_task(
         "project_id": step.project_id,
         "status": "pending",
         "original_task_id": task_id,
+    }
+
+
+@router.post("/projects/{project_id}/auto-generate")
+async def auto_generate(
+    project_id: int,
+    data: AutoGenerateRequest,
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    """一键生成爆款：编排完整的生成流水线。"""
+    project = await ProjectService(db).get_project(project_id)
+    if not project or project.user_id != current_user.id:
+        raise HTTPException(status_code=404, detail="Project not found")
+
+    # 创建 WorkflowStep 记录
+    step = WorkflowStep(
+        project_id=project_id,
+        step_name="auto_generate",
+        step_order=0,
+        status="running",
+        progress=0,
+        started_at=__import__("datetime").datetime.utcnow(),
+    )
+    db.add(step)
+    await db.commit()
+
+    # 派发编排任务
+    from app.worker.tasks.generation import auto_generate_pipeline
+
+    script_params = {
+        "title": data.title,
+        "theme": data.theme,
+        "sub_theme": data.sub_theme,
+        "duration_seconds": data.duration_seconds,
+        "narrative_type": data.narrative_type,
+        "source_case_id": data.source_case_id,
+        "video_style": data.video_style,
+        "custom_prompt": data.custom_prompt,
+    }
+
+    result = auto_generate_pipeline.delay(
+        project_id=project_id,
+        script_params=script_params,
+        workflow_step_id=step.id,
+    )
+
+    step.celery_task_id = result.id
+    await db.commit()
+
+    return {
+        "task_id": result.id,
+        "task_type": "auto_generate",
+        "project_id": project_id,
+        "status": "pending",
+        "progress": 0,
     }

@@ -719,3 +719,481 @@ def merge_project_videos(
         shot_ids=shot_ids,
         on_progress=lambda p, m: self.update_progress(workflow_step_id, p, m),
     )
+
+
+# ─── Auto-Generate Pipeline (一键爆款) ───────────────────────────────────────
+
+
+def _calc_progress(step_start: int, step_end: int, completed: int, total: int) -> int:
+    """Calculate progress within a step's percentage range."""
+    if total == 0:
+        return step_end
+    return int(step_start + (step_end - step_start) * (completed / total))
+
+
+@celery_app.task(
+    bind=True, base=BaseWorkflowTask,
+    name="app.worker.tasks.generation.auto_generate_pipeline",
+    soft_time_limit=1800, time_limit=2400,
+)
+def auto_generate_pipeline(
+    self,
+    project_id: int,
+    script_params: dict,
+    workflow_step_id: int,
+):
+    """一键爆款：从空白项目自动完成 脚本→人物提示词→分镜提示词→人物图→分镜图→分镜视频→合成。"""
+
+    # ── Step 1: AI 生成脚本 (0% → 10%) ──────────────────────────────────────
+    self.update_progress(workflow_step_id, 0, "步骤 1/7: 正在生成脚本...")
+    try:
+        from app.database import async_session_maker
+        from app.services.script_service import ScriptService
+        from app.schemas.script import GenerateScriptRequest
+
+        async def _gen_script():
+            async with async_session_maker() as db:
+                svc = ScriptService(db)
+                req = GenerateScriptRequest(**script_params)
+                return await svc.generate_script(project_id, req)
+
+        script = run_async(_gen_script())
+        logger.info(f"[AutoGenerate] Script generated: {script.id}")
+    except Exception as e:
+        logger.error(f"[AutoGenerate] Step 1 (script) failed: {e}")
+        raise  # 脚本生成失败直接中断
+
+    self.update_progress(workflow_step_id, 10, "步骤 1/7: 脚本生成完成")
+
+    # ── Step 2: 补全人物参照提示词 (10% → 15%) ──────────────────────────────
+    self.update_progress(workflow_step_id, 10, "步骤 2/7: 检查人物参照提示词...")
+    try:
+        providers = registry.get_providers_for_service(ServiceType.TEXT_GENERATION)
+        text_adapter = providers[0] if providers else None
+
+        with get_sync_session() as session:
+            result = session.execute(
+                select(Character).where(Character.project_id == project_id)
+            )
+            chars_no_prompt = [c for c in result.scalars().all() if not c.reference_prompt_cn]
+
+        if chars_no_prompt and text_adapter:
+            total_chars = len(chars_no_prompt)
+            for i, char in enumerate(chars_no_prompt):
+                try:
+                    prompt = _build_char_prompt(char)
+                    request = AIRequest(
+                        prompt=f"请为以下角色生成一段详细的中文人物肖像文生图提示词，包含外貌、穿着等所有细节：{prompt}",
+                        service_type=ServiceType.TEXT_GENERATION,
+                        params={"temperature": 0.6, "max_tokens": 512},
+                    )
+                    response = run_async(text_adapter.generate(request))
+                    if response.success and response.data:
+                        cn_prompt = response.data.get("text", "").strip()
+                        if cn_prompt:
+                            with get_sync_session() as session:
+                                db_char = session.get(Character, char.id)
+                                if db_char:
+                                    db_char.reference_prompt_cn = cn_prompt
+                                    session.commit()
+                except Exception as e:
+                    logger.warning(f"[AutoGenerate] Char prompt failed for {char.id}: {e}")
+
+                prog = _calc_progress(10, 15, i + 1, total_chars)
+                self.update_progress(workflow_step_id, prog, f"步骤 2/7: 人物提示词 {i+1}/{total_chars}")
+        else:
+            logger.info("[AutoGenerate] Step 2 skipped: all characters have prompts or no text provider")
+    except Exception as e:
+        logger.error(f"[AutoGenerate] Step 2 failed (non-fatal): {e}")
+
+    self.update_progress(workflow_step_id, 15, "步骤 2/7: 人物提示词完成")
+
+    # ── Step 3: 补全分镜提示词 (15% → 20%) ──────────────────────────────────
+    self.update_progress(workflow_step_id, 15, "步骤 3/7: 检查分镜提示词...")
+    try:
+        with get_sync_session() as session:
+            # 获取该项目的所有 shot
+            shots_result = session.execute(
+                select(Shot)
+                .join(Storyboard, Shot.storyboard_id == Storyboard.id)
+                .join(Script, Storyboard.script_id == Script.id)
+                .where(Script.project_id == project_id)
+                .order_by(Shot.shot_number)
+            )
+            all_shots = list(shots_result.scalars().all())
+            shots_no_prompt = [s for s in all_shots if not s.image_prompt or not s.video_prompt]
+
+        if shots_no_prompt and text_adapter:
+            # 加载辅助数据
+            with get_sync_session() as session:
+                storyboard = session.get(Storyboard, shots_no_prompt[0].storyboard_id)
+                script_obj = session.get(Script, storyboard.script_id) if storyboard else None
+                script_title = script_obj.title if script_obj else "未知"
+                char_profiles_text = (
+                    _build_character_profiles_text(
+                        script_obj.content, project_id=project_id, session=session
+                    ) if script_obj else ""
+                )
+                # 视觉风格
+                visual_style = ""
+                marker = "---STRUCTURED_DATA---"
+                if script_obj and marker in script_obj.content:
+                    try:
+                        parts = script_obj.content.split(marker, 1)
+                        structured = json.loads(parts[1].strip())
+                        vd = structured.get("visual_design", {})
+                        style_parts = []
+                        if vd.get("color_progression"):
+                            style_parts.append(f"色调变化：{vd['color_progression']}")
+                        for s in vd.get("visual_symbols", []):
+                            style_parts.append(f"视觉符号：{s.get('symbol', '')}({s.get('meaning', '')})")
+                        visual_style = "\n".join(style_parts)
+                    except json.JSONDecodeError:
+                        pass
+
+            total_shots = len(shots_no_prompt)
+            for i, shot in enumerate(shots_no_prompt):
+                try:
+                    prompt = _build_prompt_for_shot(
+                        shot, char_profiles_text, script_title,
+                        shot.tone, shot.mood, visual_style,
+                    )
+                    request = AIRequest(
+                        prompt=prompt,
+                        service_type=ServiceType.TEXT_GENERATION,
+                        params={"temperature": 0.7, "max_tokens": 1024},
+                    )
+                    response = run_async(text_adapter.generate(request))
+                    if response.success and response.data:
+                        text = response.data.get("text", "").strip()
+                        image_prompt, video_prompt = _parse_prompts(text)
+                        with get_sync_session() as session:
+                            db_shot = session.get(Shot, shot.id)
+                            if db_shot:
+                                if image_prompt:
+                                    db_shot.image_prompt = image_prompt
+                                if video_prompt:
+                                    db_shot.video_prompt = video_prompt
+                                session.commit()
+                except Exception as e:
+                    logger.warning(f"[AutoGenerate] Shot prompt failed for {shot.id}: {e}")
+
+                prog = _calc_progress(15, 20, i + 1, total_shots)
+                self.update_progress(workflow_step_id, prog, f"步骤 3/7: 分镜提示词 {i+1}/{total_shots}")
+        else:
+            logger.info("[AutoGenerate] Step 3 skipped: all shots have prompts")
+    except Exception as e:
+        logger.error(f"[AutoGenerate] Step 3 failed (non-fatal): {e}")
+
+    self.update_progress(workflow_step_id, 20, "步骤 3/7: 分镜提示词完成")
+
+    # ── Step 4: 生成人物参照图片 (20% → 35%) ────────────────────────────────
+    self.update_progress(workflow_step_id, 20, "步骤 4/7: 正在生成人物参照图片...")
+    try:
+        img_providers = registry.get_providers_for_service(ServiceType.TEXT_TO_IMAGE)
+        img_adapter = img_providers[0] if img_providers else None
+
+        if img_adapter:
+            with get_sync_session() as session:
+                result = session.execute(
+                    select(Character).where(Character.project_id == project_id)
+                )
+                characters = [c for c in result.scalars().all() if not c.reference_image_path]
+
+            upload_dir = Path("data/uploads")
+            upload_dir.mkdir(parents=True, exist_ok=True)
+            total_chars = len(characters)
+
+            for i, char in enumerate(characters):
+                try:
+                    with get_sync_session() as session:
+                        character = session.get(Character, char.id)
+                        if not character:
+                            continue
+                        prompt = character.reference_prompt_cn or _build_char_prompt(character)
+                        if not character.reference_prompt_cn:
+                            character.reference_prompt_cn = prompt
+
+                        request = AIRequest(
+                            prompt=prompt,
+                            service_type=ServiceType.TEXT_TO_IMAGE,
+                            params={"size": "1088x1920"},
+                        )
+                        response = run_async(img_adapter.generate(request))
+
+                        if response.success and response.data:
+                            image_data = response.data
+                            if "url" in image_data or "image_url" in image_data:
+                                import httpx
+                                img_url = image_data.get("url") or image_data.get("image_url")
+                                img_resp = httpx.get(img_url, timeout=60)
+                                filename = f"char_{char.id}_{int(time.time())}.png"
+                                filepath = upload_dir / filename
+                                filepath.write_bytes(img_resp.content)
+                                character.reference_image_path = str(filepath)
+                            elif "base64" in image_data or "image_b64" in image_data:
+                                import base64
+                                b64_data = image_data.get("base64") or image_data.get("image_b64")
+                                filename = f"char_{char.id}_{int(time.time())}.png"
+                                filepath = upload_dir / filename
+                                filepath.write_bytes(base64.b64decode(b64_data))
+                                character.reference_image_path = str(filepath)
+                            elif "local_path" in image_data:
+                                character.reference_image_path = image_data["local_path"]
+                            logger.info(f"[AutoGenerate] Character image generated: {char.id}")
+                        else:
+                            logger.error(f"[AutoGenerate] Character image failed for {char.id}: {response.error}")
+                except Exception as e:
+                    logger.error(f"[AutoGenerate] Char image error {char.id}: {e}")
+
+                prog = _calc_progress(20, 35, i + 1, total_chars)
+                self.update_progress(workflow_step_id, prog, f"步骤 4/7: 人物图片 {i+1}/{total_chars}")
+        else:
+            logger.warning("[AutoGenerate] Step 4 skipped: no TEXT_TO_IMAGE provider")
+    except Exception as e:
+        logger.error(f"[AutoGenerate] Step 4 failed (non-fatal): {e}")
+
+    self.update_progress(workflow_step_id, 35, "步骤 4/7: 人物图片完成")
+
+    # ── Step 5: 生成分镜图片 (35% → 60%) ────────────────────────────────────
+    self.update_progress(workflow_step_id, 35, "步骤 5/7: 正在生成分镜图片...")
+    try:
+        # 收集 shot_ids
+        with get_sync_session() as session:
+            shots_result = session.execute(
+                select(Shot)
+                .join(Storyboard, Shot.storyboard_id == Storyboard.id)
+                .join(Script, Storyboard.script_id == Script.id)
+                .where(Script.project_id == project_id)
+                .where(Shot.image_status == "pending")
+                .order_by(Shot.shot_number)
+            )
+            pending_image_shots = list(shots_result.scalars().all())
+
+        if pending_image_shots:
+            shot_ids = [s.id for s in pending_image_shots]
+            total = len(shot_ids)
+
+            # 复用 generate_images_for_shots 的内部逻辑
+            char_ref_map: dict[str, str] = {}
+            with get_sync_session() as session:
+                char_result = session.execute(
+                    select(Character).where(Character.project_id == project_id)
+                )
+                for c in char_result.scalars().all():
+                    if c.reference_image_path:
+                        char_ref_map[c.name] = c.reference_image_path
+
+            adapter = img_adapter or (registry.get_providers_for_service(ServiceType.TEXT_TO_IMAGE) or [None])[0]
+            if not adapter:
+                raise ValueError("No TEXT_TO_IMAGE provider available")
+
+            upload_dir = Path("data/uploads")
+            upload_dir.mkdir(parents=True, exist_ok=True)
+
+            completed = 0
+            for shot_id in shot_ids:
+                try:
+                    with get_sync_session() as session:
+                        shot = session.get(Shot, shot_id)
+                        if not shot or shot.image_status != "pending":
+                            completed += 1
+                            continue
+                        prompt = shot.image_prompt or shot.description
+                        if not prompt:
+                            shot.image_status = "skipped"
+                            completed += 1
+                            continue
+                        ref_image_b64 = _find_char_ref_for_shot(shot, char_ref_map)
+                        service_type = ServiceType.IMAGE_TO_IMAGE if ref_image_b64 else ServiceType.TEXT_TO_IMAGE
+                        request = AIRequest(
+                            prompt=prompt, service_type=service_type,
+                            image_base64=ref_image_b64,
+                            params={"size": "1088x1920"},
+                        )
+                        response = run_async(adapter.generate(request))
+                        if response.success and response.data:
+                            image_data = response.data
+                            saved = False
+                            if "url" in image_data or "image_url" in image_data:
+                                import httpx
+                                img_url = image_data.get("url") or image_data.get("image_url")
+                                img_resp = httpx.get(img_url, timeout=60)
+                                filename = f"shot_{shot_id}_{int(time.time())}.png"
+                                filepath = upload_dir / filename
+                                filepath.write_bytes(img_resp.content)
+                                shot.image_path = str(filepath)
+                                saved = True
+                            elif "base64" in image_data or "image_b64" in image_data:
+                                import base64
+                                b64_data = image_data.get("base64") or image_data.get("image_b64")
+                                filename = f"shot_{shot_id}_{int(time.time())}.png"
+                                filepath = upload_dir / filename
+                                filepath.write_bytes(base64.b64decode(b64_data))
+                                shot.image_path = str(filepath)
+                                saved = True
+                            elif "local_path" in image_data:
+                                shot.image_path = image_data["local_path"]
+                                saved = True
+                            if saved:
+                                shot.image_status = "completed"
+                            else:
+                                shot.image_status = "failed"
+                        else:
+                            shot.image_status = "failed"
+                except Exception as e:
+                    logger.error(f"[AutoGenerate] Shot image error {shot_id}: {e}")
+                    try:
+                        with get_sync_session() as session:
+                            shot = session.get(Shot, shot_id)
+                            if shot:
+                                shot.image_status = "failed"
+                    except Exception:
+                        pass
+                completed += 1
+                prog = _calc_progress(35, 60, completed, total)
+                self.update_progress(workflow_step_id, prog, f"步骤 5/7: 分镜图片 {completed}/{total}")
+        else:
+            logger.info("[AutoGenerate] Step 5 skipped: no pending image shots")
+    except Exception as e:
+        logger.error(f"[AutoGenerate] Step 5 failed: {e}")
+
+    self.update_progress(workflow_step_id, 60, "步骤 5/7: 分镜图片完成")
+
+    # ── Step 6: 生成分镜短视频 (60% → 90%) ──────────────────────────────────
+    self.update_progress(workflow_step_id, 60, "步骤 6/7: 正在生成分镜短视频...")
+    try:
+        with get_sync_session() as session:
+            shots_result = session.execute(
+                select(Shot)
+                .join(Storyboard, Shot.storyboard_id == Storyboard.id)
+                .join(Script, Storyboard.script_id == Script.id)
+                .where(Script.project_id == project_id)
+                .where(Shot.video_status == "pending")
+                .order_by(Shot.shot_number)
+            )
+            pending_video_shots = list(shots_result.scalars().all())
+
+        if pending_video_shots:
+            shot_ids = [s.id for s in pending_video_shots]
+            total = len(shot_ids)
+
+            vid_providers = registry.get_providers_for_service(ServiceType.IMAGE_TO_VIDEO)
+            vid_adapter = vid_providers[0] if vid_providers else None
+            if not vid_adapter:
+                raise ValueError("No IMAGE_TO_VIDEO provider available")
+
+            upload_dir = Path("data/uploads")
+            upload_dir.mkdir(parents=True, exist_ok=True)
+
+            completed = 0
+            for shot_id in shot_ids:
+                try:
+                    with get_sync_session() as session:
+                        shot = session.get(Shot, shot_id)
+                        if not shot or shot.video_status != "pending":
+                            completed += 1
+                            continue
+                        prompt = shot.video_prompt or shot.description
+                        image_path = shot.image_path
+                        if not prompt or not image_path:
+                            shot.video_status = "failed"
+                            completed += 1
+                            continue
+
+                        # 读取图片转 JPEG base64
+                        import base64
+                        p = Path(image_path)
+                        image_url = None
+                        if p.exists():
+                            img_bytes = p.read_bytes()
+                            try:
+                                from io import BytesIO
+                                from PIL import Image
+                                img = Image.open(BytesIO(img_bytes))
+                                if img.mode in ("RGBA", "P", "LA"):
+                                    img = img.convert("RGB")
+                                buf = BytesIO()
+                                img.save(buf, format="JPEG", quality=95)
+                                img_bytes = buf.getvalue()
+                            except ImportError:
+                                pass
+                            b64 = base64.b64encode(img_bytes).decode()
+                            image_url = f"data:image/jpeg;base64,{b64}"
+
+                        if not image_url:
+                            shot.video_status = "failed"
+                            completed += 1
+                            continue
+
+                        request = AIRequest(
+                            prompt=prompt,
+                            service_type=ServiceType.IMAGE_TO_VIDEO,
+                            image_url=image_url,
+                        )
+                        response = run_async(vid_adapter.generate(request))
+
+                        # 异步适配器轮询
+                        if response.task_id and hasattr(vid_adapter, 'check_task'):
+                            shot.video_task_id = response.task_id
+                            shot.video_status = "processing"
+                            session.commit()
+                            max_wait = 600
+                            interval = 10
+                            elapsed = 0
+                            while elapsed < max_wait:
+                                time.sleep(interval)
+                                elapsed += interval
+                                poll = run_async(vid_adapter.check_task(response.task_id))
+                                if poll.success and poll.data:
+                                    status = poll.data.get("status", "").lower()
+                                    if status in ("completed", "succeeded"):
+                                        _save_video_result(shot_id, poll.data, upload_dir)
+                                        break
+                                    elif status == "failed":
+                                        _mark_video_failed(shot_id, poll.data.get("error", "Async task failed"))
+                                        break
+                                elif not poll.success:
+                                    _mark_video_failed(shot_id, poll.error or "Poll failed")
+                                    break
+                            else:
+                                _mark_video_failed(shot_id, "Timeout waiting for video generation")
+                        elif response.success and response.data:
+                            _save_video_result(shot_id, response.data, upload_dir)
+                        else:
+                            _mark_video_failed(shot_id, response.error or "Unknown error")
+                except Exception as e:
+                    logger.error(f"[AutoGenerate] Shot video error {shot_id}: {e}")
+                    _mark_video_failed(shot_id, str(e))
+
+                completed += 1
+                prog = _calc_progress(60, 90, completed, total)
+                self.update_progress(workflow_step_id, prog, f"步骤 6/7: 分镜视频 {completed}/{total}")
+        else:
+            logger.info("[AutoGenerate] Step 6 skipped: no pending video shots")
+    except Exception as e:
+        logger.error(f"[AutoGenerate] Step 6 failed: {e}")
+
+    self.update_progress(workflow_step_id, 90, "步骤 6/7: 分镜视频完成")
+
+    # ── Step 7: 合成短片 (90% → 100%) ───────────────────────────────────────
+    self.update_progress(workflow_step_id, 90, "步骤 7/7: 正在合成短片...")
+    try:
+        from app.services.video_merge_service import VideoMergeService
+
+        merge_service = VideoMergeService()
+        merge_service.merge_project_videos(
+            project_id=project_id,
+            add_music=False,
+            music_path=None,
+            shot_ids=None,
+            on_progress=lambda p, m: self.update_progress(
+                workflow_step_id, _calc_progress(90, 100, p, 100), f"步骤 7/7: {m}"
+            ),
+        )
+    except Exception as e:
+        logger.error(f"[AutoGenerate] Step 7 (merge) failed: {e}")
+        raise
+
+    self.update_progress(workflow_step_id, 100, "一键生成完成！所有步骤已成功执行")
+    logger.info(f"[AutoGenerate] Pipeline complete for project {project_id}")

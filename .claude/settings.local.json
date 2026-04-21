@@ -55,7 +55,31 @@
       "Bash(iconv -f gbk -t utf-8)",
       "Bash(python -c \":*)",
       "Bash(del:*)",
-      "Bash(powershell -Command \"Get-NetTCPConnection -LocalPort 8000,8001,8090 -State Listen -ErrorAction SilentlyContinue | Select-Object LocalPort, State, OwningProcess\")"
+      "Bash(powershell -Command \"Get-NetTCPConnection -LocalPort 8000,8001,8090 -State Listen -ErrorAction SilentlyContinue | Select-Object LocalPort, State, OwningProcess\")",
+      "Bash(more +1)",
+      "Bash(PYTHONIOENCODING=utf-8 python scripts/reanalyze_case.py)",
+      "Bash(echo $DASHSCOPE_API_KEY)",
+      "Bash(PYTHONIOENCODING=utf-8 python -c \":*)",
+      "Bash(PYTHONIOENCODING=utf-8 timeout 30 python -c \":*)",
+      "Bash(echo \"exit: $?\")",
+      "Bash(npx vue-tsc:*)",
+      "Bash(E:/ai-creator-studio-frontend/node_modules/.bin/vue-tsc.cmd --noEmit --project E:/ai-creator-studio-frontend/tsconfig.app.json)",
+      "Bash(1:*)",
+      "Bash(findstr -i python)",
+      "Bash(findstr :8000)",
+      "Bash(findstr \":5173\\\\|:3000\")",
+      "Bash(findstr \":5173 \")",
+      "Bash(findstr \"LISTENING\")",
+      "Bash(findstr \"5173 5174 3000 3001 8080\")",
+      "Bash(python -c \"import sys; print\\(''''API docs accessible'''' if sys.stdin.read\\(\\) else ''''not accessible''''\\)\")",
+      "Bash(findstr \":8000 \")",
+      "Bash(findstr 'python uvicorn')",
+      "Bash(findstr \":8000.*LISTENING\")",
+      "Bash(cmd //c \"taskkill /F /PID 18336\")",
+      "Bash(cmd //c \"taskkill /F /PID 18916\")",
+      "Bash(cmd //c 'taskkill /F /PID 18336 /T')",
+      "Bash(cmd //c 'taskkill /F /PID 18916 /T')",
+      "Bash(cmd //c 'taskkill /F /IM python.exe /T')"
     ]
   }
 }

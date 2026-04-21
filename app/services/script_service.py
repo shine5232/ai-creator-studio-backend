@@ -530,10 +530,21 @@ class ScriptService:
                     viral_str = []
                     for layer, items in viral_list.items():
                         if isinstance(items, list):
-                            viral_str.append(f"{layer}: {', '.join(items)}")
+                            viral_str.append(f"{layer}: {', '.join(str(i) for i in items)}")
                     viral_part = f"爆款元素:\n" + "\n".join(viral_str) + "\n"
+                elif isinstance(viral_list, list) and viral_list and isinstance(viral_list[0], dict):
+                    # viral_elements 是 list[dict] 格式
+                    viral_str = []
+                    for item in viral_list:
+                        if isinstance(item, dict):
+                            viral_str.append(str(item))
+                        else:
+                            viral_str.append(str(item))
+                    viral_part = f"爆款元素: {', '.join(viral_str)}\n"
+                elif isinstance(viral_list, list):
+                    viral_part = f"爆款元素: {', '.join(str(i) for i in viral_list)}\n"
                 else:
-                    viral_part = f"爆款元素: {', '.join(viral_list)}\n"
+                    viral_part = f"爆款元素: {viral_list}\n"
 
                 kb_reference = (
                     f"\n\n【参考爆款案例】\n"
@@ -546,7 +557,7 @@ class ScriptService:
                     f"{emotion_part}"
                     f"视觉风格: {ctx['visual_style']}\n"
                     f"{contrast_part}"
-                    f"视觉符号: {', '.join(ctx['visual_symbols'])}\n"
+                    f"视觉符号: {', '.join(str(s) if isinstance(s, dict) else s for s in ctx.get('visual_symbols', []))}\n"
                     f"{viral_part}"
                     f"{audience_part}"
                     f"{reusable_part}"
@@ -568,9 +579,27 @@ class ScriptService:
         if top_elements:
             kb_hints = f"\n\n【高频爆款元素参考】{', '.join(e.name for e in top_elements)}\n请适当融入以上元素。"
 
-        # 3. 构建时长指引
-        target_words = (data.duration_seconds or 60) * 3
-        duration_guide = f"目标时长 {data.duration_seconds or 60} 秒，脚本正文约 {target_words} 字。"
+        # 3. 构建时长指引（根据目标时长动态计算分镜数量）
+        duration = data.duration_seconds or 60
+        target_shots = max(8, round(duration / 3))
+        # 脚本正文字数：30s→600, 60s→800, 120s→1400, 180s→2000
+        target_words = max(600, int(duration * 12))
+        if target_shots <= 12:
+            act_range = "3 幕"
+            shots_per_act = "3-5 个"
+        elif target_shots <= 20:
+            act_range = "3-4 幕"
+            shots_per_act = "4-6 个"
+        elif target_shots <= 30:
+            act_range = "4-5 幕"
+            shots_per_act = "5-7 个"
+        else:
+            act_range = "5-6 幕"
+            shots_per_act = "6-10 个"
+        duration_guide = (
+            f"目标时长 {duration} 秒，脚本正文约 {target_words} 字。"
+            f"总共需要约 {target_shots} 个镜头。"
+        )
 
         # 4. 额外要求
         custom = f"\n\n【额外要求】{data.custom_prompt}" if data.custom_prompt else ""
@@ -597,7 +626,7 @@ class ScriptService:
             '  "title": "脚本标题",\n'
             '  "theme": "主题",\n'
             '  "narrative_type": "叙事类型",\n'
-            '  "content": "完整详细的叙事短文（600-1000字），见下方\"脚本正文规则\"",\n\n'
+            f'  "content": "完整详细的叙事短文（{target_words}字左右），见下方\"脚本正文规则\"",\n\n'
 
             '  "character_profiles": [\n'
             '    {\n'
@@ -672,7 +701,7 @@ class ScriptService:
 
             "### 脚本正文规则（content 字段 — 最重要）\n"
             "content 字段是一篇**完整的叙事短文**，是整个视频故事的详细文字版，要求：\n"
-            "1. **字数**：600-1000字，不能少于600字\n"
+            f"1. **字数**：{target_words}字左右，不能少于{min(target_words, 600)}字\n"
             "2. **叙事结构**：三段式直击痛点 —\n"
             "   - 开场（前1/3）：用一个强画面快速建立人物和困境，让观众在3秒内产生共情\n"
             "   - 转折（中1/3）：一个关键动作或事件，引爆情感\n"
@@ -692,8 +721,8 @@ class ScriptService:
             "5. 描写级别示例：不能写\"一个男人\"，要写\"一个约50岁的东南亚裔男人，黝黑皮肤，花白短发，穿着褪色的蓝色工装\"\n\n"
 
             "### 分镜规则\n"
-            "1. 脚本分为 3-4 幕（acts），每幕包含 3-5 个镜头（shots），总共 10-20 个镜头\n"
-            "2. 每个镜头约3秒，总镜头数 = 目标时长 / 3\n"
+            f"1. 脚本分为 {act_range}（acts），每幕包含 {shots_per_act} 镜头（shots），总共约 {target_shots} 个镜头\n"
+            f"2. 每个镜头约3秒，总镜头数 = 目标时长 / 3 ≈ {target_shots} 个\n"
             "3. 每个镜头必须包含：景别、地点、人物动作表情、环境细节、事件、色调、氛围\n"
             "4. 人物描写中要带上具体年龄和外貌细节\n"
             "5. 环境描写要具体：不能写\"一间屋子\"，要写\"一间昏暗破旧的出租屋，墙上贴着发黄的报纸\"\n"

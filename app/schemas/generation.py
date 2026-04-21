@@ -29,6 +29,18 @@ class AddMusicRequest(BaseModel):
     music_path: str | None = None
 
 
+class AutoGenerateRequest(BaseModel):
+    """一键爆款生成请求"""
+    title: str = Field(min_length=1, max_length=200)
+    theme: str | None = None
+    sub_theme: str | None = None
+    duration_seconds: int = 60
+    narrative_type: str | None = None
+    source_case_id: int | None = None
+    video_style: str = "cinematic"
+    custom_prompt: str | None = None
+
+
 # --- Responses ---
 
 class GenerationTaskResponse(BaseModel):
