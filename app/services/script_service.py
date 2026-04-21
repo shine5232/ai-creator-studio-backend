@@ -12,6 +12,39 @@ from app.models.script import Script, Storyboard, Shot
 from app.schemas.script import CreateScriptRequest, GenerateScriptRequest, UpdateScriptRequest
 from app.utils.logger import logger
 
+VIDEO_STYLE_GUIDE = {
+    "cinematic": {
+        "label": "电影级写实风格",
+        "prompt_suffix": "电影感，真实照片风格，8K高清，竖屏9:16",
+        "reference_suffix": "竖屏构图，全身或半身肖像，高质量人物肖像，面部细节丰富，电影级光影",
+        "visual_hint": "色调参考电影胶片质感，注重光影对比和景深效果",
+    },
+    "anime": {
+        "label": "日式动漫风格",
+        "prompt_suffix": "日式动漫风格，赛璐璐着色，精致线条，鲜艳色彩，竖屏9:16",
+        "reference_suffix": "竖屏构图，日式动漫角色设计，精致线条，鲜艳色彩，高质量插画",
+        "visual_hint": "色彩鲜艳明快，赛璐璐着色风格，注重线条表现和表情夸张",
+    },
+    "animation": {
+        "label": "3D动画风格",
+        "prompt_suffix": "3D动画风格，皮克斯质感，柔和光影，细腻材质，竖屏9:16",
+        "reference_suffix": "竖屏构图，3D动画角色，柔和光影，细腻材质纹理，高质量渲染",
+        "visual_hint": "柔和光影，色彩温暖，类似皮克斯/迪士尼3D动画质感",
+    },
+    "cyberpunk": {
+        "label": "赛博朋克风格",
+        "prompt_suffix": "赛博朋克风格，霓虹灯光，暗色调高对比度，科技感，竖屏9:16",
+        "reference_suffix": "竖屏构图，赛博朋克角色，霓虹灯光映射，暗色调，高对比度，科技感",
+        "visual_hint": "暗色调搭配霓虹灯光，高对比度，充满科技感和未来感",
+    },
+    "oil_painting": {
+        "label": "油画艺术风格",
+        "prompt_suffix": "油画艺术风格，厚重笔触，经典构图，柔和色调，竖屏9:16",
+        "reference_suffix": "竖屏构图，油画风格肖像，厚重笔触，细腻色彩过渡，经典艺术感",
+        "visual_hint": "厚重笔触质感，柔和色调，注重光影过渡和色彩层次",
+    },
+}
+
 
 def _convert_to_markdown(generated: dict, project_id: int, version: int) -> str:
     """Convert generated script JSON to Markdown format based on template."""
@@ -542,6 +575,9 @@ class ScriptService:
         # 4. 额外要求
         custom = f"\n\n【额外要求】{data.custom_prompt}" if data.custom_prompt else ""
 
+        # 4.5 视频风格
+        style = VIDEO_STYLE_GUIDE.get(data.video_style or "cinematic", VIDEO_STYLE_GUIDE["cinematic"])
+
         # 5. 构建富结构 prompt
         prompt = (
             "你是一个专业的短视频脚本作家兼导演。请根据以下要求创作一个**完整的分镜级别脚本**，"
@@ -550,6 +586,7 @@ class ScriptService:
             f"主题: {data.theme or '不限'}\n"
             f"子主题: {data.sub_theme or '不限'}\n"
             f"叙事类型: {data.narrative_type or '不限'}\n"
+            f"视频风格: {style['label']}\n"
             f"{duration_guide}"
             f"{kb_reference}{kb_hints}{custom}\n\n"
 
@@ -575,7 +612,7 @@ class ScriptService:
             '      "body_type": "体型描述（身高、胖瘦、姿态）",\n'
             '      "special_marks": "特殊标记（疤痕、老茧等）",\n'
             '      "personality": "性格特点",\n'
-            '      "reference_prompt": "人物肖像文生图提示词，用中文描述该角色的完整外貌（年龄、性别、种族、肤色、眼睛、发型、面部特征、体型、特殊标记、穿着），结尾加：竖屏构图，全身或半身肖像，高质量人物肖像，面部细节丰富，电影级光影",\n'
+            f'      "reference_prompt": "人物肖像文生图提示词，用中文描述该角色的完整外貌（年龄、性别、种族、肤色、眼睛、发型、面部特征、体型、特殊标记、穿着），结尾加：{style["reference_suffix"]}",\n'
             '      "clothing_phases": [\n'
             '        {"phase": "前期", "description": "前期穿着描述"},\n'
             '        {"phase": "中期", "description": "中期穿着描述"},\n'
@@ -600,8 +637,8 @@ class ScriptService:
             '          "event": "发生的事件/动作",\n'
             '          "tone": "画面色调（如：暗黄色，整体偏暗）",\n'
             '          "mood": "情感氛围关键词",\n'
-            '          "image_prompt": "Seedream文生图提示词（中文为主，专业术语用英文），格式：先写景别，再写画面主体（含完整人物外貌细节），再写人物动作表情，再写环境描写，再写美学短词（色调、光影、构图、氛围），结尾固定：电影感，真实照片风格，8K高清，竖屏9:16",\n'
-            '          "video_prompt": "图生视频提示词（中文为主，英文不超过50词），描述画面中的动态变化、运动和镜头运动，1-3句话，如：主体缓缓转头，微风吹动头发，固定镜头，柔光，暖色调"\n'
+            f'          "image_prompt": "Seedream文生图提示词（中文为主，专业术语用英文），格式：先写景别，再写画面主体（含完整人物外貌细节），再写人物动作表情，再写环境描写，再写美学短词（色调、光影、构图、氛围），结尾固定：{style["prompt_suffix"]}",\n'
+            f'          "video_prompt": "图生视频提示词（中文为主，英文不超过50词），描述画面中的动态变化、运动和镜头运动，1-3句话，风格需符合{style["label"]}，如：主体缓缓转头，微风吹动头发，固定镜头，柔光，暖色调"\n'
             '        }\n'
             '      ]\n'
             '    }\n'
@@ -665,7 +702,8 @@ class ScriptService:
             "### 视觉设计规则\n"
             "1. color_progression 要体现整体色调演变\n"
             "2. contrasts 要包含至少2组前后对比\n"
-            "3. visual_symbols 要包含至少3个关键视觉符号及其象征意义\n\n"
+            "3. visual_symbols 要包含至少3个关键视觉符号及其象征意义\n"
+            f"4. **风格要求**：{style['visual_hint']}\n\n"
 
             "### 标题规则\n"
             "1. 提供 3 个标题建议\n"

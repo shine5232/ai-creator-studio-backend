@@ -35,6 +35,7 @@ class GenerateScriptRequest(BaseModel):
     duration_seconds: int | None = Field(default=60, description="目标时长（秒）")
     narrative_type: str | None = Field(default=None, description="叙事类型，如：悬念、温情、搞笑、反转")
     source_case_id: int | None = Field(default=None, description="参考知识库案例 ID")
+    video_style: str | None = Field(default="cinematic", description="视频风格：cinematic/anime/animation/cyberpunk/oil_painting")
     custom_prompt: str | None = Field(default=None, description="额外要求，如：角色设定、场景要求等")
 
 
