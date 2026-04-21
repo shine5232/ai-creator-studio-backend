@@ -19,9 +19,9 @@ class KnowledgeService:
 
     async def list_cases(
         self, platform: str | None = None, theme: str | None = None,
-        page: int = 1, page_size: int = 20,
+        page: int = 1, page_size: int = 20, *, user_id: int,
     ) -> tuple[list[KBCase], int]:
-        query = select(KBCase)
+        query = select(KBCase).where(KBCase.user_id == user_id)
         if platform:
             query = query.where(KBCase.platform == platform)
         if theme:
@@ -37,12 +37,15 @@ class KnowledgeService:
         )
         return result.scalars().all(), total
 
-    async def get_case(self, case_id: int) -> KBCase | None:
-        result = await self.db.execute(select(KBCase).where(KBCase.id == case_id))
+    async def get_case(self, case_id: int, *, user_id: int | None = None) -> KBCase | None:
+        query = select(KBCase).where(KBCase.id == case_id)
+        if user_id is not None:
+            query = query.where(KBCase.user_id == user_id)
+        result = await self.db.execute(query)
         return result.scalar_one_or_none()
 
-    async def delete_case(self, case_id: int) -> bool:
-        case = await self.get_case(case_id)
+    async def delete_case(self, case_id: int, *, user_id: int) -> bool:
+        case = await self.get_case(case_id, user_id=user_id)
         if not case:
             return False
         # Clean up entire work directory (video, frames, reports)
@@ -70,19 +73,20 @@ class KnowledgeService:
         result = await self.db.execute(query)
         return result.scalars().all()
 
-    async def list_script_templates(self, theme: str | None = None) -> list[KBScriptTemplate]:
-        query = select(KBScriptTemplate)
+    async def list_script_templates(self, theme: str | None = None, *, user_id: int) -> list[KBScriptTemplate]:
+        query = select(KBScriptTemplate).where(KBScriptTemplate.user_id == user_id)
         if theme:
             query = query.where(KBScriptTemplate.theme == theme)
         result = await self.db.execute(query)
         return result.scalars().all()
 
-    async def analyze_video(self, source_url: str, platform: str) -> dict:
+    async def analyze_video(self, source_url: str, platform: str, *, user_id: int) -> dict:
         """Submit a video analysis task. Creates KBCase, then dispatches Celery task."""
         from app.models.knowledge import KBCase
 
         # Create KBCase record
         kb_case = KBCase(
+            user_id=user_id,
             platform=platform,
             title=source_url[:200],
             source_url=source_url,
@@ -113,12 +117,13 @@ class KnowledgeService:
             "status": "pending",
         }
 
-    async def search(self, query: str, element_type: str | None = None, limit: int = 20) -> dict:
+    async def search(self, query: str, element_type: str | None = None, limit: int = 20, *, user_id: int) -> dict:
         """Search across knowledge base."""
         results = {}
 
         # Search cases
         case_query = select(KBCase).where(
+            KBCase.user_id == user_id,
             or_(
                 KBCase.title.contains(query),
                 KBCase.theme.contains(query),
@@ -142,9 +147,9 @@ class KnowledgeService:
 
         return results
 
-    async def recommend_themes(self, description: str | None = None, platform: str | None = None, limit: int = 10) -> list[KBCase]:
+    async def recommend_themes(self, description: str | None = None, platform: str | None = None, limit: int = 10, *, user_id: int) -> list[KBCase]:
         """Recommend themes based on description. Returns top cases."""
-        query = select(KBCase).order_by(KBCase.like_rate.desc().nullslast())
+        query = select(KBCase).where(KBCase.user_id == user_id).order_by(KBCase.like_rate.desc().nullslast())
         if platform:
             query = query.where(KBCase.platform == platform)
         query = query.limit(limit)
@@ -155,9 +160,9 @@ class KnowledgeService:
     # 知识库闭环：参考上下文 / 脚本模板生成 / 案例推荐
     # ------------------------------------------------------------------
 
-    async def get_reference_context(self, case_id: int) -> dict | None:
+    async def get_reference_context(self, case_id: int, *, user_id: int | None = None) -> dict | None:
         """获取单个案例的完整参考上下文，供创作流程使用。"""
-        case = await self.get_case(case_id)
+        case = await self.get_case(case_id, user_id=user_id)
         if not case or case.analysis_status != "completed":
             return None
         viral = json.loads(case.viral_elements) if case.viral_elements else {}
@@ -185,12 +190,13 @@ class KnowledgeService:
             "like_rate": case.like_rate,
         }
 
-    async def generate_script_template(self, case_id: int) -> KBScriptTemplate | None:
+    async def generate_script_template(self, case_id: int, *, user_id: int) -> KBScriptTemplate | None:
         """从已分析案例自动生成脚本模板，存入 kb_script_templates。"""
-        ctx = await self.get_reference_context(case_id)
+        ctx = await self.get_reference_context(case_id, user_id=user_id)
         if not ctx:
             return None
         template = KBScriptTemplate(
+            user_id=user_id,
             name=f"模板-{ctx['title'][:50]}",
             theme=ctx["theme"],
             narrative_type=ctx["narrative_type"],
@@ -204,9 +210,10 @@ class KnowledgeService:
 
     async def recommend_cases_for_project(
         self, description: str | None = None, platform: str | None = None, limit: int = 5,
+        *, user_id: int,
     ) -> list[KBCase]:
         """基于项目描述推荐最佳参考案例（按 like_rate 排序）。"""
-        query = select(KBCase).where(KBCase.analysis_status == "completed")
+        query = select(KBCase).where(KBCase.analysis_status == "completed", KBCase.user_id == user_id)
         if platform:
             query = query.where(KBCase.platform == platform)
         query = query.order_by(KBCase.like_rate.desc().nullslast()).limit(limit)

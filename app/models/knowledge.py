@@ -8,6 +8,7 @@ class KBCase(Base, TimestampMixin):
     __tablename__ = "kb_cases"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    user_id: Mapped[int | None] = mapped_column(Integer, ForeignKey("users.id"))
     platform: Mapped[str] = mapped_column(String(30), nullable=False)
     title: Mapped[str] = mapped_column(String(200), nullable=False)
     source_url: Mapped[str | None] = mapped_column(String(500))
@@ -70,6 +71,7 @@ class KBScriptTemplate(Base, TimestampMixin):
     __tablename__ = "kb_script_templates"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    user_id: Mapped[int | None] = mapped_column(Integer, ForeignKey("users.id"))
     name: Mapped[str] = mapped_column(String(100), nullable=False)
     theme: Mapped[str | None] = mapped_column(String(100))
     narrative_type: Mapped[str | None] = mapped_column(String(50))

@@ -49,7 +49,7 @@ async def list_cases(
     db: AsyncSession = Depends(get_db),
 ):
     service = KnowledgeService(db)
-    cases, total = await service.list_cases(platform, theme, page, page_size)
+    cases, total = await service.list_cases(platform, theme, page, page_size, user_id=current_user.id)
     items = []
     for c in cases:
         data = KBCaseResponse.model_validate(c).model_dump()
@@ -69,7 +69,7 @@ async def delete_case(
     db: AsyncSession = Depends(get_db),
 ):
     service = KnowledgeService(db)
-    deleted = await service.delete_case(case_id)
+    deleted = await service.delete_case(case_id, user_id=current_user.id)
     if not deleted:
         raise HTTPException(status_code=404, detail="Case not found")
     return {"detail": "Deleted"}
@@ -83,7 +83,7 @@ async def get_case(
     db: AsyncSession = Depends(get_db),
 ):
     service = KnowledgeService(db)
-    case = await service.get_case(case_id)
+    case = await service.get_case(case_id, user_id=current_user.id)
     if not case:
         raise HTTPException(status_code=404, detail="Case not found")
     data = KBCaseResponse.model_validate(case).model_dump()
@@ -93,11 +93,12 @@ async def get_case(
 @router.get("/cases/{case_id}/thumbnail")
 async def get_case_thumbnail(
     case_id: int,
+    current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
-    """Serve the first extracted frame as case thumbnail (no auth required for image loading)."""
+    """Serve the first extracted frame as case thumbnail."""
     service = KnowledgeService(db)
-    case = await service.get_case(case_id)
+    case = await service.get_case(case_id, user_id=current_user.id)
     if not case or not case.frames_dir:
         raise HTTPException(status_code=404, detail="Thumbnail not found")
 
@@ -114,11 +115,12 @@ async def get_case_thumbnail(
 async def get_case_video(
     case_id: int,
     request: Request,
+    current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
     """Serve the source video file with Range request support for browser playback."""
     service = KnowledgeService(db)
-    case = await service.get_case(case_id)
+    case = await service.get_case(case_id, user_id=current_user.id)
     if not case or not case.source_video_path:
         raise HTTPException(status_code=404, detail="Video not found")
 
@@ -201,7 +203,7 @@ async def list_script_templates(
     db: AsyncSession = Depends(get_db),
 ):
     service = KnowledgeService(db)
-    templates = await service.list_script_templates(theme)
+    templates = await service.list_script_templates(theme, user_id=current_user.id)
     return [KBScriptTemplateResponse.model_validate(t).model_dump() for t in templates]
 
 
@@ -212,7 +214,7 @@ async def analyze_video(
     db: AsyncSession = Depends(get_db),
 ):
     service = KnowledgeService(db)
-    return await service.analyze_video(data.source_url, data.platform)
+    return await service.analyze_video(data.source_url, data.platform, user_id=current_user.id)
 
 
 @router.get("/analysis/{case_id}")
@@ -223,7 +225,7 @@ async def get_analysis_status(
 ):
     """Query analysis progress and results for a given KBCase."""
     service = KnowledgeService(db)
-    case = await service.get_case(case_id)
+    case = await service.get_case(case_id, user_id=current_user.id)
     if not case:
         raise HTTPException(status_code=404, detail="Case not found")
 
@@ -273,7 +275,7 @@ async def reanalyze_case(
 ):
     """Re-analyze an existing case using its extracted frames."""
     service = KnowledgeService(db)
-    case = await service.get_case(case_id)
+    case = await service.get_case(case_id, user_id=current_user.id)
     if not case:
         raise HTTPException(status_code=404, detail="Case not found")
     if not case.frames_dir:
@@ -308,7 +310,7 @@ async def search_knowledge(
     db: AsyncSession = Depends(get_db),
 ):
     service = KnowledgeService(db)
-    return await service.search(data.query, data.element_type, data.limit)
+    return await service.search(data.query, data.element_type, data.limit, user_id=current_user.id)
 
 
 @router.post("/recommend-themes")
@@ -319,7 +321,7 @@ async def recommend_themes(
     db: AsyncSession = Depends(get_db),
 ):
     service = KnowledgeService(db)
-    cases = await service.recommend_themes(data.description, data.platform, data.limit)
+    cases = await service.recommend_themes(data.description, data.platform, data.limit, user_id=current_user.id)
     base = str(request.base_url).rstrip("/")
     results = []
     for c in cases:
@@ -345,6 +347,7 @@ async def recommend_cases(
         description=data.description,
         platform=data.platform,
         limit=data.limit,
+        user_id=current_user.id,
     )
     base = str(request.base_url).rstrip("/")
     results = []
@@ -366,7 +369,7 @@ async def generate_template(
 ):
     """从已分析案例自动生成脚本模板。"""
     service = KnowledgeService(db)
-    template = await service.generate_script_template(case_id)
+    template = await service.generate_script_template(case_id, user_id=current_user.id)
     if not template:
         raise HTTPException(status_code=404, detail="Case not found or not analyzed")
     return KBScriptTemplateResponse.model_validate(template).model_dump()
@@ -380,7 +383,7 @@ async def get_reference_context(
 ):
     """获取案例的完整参考上下文，供创作流程使用。"""
     service = KnowledgeService(db)
-    ctx = await service.get_reference_context(case_id)
+    ctx = await service.get_reference_context(case_id, user_id=current_user.id)
     if not ctx:
         raise HTTPException(status_code=404, detail="Case not found or not analyzed")
     return ctx
@@ -404,7 +407,7 @@ async def get_case_markdown(
     logger.info(f"[DEBUG] All case IDs: {list(all_ids)}")
 
     service = KnowledgeService(db)
-    case = await service.get_case(case_id)
+    case = await service.get_case(case_id, user_id=current_user.id)
 
     logger.info(f"[DEBUG] Requested case_id={case_id}, case_found={case is not None}")
 
