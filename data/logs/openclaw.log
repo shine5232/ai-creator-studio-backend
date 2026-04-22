@@ -1710,3 +1710,11 @@ kombu.exceptions.OperationalError: MISCONF Redis is configured to save RDB snaps
 2026-04-22 02:56:52.353 | INFO     | app.main:lifespan:21 - Database initialized
 2026-04-22 02:56:53.095 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
 2026-04-22 03:00:17.430 | ERROR    | app.ai_gateway.providers.doubao_adapter:generate:80 - Doubao API error: 429 - {"error":{"code":"SetLimitExceeded","message":"Your account [2112059946] has reached the set inference limit for the [doubao-seedream-4-0] model, and the model service has been paused. To continue using this model, please visit the Model Activation page to adjust or close the \"Safe Experience Mode\". Request id: 021776798017208fadef930ee560a642a71bddf4d1e9937a25548","param":"","type":""}}
+2026-04-22 08:12:47.685 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-22 08:12:48.595 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-22 08:16:00.843 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-22 08:16:01.555 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-22 08:16:16.887 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-22 08:16:17.595 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
+2026-04-22 08:16:56.582 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-22 08:16:57.299 | INFO     | app.main:lifespan:35 - Registered 5 AI providers
