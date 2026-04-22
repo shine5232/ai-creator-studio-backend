@@ -44,6 +44,6 @@ class CharacterPeriod(Base):
     expression: Mapped[str | None] = mapped_column(String(100))
     tone: Mapped[str | None] = mapped_column(String(50))
     sort_order: Mapped[int] = mapped_column(Integer, default=0)
-    created_at: Mapped[str | None] = mapped_column(String)
+    created_at: Mapped[str | None] = mapped_column(String(50))
 
     character: Mapped["Character"] = relationship(back_populates="periods")

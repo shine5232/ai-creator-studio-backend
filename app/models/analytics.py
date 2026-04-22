@@ -18,7 +18,7 @@ class ContentAnalytics(Base):
     favorite_count: Mapped[int] = mapped_column(Integer, default=0)
     avg_watch_time: Mapped[float | None] = mapped_column(Float)
     engagement_rate: Mapped[float | None] = mapped_column(Float)
-    recorded_at: Mapped[str | None] = mapped_column(String)
+    recorded_at: Mapped[str | None] = mapped_column(String(50))
 
 
 class GenerationCost(Base, TimestampMixin):

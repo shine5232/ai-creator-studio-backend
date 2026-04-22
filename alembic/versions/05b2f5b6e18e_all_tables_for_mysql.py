@@ -1,8 +1,8 @@
-"""all tables
+"""all tables for mysql
 
-Revision ID: ebaddaf6766f
+Revision ID: 05b2f5b6e18e
 Revises: 
-Create Date: 2026-04-16 14:18:45.463342
+Create Date: 2026-04-22 03:55:24.589497
 
 """
 from typing import Sequence, Union
@@ -12,7 +12,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = 'ebaddaf6766f'
+revision: str = '05b2f5b6e18e'
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -26,36 +26,10 @@ def upgrade() -> None:
     sa.Column('display_name', sa.String(length=100), nullable=False),
     sa.Column('is_enabled', sa.Boolean(), nullable=False),
     sa.Column('config', sa.Text(), nullable=True),
-    sa.Column('created_at', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=False),
-    sa.Column('updated_at', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=False),
+    sa.Column('created_at', sa.DateTime(), server_default=sa.text('now()'), nullable=False),
+    sa.Column('updated_at', sa.DateTime(), server_default=sa.text('now()'), nullable=False),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('name')
-    )
-    op.create_table('kb_cases',
-    sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
-    sa.Column('platform', sa.String(length=30), nullable=False),
-    sa.Column('title', sa.String(length=200), nullable=False),
-    sa.Column('source_url', sa.String(length=500), nullable=True),
-    sa.Column('source_video_path', sa.String(length=500), nullable=True),
-    sa.Column('view_count', sa.Integer(), nullable=True),
-    sa.Column('like_count', sa.Integer(), nullable=True),
-    sa.Column('like_rate', sa.Float(), nullable=True),
-    sa.Column('duration_seconds', sa.Integer(), nullable=True),
-    sa.Column('uploader', sa.String(length=100), nullable=True),
-    sa.Column('upload_date', sa.String(), nullable=True),
-    sa.Column('theme', sa.String(length=100), nullable=True),
-    sa.Column('narrative_type', sa.String(length=50), nullable=True),
-    sa.Column('emotion_curve', sa.Text(), nullable=True),
-    sa.Column('visual_style', sa.Text(), nullable=True),
-    sa.Column('viral_elements', sa.Text(), nullable=True),
-    sa.Column('visual_symbols', sa.Text(), nullable=True),
-    sa.Column('title_formula', sa.String(length=200), nullable=True),
-    sa.Column('characters_ethnicity', sa.Text(), nullable=True),
-    sa.Column('analysis_report_path', sa.String(length=500), nullable=True),
-    sa.Column('frames_dir', sa.String(length=500), nullable=True),
-    sa.Column('created_at', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=False),
-    sa.Column('updated_at', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=False),
-    sa.PrimaryKeyConstraint('id')
     )
     op.create_table('kb_elements',
     sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
@@ -64,8 +38,8 @@ def upgrade() -> None:
     sa.Column('description', sa.Text(), nullable=True),
     sa.Column('impact_score', sa.Float(), nullable=True),
     sa.Column('examples', sa.Text(), nullable=True),
-    sa.Column('created_at', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=False),
-    sa.Column('updated_at', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=False),
+    sa.Column('created_at', sa.DateTime(), server_default=sa.text('now()'), nullable=False),
+    sa.Column('updated_at', sa.DateTime(), server_default=sa.text('now()'), nullable=False),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('kb_frameworks',
@@ -76,8 +50,8 @@ def upgrade() -> None:
     sa.Column('formula', sa.Text(), nullable=False),
     sa.Column('impact_data', sa.Text(), nullable=True),
     sa.Column('examples', sa.Text(), nullable=True),
-    sa.Column('created_at', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=False),
-    sa.Column('updated_at', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=False),
+    sa.Column('created_at', sa.DateTime(), server_default=sa.text('now()'), nullable=False),
+    sa.Column('updated_at', sa.DateTime(), server_default=sa.text('now()'), nullable=False),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('users',
@@ -89,8 +63,8 @@ def upgrade() -> None:
     sa.Column('avatar_url', sa.String(length=500), nullable=True),
     sa.Column('role', sa.String(length=20), nullable=False),
     sa.Column('is_active', sa.Boolean(), nullable=False),
-    sa.Column('created_at', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=False),
-    sa.Column('updated_at', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=False),
+    sa.Column('created_at', sa.DateTime(), server_default=sa.text('now()'), nullable=False),
+    sa.Column('updated_at', sa.DateTime(), server_default=sa.text('now()'), nullable=False),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('email'),
     sa.UniqueConstraint('username')
@@ -103,8 +77,8 @@ def upgrade() -> None:
     sa.Column('service_type', sa.String(length=30), nullable=False),
     sa.Column('is_default', sa.Boolean(), nullable=False),
     sa.Column('config', sa.Text(), nullable=True),
-    sa.Column('created_at', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=False),
-    sa.Column('updated_at', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=False),
+    sa.Column('created_at', sa.DateTime(), server_default=sa.text('now()'), nullable=False),
+    sa.Column('updated_at', sa.DateTime(), server_default=sa.text('now()'), nullable=False),
     sa.ForeignKeyConstraint(['provider_id'], ['ai_providers.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
@@ -116,23 +90,47 @@ def upgrade() -> None:
     sa.Column('is_active', sa.Boolean(), nullable=False),
     sa.Column('usage_count', sa.Integer(), nullable=False),
     sa.Column('last_used_at', sa.DateTime(), nullable=True),
-    sa.Column('created_at', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=False),
-    sa.Column('updated_at', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=False),
+    sa.Column('created_at', sa.DateTime(), server_default=sa.text('now()'), nullable=False),
+    sa.Column('updated_at', sa.DateTime(), server_default=sa.text('now()'), nullable=False),
     sa.ForeignKeyConstraint(['provider_id'], ['ai_providers.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
-    op.create_table('kb_script_templates',
+    op.create_table('kb_cases',
     sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
-    sa.Column('name', sa.String(length=100), nullable=False),
+    sa.Column('user_id', sa.Integer(), nullable=True),
+    sa.Column('platform', sa.String(length=30), nullable=False),
+    sa.Column('title', sa.String(length=200), nullable=False),
+    sa.Column('source_url', sa.String(length=500), nullable=True),
+    sa.Column('source_video_path', sa.String(length=500), nullable=True),
+    sa.Column('view_count', sa.Integer(), nullable=True),
+    sa.Column('like_count', sa.Integer(), nullable=True),
+    sa.Column('like_rate', sa.Float(), nullable=True),
+    sa.Column('duration_seconds', sa.Integer(), nullable=True),
+    sa.Column('uploader', sa.String(length=100), nullable=True),
+    sa.Column('upload_date', sa.String(length=50), nullable=True),
     sa.Column('theme', sa.String(length=100), nullable=True),
     sa.Column('narrative_type', sa.String(length=50), nullable=True),
-    sa.Column('duration_seconds', sa.Integer(), nullable=True),
-    sa.Column('template_content', sa.Text(), nullable=False),
-    sa.Column('reference_case_id', sa.Integer(), nullable=True),
-    sa.Column('usage_count', sa.Integer(), nullable=False),
-    sa.Column('created_at', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=False),
-    sa.Column('updated_at', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=False),
-    sa.ForeignKeyConstraint(['reference_case_id'], ['kb_cases.id'], ),
+    sa.Column('narrative_structure', sa.Text(), nullable=True),
+    sa.Column('story_summary', sa.Text(), nullable=True),
+    sa.Column('emotion_curve', sa.Text(), nullable=True),
+    sa.Column('emotion_triggers', sa.Text(), nullable=True),
+    sa.Column('visual_style', sa.Text(), nullable=True),
+    sa.Column('visual_contrast', sa.Text(), nullable=True),
+    sa.Column('viral_elements', sa.Text(), nullable=True),
+    sa.Column('visual_symbols', sa.Text(), nullable=True),
+    sa.Column('audience_profile', sa.Text(), nullable=True),
+    sa.Column('reusable_elements', sa.Text(), nullable=True),
+    sa.Column('success_factors', sa.Text(), nullable=True),
+    sa.Column('title_formula', sa.String(length=200), nullable=True),
+    sa.Column('characters_ethnicity', sa.Text(), nullable=True),
+    sa.Column('analysis_report_path', sa.String(length=500), nullable=True),
+    sa.Column('frames_dir', sa.String(length=500), nullable=True),
+    sa.Column('analysis_status', sa.String(length=20), nullable=True),
+    sa.Column('analysis_progress', sa.Integer(), nullable=True),
+    sa.Column('celery_task_id', sa.String(length=100), nullable=True),
+    sa.Column('created_at', sa.DateTime(), server_default=sa.text('now()'), nullable=False),
+    sa.Column('updated_at', sa.DateTime(), server_default=sa.text('now()'), nullable=False),
+    sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('projects',
@@ -145,9 +143,10 @@ def upgrade() -> None:
     sa.Column('source_platform', sa.String(length=30), nullable=True),
     sa.Column('reference_case_id', sa.Integer(), nullable=True),
     sa.Column('output_duration', sa.Integer(), nullable=True),
+    sa.Column('output_video_path', sa.String(length=500), nullable=True),
     sa.Column('settings', sa.Text(), nullable=True),
-    sa.Column('created_at', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=False),
-    sa.Column('updated_at', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=False),
+    sa.Column('created_at', sa.DateTime(), server_default=sa.text('now()'), nullable=False),
+    sa.Column('updated_at', sa.DateTime(), server_default=sa.text('now()'), nullable=False),
     sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
@@ -160,8 +159,8 @@ def upgrade() -> None:
     sa.Column('auth_data', sa.Text(), nullable=True),
     sa.Column('is_active', sa.Boolean(), nullable=False),
     sa.Column('last_publish_at', sa.DateTime(), nullable=True),
-    sa.Column('created_at', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=False),
-    sa.Column('updated_at', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=False),
+    sa.Column('created_at', sa.DateTime(), server_default=sa.text('now()'), nullable=False),
+    sa.Column('updated_at', sa.DateTime(), server_default=sa.text('now()'), nullable=False),
     sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
@@ -173,8 +172,8 @@ def upgrade() -> None:
     sa.Column('limit_count', sa.Integer(), nullable=False),
     sa.Column('period', sa.String(length=20), nullable=False),
     sa.Column('reset_at', sa.DateTime(), nullable=True),
-    sa.Column('created_at', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=False),
-    sa.Column('updated_at', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=False),
+    sa.Column('created_at', sa.DateTime(), server_default=sa.text('now()'), nullable=False),
+    sa.Column('updated_at', sa.DateTime(), server_default=sa.text('now()'), nullable=False),
     sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
@@ -195,9 +194,25 @@ def upgrade() -> None:
     sa.Column('reference_image_path', sa.String(length=500), nullable=True),
     sa.Column('reference_prompt_cn', sa.Text(), nullable=True),
     sa.Column('reference_prompt_en', sa.Text(), nullable=True),
-    sa.Column('created_at', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=False),
-    sa.Column('updated_at', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=False),
+    sa.Column('created_at', sa.DateTime(), server_default=sa.text('now()'), nullable=False),
+    sa.Column('updated_at', sa.DateTime(), server_default=sa.text('now()'), nullable=False),
     sa.ForeignKeyConstraint(['project_id'], ['projects.id'], ),
+    sa.PrimaryKeyConstraint('id')
+    )
+    op.create_table('kb_script_templates',
+    sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
+    sa.Column('user_id', sa.Integer(), nullable=True),
+    sa.Column('name', sa.String(length=100), nullable=False),
+    sa.Column('theme', sa.String(length=100), nullable=True),
+    sa.Column('narrative_type', sa.String(length=50), nullable=True),
+    sa.Column('duration_seconds', sa.Integer(), nullable=True),
+    sa.Column('template_content', sa.Text(), nullable=False),
+    sa.Column('reference_case_id', sa.Integer(), nullable=True),
+    sa.Column('usage_count', sa.Integer(), nullable=False),
+    sa.Column('created_at', sa.DateTime(), server_default=sa.text('now()'), nullable=False),
+    sa.Column('updated_at', sa.DateTime(), server_default=sa.text('now()'), nullable=False),
+    sa.ForeignKeyConstraint(['reference_case_id'], ['kb_cases.id'], ),
+    sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('scripts',
@@ -211,10 +226,11 @@ def upgrade() -> None:
     sa.Column('content', sa.Text(), nullable=False),
     sa.Column('viral_elements', sa.Text(), nullable=True),
     sa.Column('source_case_id', sa.Integer(), nullable=True),
+    sa.Column('script_path', sa.String(length=500), nullable=True),
     sa.Column('version', sa.Integer(), nullable=False),
     sa.Column('is_current', sa.Boolean(), nullable=False),
-    sa.Column('created_at', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=False),
-    sa.Column('updated_at', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=False),
+    sa.Column('created_at', sa.DateTime(), server_default=sa.text('now()'), nullable=False),
+    sa.Column('updated_at', sa.DateTime(), server_default=sa.text('now()'), nullable=False),
     sa.ForeignKeyConstraint(['project_id'], ['projects.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
@@ -243,7 +259,7 @@ def upgrade() -> None:
     sa.Column('expression', sa.String(length=100), nullable=True),
     sa.Column('tone', sa.String(length=50), nullable=True),
     sa.Column('sort_order', sa.Integer(), nullable=False),
-    sa.Column('created_at', sa.String(), nullable=True),
+    sa.Column('created_at', sa.String(length=50), nullable=True),
     sa.ForeignKeyConstraint(['character_id'], ['characters.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
@@ -253,8 +269,8 @@ def upgrade() -> None:
     sa.Column('total_shots', sa.Integer(), nullable=False),
     sa.Column('total_duration', sa.Integer(), nullable=True),
     sa.Column('tone_mapping', sa.Text(), nullable=True),
-    sa.Column('created_at', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=False),
-    sa.Column('updated_at', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=False),
+    sa.Column('created_at', sa.DateTime(), server_default=sa.text('now()'), nullable=False),
+    sa.Column('updated_at', sa.DateTime(), server_default=sa.text('now()'), nullable=False),
     sa.ForeignKeyConstraint(['script_id'], ['scripts.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
@@ -268,6 +284,8 @@ def upgrade() -> None:
     sa.Column('description', sa.Text(), nullable=False),
     sa.Column('tone', sa.String(length=50), nullable=True),
     sa.Column('mood', sa.String(length=50), nullable=True),
+    sa.Column('dialog', sa.Text(), nullable=True),
+    sa.Column('dialog_lang', sa.String(length=10), nullable=True),
     sa.Column('image_prompt', sa.Text(), nullable=True),
     sa.Column('image_path', sa.String(length=500), nullable=True),
     sa.Column('image_status', sa.String(length=20), nullable=False),
@@ -279,8 +297,8 @@ def upgrade() -> None:
     sa.Column('video_duration', sa.Float(), nullable=False),
     sa.Column('video_provider', sa.String(length=30), nullable=True),
     sa.Column('video_model', sa.String(length=50), nullable=True),
-    sa.Column('created_at', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=False),
-    sa.Column('updated_at', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=False),
+    sa.Column('created_at', sa.DateTime(), server_default=sa.text('now()'), nullable=False),
+    sa.Column('updated_at', sa.DateTime(), server_default=sa.text('now()'), nullable=False),
     sa.ForeignKeyConstraint(['storyboard_id'], ['storyboards.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
@@ -298,7 +316,7 @@ def upgrade() -> None:
     sa.Column('duration', sa.Float(), nullable=True),
     sa.Column('metadata', sa.Text(), nullable=True),
     sa.Column('shot_id', sa.Integer(), nullable=True),
-    sa.Column('created_at', sa.String(), nullable=True),
+    sa.Column('created_at', sa.String(length=50), nullable=True),
     sa.ForeignKeyConstraint(['project_id'], ['projects.id'], ),
     sa.ForeignKeyConstraint(['shot_id'], ['shots.id'], ),
     sa.PrimaryKeyConstraint('id')
@@ -317,8 +335,8 @@ def upgrade() -> None:
     sa.Column('cost_amount', sa.Float(), nullable=False),
     sa.Column('currency', sa.String(length=10), nullable=False),
     sa.Column('duration_ms', sa.Integer(), nullable=True),
-    sa.Column('created_at', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=False),
-    sa.Column('updated_at', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=False),
+    sa.Column('created_at', sa.DateTime(), server_default=sa.text('now()'), nullable=False),
+    sa.Column('updated_at', sa.DateTime(), server_default=sa.text('now()'), nullable=False),
     sa.ForeignKeyConstraint(['project_id'], ['projects.id'], ),
     sa.ForeignKeyConstraint(['shot_id'], ['shots.id'], ),
     sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
@@ -355,7 +373,7 @@ def upgrade() -> None:
     sa.Column('favorite_count', sa.Integer(), nullable=False),
     sa.Column('avg_watch_time', sa.Float(), nullable=True),
     sa.Column('engagement_rate', sa.Float(), nullable=True),
-    sa.Column('recorded_at', sa.String(), nullable=True),
+    sa.Column('recorded_at', sa.String(length=50), nullable=True),
     sa.ForeignKeyConstraint(['project_id'], ['projects.id'], ),
     sa.ForeignKeyConstraint(['publish_record_id'], ['publish_records.id'], ),
     sa.PrimaryKeyConstraint('id')
@@ -374,16 +392,16 @@ def downgrade() -> None:
     op.drop_table('character_periods')
     op.drop_table('workflow_steps')
     op.drop_table('scripts')
+    op.drop_table('kb_script_templates')
     op.drop_table('characters')
     op.drop_table('user_quotas')
     op.drop_table('social_accounts')
     op.drop_table('projects')
-    op.drop_table('kb_script_templates')
+    op.drop_table('kb_cases')
     op.drop_table('api_keys')
     op.drop_table('ai_models')
     op.drop_table('users')
     op.drop_table('kb_frameworks')
     op.drop_table('kb_elements')
-    op.drop_table('kb_cases')
     op.drop_table('ai_providers')
     # ### end Alembic commands ###

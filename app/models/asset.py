@@ -20,6 +20,6 @@ class Asset(Base):
     duration: Mapped[float | None] = mapped_column(Float)
     metadata_json: Mapped[str | None] = mapped_column("metadata", Text)
     shot_id: Mapped[int | None] = mapped_column(Integer, ForeignKey("shots.id"))
-    created_at: Mapped[str | None] = mapped_column(String)
+    created_at: Mapped[str | None] = mapped_column(String(50))
 
     project: Mapped["Project"] = relationship(back_populates="assets")  # noqa: F821

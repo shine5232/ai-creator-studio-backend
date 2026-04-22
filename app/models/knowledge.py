@@ -18,7 +18,7 @@ class KBCase(Base, TimestampMixin):
     like_rate: Mapped[float | None] = mapped_column(Float)
     duration_seconds: Mapped[int | None] = mapped_column(Integer)
     uploader: Mapped[str | None] = mapped_column(String(100))
-    upload_date: Mapped[str | None] = mapped_column(String)
+    upload_date: Mapped[str | None] = mapped_column(String(50))
 
     theme: Mapped[str | None] = mapped_column(String(100))
     narrative_type: Mapped[str | None] = mapped_column(String(50))
