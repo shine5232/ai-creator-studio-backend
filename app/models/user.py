@@ -19,6 +19,7 @@ class User(Base, TimestampMixin):
     projects: Mapped[list["Project"]] = relationship(back_populates="user", lazy="selectin")  # noqa: F821
     quotas: Mapped[list["UserQuota"]] = relationship(back_populates="user", cascade="all, delete-orphan")
     social_accounts: Mapped[list["SocialAccount"]] = relationship(back_populates="user", cascade="all, delete-orphan")  # noqa: F821
+    ai_configs: Mapped[list["UserAIConfig"]] = relationship(back_populates="user", cascade="all, delete-orphan")  # noqa: F821
 
 
 class UserQuota(Base, TimestampMixin):

@@ -15,14 +15,15 @@ class WanxAdapter(BaseAdapter):
         self.api_key = settings.WANX_API_KEY
 
     async def generate(self, request: AIRequest) -> AIResponse:
-        api_key = self.api_key
+        api_key = request.override_api_key or self.api_key
         if not api_key:
             return AIResponse(success=False, error="Wanx API key not configured")
 
         if not request.image_url:
             return AIResponse(success=False, error="image_url is required for Wanx video generation")
 
-        url = f"{WANX_API_BASE}/services/aigc/video-generation/video-synthesis"
+        base_url = request.override_base_url or WANX_API_BASE
+        url = f"{base_url}/services/aigc/video-generation/video-synthesis"
         headers = {
             "Content-Type": "application/json",
             "Authorization": f"Bearer {api_key}",
@@ -80,12 +81,13 @@ class WanxAdapter(BaseAdapter):
             logger.error(f"Wanx error: {e}")
             return AIResponse(success=False, error=str(e))
 
-    async def check_task(self, task_id: str) -> AIResponse:
-        api_key = self.api_key
+    async def check_task(self, task_id: str, *, request: AIRequest | None = None) -> AIResponse:
+        api_key = (request.override_api_key if request else None) or self.api_key
         if not api_key:
             return AIResponse(success=False, error="Wanx API key not configured")
 
-        url = f"{WANX_API_BASE}/tasks/{task_id}"
+        base_url = (request.override_base_url if request else None) or WANX_API_BASE
+        url = f"{base_url}/tasks/{task_id}"
         headers = {
             "Authorization": f"Bearer {api_key}",
         }

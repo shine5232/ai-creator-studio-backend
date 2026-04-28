@@ -15,7 +15,7 @@ class GenerationService:
 
     async def generate_images_batch(
         self, project_id: int, provider: str | None = None, model: str | None = None,
-        shot_ids: list[int] | None = None,
+        shot_ids: list[int] | None = None, user_id: int | None = None,
     ) -> dict:
         """Batch generate images for shots. Returns task info."""
         shots = await self._get_pending_shots(project_id, "image", shot_ids)
@@ -43,6 +43,7 @@ class GenerationService:
             provider=provider,
             model=model,
             workflow_step_id=step.id,
+            user_id=user_id,
         )
 
         # Store real Celery task ID
@@ -61,7 +62,7 @@ class GenerationService:
 
     async def generate_videos_batch(
         self, project_id: int, provider: str | None = None, model: str | None = None,
-        shot_ids: list[int] | None = None,
+        shot_ids: list[int] | None = None, user_id: int | None = None,
     ) -> dict:
         """Batch generate videos for shots. Returns task info."""
         shots = await self._get_pending_shots(project_id, "video", shot_ids)
@@ -89,6 +90,7 @@ class GenerationService:
             provider=provider,
             model=model,
             workflow_step_id=step.id,
+            user_id=user_id,
         )
 
         step.celery_task_id = result.id
@@ -204,6 +206,7 @@ class GenerationService:
 
     async def batch_generate_character_images(
         self, project_id: int, aspect_ratio: str = "9:16",
+        user_id: int | None = None,
     ) -> dict:
         """批量生成该项目所有人物的参考图。"""
         result = await self.db.execute(
@@ -232,6 +235,7 @@ class GenerationService:
             project_id=project_id,
             aspect_ratio=aspect_ratio,
             workflow_step_id=step.id,
+            user_id=user_id,
         )
 
         step.celery_task_id = celery_result.id

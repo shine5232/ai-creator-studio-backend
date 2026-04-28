@@ -14,7 +14,7 @@ class NanoBananaAdapter(BaseAdapter):
         self.api_key = settings.GEMINI_API_KEY
 
     async def generate(self, request: AIRequest) -> AIResponse:
-        api_key = self.api_key
+        api_key = request.override_api_key or self.api_key
         if not api_key:
             return AIResponse(success=False, error="Gemini API key not configured")
 

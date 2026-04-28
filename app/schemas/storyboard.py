@@ -18,6 +18,7 @@ class UpdateShotRequest(BaseModel):
     shot_type: str | None = None
     tone: str | None = None
     mood: str | None = None
+    characters: str | None = None
     image_prompt: str | None = None
     video_prompt: str | None = None
     video_duration: float | None = None
@@ -52,6 +53,7 @@ class ShotResponse(BaseModel):
     time_range: str | None
     shot_type: str | None
     description: str
+    characters: str | None
     tone: str | None
     mood: str | None
     image_prompt: str | None

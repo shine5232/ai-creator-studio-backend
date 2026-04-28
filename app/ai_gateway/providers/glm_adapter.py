@@ -16,7 +16,7 @@ class QwenAdapter(BaseAdapter):
         self.api_key = settings.DASHSCOPE_API_KEY
 
     async def generate(self, request: AIRequest) -> AIResponse:
-        api_key = self.api_key
+        api_key = request.override_api_key or self.api_key
         if not api_key:
             return AIResponse(success=False, error="DashScope API key not configured")
 
@@ -25,9 +25,11 @@ class QwenAdapter(BaseAdapter):
         max_tokens = request.params.get("max_tokens", 8192)
         timeout = request.params.get("timeout", 300)
 
+        base_url = request.override_base_url or "https://dashscope.aliyuncs.com/compatible-mode/v1"
+
         try:
             response = await asyncio.wait_for(
-                asyncio.to_thread(self._sync_call, api_key, model, request.prompt, temperature, max_tokens),
+                asyncio.to_thread(self._sync_call, api_key, model, request.prompt, temperature, max_tokens, base_url),
                 timeout=timeout,
             )
             return response
@@ -39,10 +41,10 @@ class QwenAdapter(BaseAdapter):
             return AIResponse(success=False, error=str(e))
 
     @staticmethod
-    def _sync_call(api_key: str, model: str, prompt: str, temperature: float, max_tokens: int) -> AIResponse:
+    def _sync_call(api_key: str, model: str, prompt: str, temperature: float, max_tokens: int, base_url: str = "https://dashscope.aliyuncs.com/compatible-mode/v1") -> AIResponse:
         client = OpenAI(
             api_key=api_key,
-            base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",
+            base_url=base_url,
         )
         messages = [{"role": "user", "content": prompt}]
         response = client.chat.completions.create(

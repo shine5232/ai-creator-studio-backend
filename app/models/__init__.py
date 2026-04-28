@@ -8,3 +8,4 @@ from app.models.ai_gateway import AIProvider, AIModel, APIKey  # noqa: F401
 from app.models.publish import SocialAccount, PublishRecord  # noqa: F401
 from app.models.knowledge import KBCase, KBElement, KBFramework, KBScriptTemplate  # noqa: F401
 from app.models.analytics import ContentAnalytics, GenerationCost  # noqa: F401
+from app.models.user_ai_config import UserAIConfig  # noqa: F401

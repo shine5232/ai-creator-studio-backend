@@ -20,6 +20,9 @@ class AIRequest:
     last_frame_url: str | None = None
     audio_url: str | None = None
     params: dict = field(default_factory=dict)
+    # User-level overrides (injected by worker/config resolver)
+    override_api_key: str | None = None
+    override_base_url: str | None = None
 
 
 @dataclass

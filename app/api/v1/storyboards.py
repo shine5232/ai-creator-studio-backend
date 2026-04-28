@@ -107,6 +107,7 @@ async def regenerate_image(
         provider=data.provider if data else None,
         model=data.model if data else None,
         shot_ids=[shot_id],
+        user_id=current_user.id,
     )
 
 
@@ -139,6 +140,7 @@ async def regenerate_video(
         provider=data.provider if data else None,
         model=data.model if data else None,
         shot_ids=[shot_id],
+        user_id=current_user.id,
     )
 
 
@@ -303,7 +305,7 @@ async def generate_shot_image(
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
-    """同步为单个镜头生成图片。"""
+    """为单个镜头生成图片，通过 Celery 异步任务执行。"""
     result = await db.execute(select(Shot).where(Shot.id == shot_id))
     shot = result.scalar_one_or_none()
     if not shot:
@@ -317,50 +319,17 @@ async def generate_shot_image(
     if not prompt:
         raise HTTPException(status_code=400, detail="No prompt available for this shot")
 
-    aspect_ratio = getattr(data, "aspect_ratio", None) or "9:16" if data else "9:16"
-    size_map = {"9:16": "1088x1920", "16:9": "1920x1088", "1:1": "1440x1440"}
-    size = size_map.get(aspect_ratio, "1088x1920")
+    # Reset status to pending
+    shot.image_status = "pending"
+    await db.commit()
 
-    providers = registry.get_providers_for_service(ServiceType.TEXT_TO_IMAGE)
-    if not providers:
-        raise HTTPException(status_code=500, detail="No image generation provider available")
-
-    response = await providers[0].generate(AIRequest(
-        prompt=prompt,
-        service_type=ServiceType.TEXT_TO_IMAGE,
-        params={"size": size},
-    ))
-
-    if not response.success:
-        raise HTTPException(status_code=500, detail=f"Image generation failed: {response.error}")
-
-    upload_dir = Path("data/uploads")
-    upload_dir.mkdir(parents=True, exist_ok=True)
-
-    if response.data:
-        if "url" in response.data or "image_url" in response.data:
-            import httpx
-            img_url = response.data.get("url") or response.data.get("image_url")
-            img_resp = httpx.get(img_url, timeout=60)
-            filename = f"shot_{shot_id}_{int(time.time())}.png"
-            filepath = upload_dir / filename
-            filepath.write_bytes(img_resp.content)
-            shot.image_path = str(filepath)
-        elif "base64" in response.data or "image_b64" in response.data:
-            import base64
-            b64_data = response.data.get("base64") or response.data.get("image_b64")
-            filename = f"shot_{shot_id}_{int(time.time())}.png"
-            filepath = upload_dir / filename
-            filepath.write_bytes(base64.b64decode(b64_data))
-            shot.image_path = str(filepath)
-        elif "local_path" in response.data:
-            shot.image_path = response.data["local_path"]
-
-        shot.image_status = "completed"
-        await db.commit()
-
-    logger.info(f"Sync generated image for shot {shot_id}")
-    return {"shot_id": shot_id, "image_path": shot.image_path, "image_status": shot.image_status}
+    # Dispatch Celery task
+    service = GenerationService(db)
+    return await service.generate_images_batch(
+        project_id,
+        shot_ids=[shot_id],
+        user_id=current_user.id,
+    )
 
 
 @router.post("/projects/{project_id}/batch/character-images")
@@ -374,7 +343,7 @@ async def batch_generate_character_images(
         raise HTTPException(status_code=404, detail="Project not found")
 
     service = GenerationService(db)
-    return await service.batch_generate_character_images(project_id)
+    return await service.batch_generate_character_images(project_id, user_id=current_user.id)
 
 
 @router.post("/projects/{project_id}/batch/shot-images")
@@ -415,6 +384,7 @@ async def batch_generate_shot_images(
     return await service.generate_images_batch(
         project_id,
         shot_ids=shot_ids,
+        user_id=current_user.id,
     )
 
 
@@ -486,4 +456,5 @@ async def batch_generate_shot_videos(
     return await service.generate_videos_batch(
         project_id,
         shot_ids=shot_ids,
+        user_id=current_user.id,
     )

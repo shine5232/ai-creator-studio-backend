@@ -117,6 +117,6 @@ async def generate_reference(
     try:
         provider = data.provider if data else None
         aspect_ratio = data.aspect_ratio if data else "9:16"
-        return await service.generate_reference_image(character_id, provider, aspect_ratio)
+        return await service.generate_reference_image(character_id, provider, aspect_ratio, user_id=current_user.id)
     except ValueError as e:
         raise HTTPException(status_code=404, detail=str(e))

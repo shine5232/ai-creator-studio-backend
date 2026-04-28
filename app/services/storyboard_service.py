@@ -88,6 +88,8 @@ class StoryboardService:
         # 从脚本 content 中提取结构化场景/人物数据（如果存在）
         display_content = script.content
         scene_context = ""
+        # structured shot → characters mapping for fallback population
+        shot_chars_map: dict[int, str] = {}  # {shot_number: "角色A,角色B"}
         marker = "---STRUCTURED_DATA---"
         if marker in script.content:
             parts = script.content.split(marker, 1)
@@ -121,13 +123,18 @@ class StoryboardService:
                 acts_data = structured.get("acts", [])
                 if acts_data:
                     scene_context += "【分镜结构】\n"
+                    global_shot_idx = 0
                     for act in acts_data:
                         scene_context += f"第{act.get('act_number', '?')}幕: {act.get('act_name', '')} ({act.get('time_range', '')})\n"
                         for shot in act.get("shots", []):
+                            global_shot_idx += 1
+                            chars = shot.get("characters", "")
+                            if chars:
+                                shot_chars_map[global_shot_idx] = chars
                             scene_context += (
                                 f"  镜头{shot.get('shot_number', '?')} {shot.get('time_range', '')} "
                                 f"[{shot.get('shot_type', '')}] {shot.get('location', '')}\n"
-                                f"    人物: {shot.get('characters', '')}\n"
+                                f"    人物: {chars}\n"
                                 f"    环境: {shot.get('environment', '')}\n"
                                 f"    事件: {shot.get('event', '')}\n"
                             )
@@ -182,6 +189,7 @@ class StoryboardService:
             "- act_name: 场幕名称（可选）\n"
             "- time_range: 时间范围，如 '0-3s'（可选）\n"
             "- shot_type: 镜头类型，如 close_up/medium/wide/establishing（可选）\n"
+            "- characters: 该镜头中出现的人物名称，逗号分隔（可选）\n"
             "- description: 镜头画面描述（必填，中文，包含人物外貌、动作、环境细节）\n"
             "- tone: 画面色调（可选）\n"
             "- mood: 情绪氛围（可选）\n"
@@ -229,6 +237,8 @@ class StoryboardService:
 
         shots: list[Shot] = []
         for i, sd in enumerate(shot_data_list, start=1):
+            # characters: prefer AI output, fallback to structured data
+            characters = sd.get("characters") or shot_chars_map.get(i)
             shot = Shot(
                 storyboard_id=storyboard.id,
                 shot_number=i,
@@ -236,6 +246,7 @@ class StoryboardService:
                 time_range=sd.get("time_range"),
                 shot_type=sd.get("shot_type"),
                 description=sd.get("description", f"Shot {i}"),
+                characters=characters,
                 tone=sd.get("tone"),
                 mood=sd.get("mood"),
                 image_prompt=sd.get("image_prompt"),

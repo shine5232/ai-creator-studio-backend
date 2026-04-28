@@ -8,12 +8,40 @@ from sqlalchemy import select
 
 from app.ai_gateway.base import AIRequest, ServiceType
 from app.ai_gateway.registry import registry
+from app.ai_gateway.user_config_resolver import resolve_user_config
 from app.models.character import Character
 from app.models.script import Script, Shot, Storyboard
 from app.utils.logger import logger
 from app.worker.celery_app import celery_app
 from app.worker.db import get_sync_session
 from app.worker.tasks.base import BaseWorkflowTask, run_async
+
+
+# ─── User config resolver helper ─────────────────────────────────────────────
+
+def _resolve_overrides(session, user_id: int | None, service_type: str) -> dict:
+    """Resolve user config overrides.
+
+    Returns dict with override_api_key, override_base_url, override_provider, override_model,
+    and _adapter_config (to be merged into request.params).
+    """
+    if not user_id:
+        return {}
+    creds = resolve_user_config(session, user_id, service_type)
+    if not creds:
+        return {}
+    overrides = {}
+    if creds.api_key:
+        overrides["override_api_key"] = creds.api_key
+    if creds.base_url:
+        overrides["override_base_url"] = creds.base_url
+    if creds.provider:
+        overrides["override_provider"] = creds.provider
+    if creds.model_id:
+        overrides["override_model"] = creds.model_id
+    if creds.extra_config:
+        overrides["_adapter_config"] = creds.extra_config
+    return overrides
 
 
 # ─── Image Prompt Generation ────────────────────────────────────────────────
@@ -195,6 +223,7 @@ def generate_image_prompts_for_shots(
     self,
     shot_ids: list[int],
     workflow_step_id: int,
+    user_id: int | None = None,
 ):
     """为每个分镜调用 AI 生成 Seedream 文生图提示词，保存到 shot.image_prompt。"""
     total = len(shot_ids)
@@ -204,6 +233,12 @@ def generate_image_prompts_for_shots(
 
     adapter = providers[0]
     completed = 0
+
+    # Resolve user config overrides
+    text_overrides = {}
+    if user_id:
+        with get_sync_session() as session:
+            text_overrides = _resolve_overrides(session, user_id, "text_generation")
 
     # 批量加载所需数据
     with get_sync_session() as session:
@@ -257,6 +292,7 @@ def generate_image_prompts_for_shots(
                 prompt=prompt,
                 service_type=ServiceType.TEXT_GENERATION,
                 params={"temperature": 0.7, "max_tokens": 1024},
+                **text_overrides,
             )
             response = run_async(adapter.generate(request))
 
@@ -329,14 +365,30 @@ def generate_character_images(
     project_id: int,
     aspect_ratio: str = "9:16",
     workflow_step_id: int = 0,
+    user_id: int | None = None,
 ):
     """批量生成人物参考图。"""
     total = len(character_ids)
-    providers = registry.get_providers_for_service(ServiceType.TEXT_TO_IMAGE)
-    if not providers:
-        raise ValueError("No AI provider found for image generation")
 
-    adapter = providers[0]
+    # Resolve user config overrides
+    img_overrides = {}
+    if user_id:
+        with get_sync_session() as session:
+            img_overrides = _resolve_overrides(session, user_id, "text_to_image")
+
+    # Select adapter based on user config or fallback
+    resolved_provider = img_overrides.pop("override_provider", None)
+    resolved_model = img_overrides.pop("override_model", None)
+    adapter_config = img_overrides.pop("_adapter_config", {})
+
+    adapter = registry.get_provider(resolved_provider) if resolved_provider else None
+    if not adapter:
+        providers = registry.get_providers_for_service(ServiceType.TEXT_TO_IMAGE)
+        if providers:
+            adapter = providers[0]
+        else:
+            raise ValueError("No AI provider found for image generation")
+
     upload_dir = Path("data/uploads")
     upload_dir.mkdir(parents=True, exist_ok=True)
 
@@ -362,12 +414,44 @@ def generate_character_images(
                 request = AIRequest(
                     prompt=prompt,
                     service_type=ServiceType.TEXT_TO_IMAGE,
-                    params={"size": size},
+                    model=resolved_model,
+                    params={"size": size, "adapter_config": adapter_config},
+                    **img_overrides,
                 )
 
                 response = run_async(adapter.generate(request))
 
-                if response.success and response.data:
+                # Async adapter: initial submit returns task_id, poll for result
+                if response.task_id and hasattr(adapter, 'check_task'):
+                    max_wait = 300
+                    interval = 5
+                    elapsed = 0
+                    while elapsed < max_wait:
+                        time.sleep(interval)
+                        elapsed += interval
+                        poll = run_async(adapter.check_task(response.task_id, request=request))
+                        if poll.success and poll.data:
+                            status = poll.data.get("status", "").lower()
+                            if status in ("completed", "succeeded"):
+                                image_url = poll.data.get("image_url") or poll.data.get("url")
+                                if image_url:
+                                    import httpx
+                                    img_resp = httpx.get(image_url, timeout=60)
+                                    filename = f"char_{char_id}_{int(time.time())}.png"
+                                    filepath = upload_dir / filename
+                                    filepath.write_bytes(img_resp.content)
+                                    character.reference_image_path = str(filepath)
+                                    logger.info(f"Character image generated (async): {char_id}")
+                                break
+                            elif status == "failed":
+                                logger.error(f"Character image async task failed for {char_id}")
+                                break
+                        elif not poll.success:
+                            logger.error(f"Character image poll failed for {char_id}: {poll.error}")
+                            break
+                    else:
+                        logger.error(f"Character image timeout for {char_id}")
+                elif response.success and response.data:
                     image_data = response.data
                     if "url" in image_data or "image_url" in image_data:
                         import httpx
@@ -401,17 +485,52 @@ def generate_character_images(
     logger.info(f"Character image generation complete: {completed}/{total} for project {project_id}")
 
 
-def _find_char_ref_for_shot(shot: Shot, char_ref_map: dict[str, str]) -> str | None:
-    """从镜头描述/幕名中匹配人物名称，返回对应的参照图 base64（带 data URI 前缀）。"""
-    text = f"{shot.description or ''} {shot.act_name or ''}"
+def _find_char_refs_for_shot(shot: Shot, char_ref_map: dict[str, str]) -> list[str]:
+    """从 shot.characters 字段或文本中匹配人物名称，返回所有匹配的参照图 base64 列表。
+
+    优先使用 shot.characters 字段（精确匹配），fallback 到 description 文本子串匹配。
+    """
     import base64
-    for name, ref_path in char_ref_map.items():
-        if name in text:
-            p = Path(ref_path)
-            if p.exists():
-                b64 = base64.b64encode(p.read_bytes()).decode()
-                return b64
-    return None
+
+    def _load_ref(ref_path: str) -> str | None:
+        p = Path(ref_path)
+        if p.exists():
+            return base64.b64encode(p.read_bytes()).decode()
+        return None
+
+    matched: list[str] = []
+
+    # 1. 优先使用 shot.characters 字段
+    if shot.characters:
+        for name in shot.characters.split(","):
+            name = name.strip()
+            if not name:
+                continue
+            # 精确匹配人物名称
+            ref_path = char_ref_map.get(name)
+            if ref_path:
+                b64 = _load_ref(ref_path)
+                if b64:
+                    matched.append(b64)
+            else:
+                # 尝试别名匹配（如"小明"可能在 map 中是全名"李明"）
+                for map_name, map_path in char_ref_map.items():
+                    if name in map_name or map_name in name:
+                        b64 = _load_ref(map_path)
+                        if b64:
+                            matched.append(b64)
+                            break
+
+    # 2. fallback: 从 description 文本中匹配
+    if not matched:
+        text = f"{shot.description or ''} {shot.act_name or ''}"
+        for name, ref_path in char_ref_map.items():
+            if name in text:
+                b64 = _load_ref(ref_path)
+                if b64:
+                    matched.append(b64)
+
+    return matched
 
 
 # ─── Image Generation ────────────────────────────────────────────────────────
@@ -425,9 +544,21 @@ def generate_images_for_shots(
     provider: str | None,
     model: str | None,
     workflow_step_id: int,
+    user_id: int | None = None,
 ):
     """Generate images for a list of shots using the specified AI provider."""
     total = len(shot_ids)
+
+    # Resolve user config overrides
+    img_overrides = {}
+    if user_id:
+        with get_sync_session() as session:
+            img_overrides = _resolve_overrides(session, user_id, "text_to_image")
+
+    # Extract provider/model from user config for adapter routing
+    resolved_provider = provider or img_overrides.pop("override_provider", None)
+    resolved_model = model or img_overrides.pop("override_model", None)
+    shot_adapter_config = img_overrides.pop("_adapter_config", {})
 
     # 预加载人物参照图映射 {name: image_path}
     char_ref_map: dict[str, str] = {}
@@ -439,7 +570,7 @@ def generate_images_for_shots(
             if c.reference_image_path:
                 char_ref_map[c.name] = c.reference_image_path
 
-    adapter = registry.get_provider(provider) if provider else None
+    adapter = registry.get_provider(resolved_provider) if resolved_provider else None
 
     if not adapter:
         # Try to find any provider that supports text-to-image
@@ -447,7 +578,7 @@ def generate_images_for_shots(
         if providers:
             adapter = providers[0]
         else:
-            raise ValueError(f"No AI provider found for image generation (requested: {provider})")
+            raise ValueError(f"No AI provider found for image generation (requested: {resolved_provider})")
 
     upload_dir = Path("data/uploads")
     upload_dir.mkdir(parents=True, exist_ok=True)
@@ -467,23 +598,71 @@ def generate_images_for_shots(
                     completed += 1
                     continue
 
-                # 查找匹配的人物参照图
-                ref_image_b64 = _find_char_ref_for_shot(shot, char_ref_map)
+                # 查找匹配的人物参照图（支持多人物）
+                ref_images_b64 = _find_char_refs_for_shot(shot, char_ref_map)
 
                 service_type = ServiceType.TEXT_TO_IMAGE
-                if ref_image_b64:
+                ref_image_b64 = None
+                if ref_images_b64:
                     service_type = ServiceType.IMAGE_TO_IMAGE
+                    # 取第一个参考图作为主参考（后续可通过 image_urls 传递多个）
+                    ref_image_b64 = ref_images_b64[0]
 
                 request = AIRequest(
                     prompt=prompt,
                     service_type=service_type,
-                    model=model,
+                    model=resolved_model,
                     image_base64=ref_image_b64,
+                    params={
+                        "adapter_config": shot_adapter_config,
+                        "extra_ref_images": ref_images_b64[1:] if len(ref_images_b64) > 1 else [],
+                    },
+                    **img_overrides,
                 )
 
                 response = run_async(adapter.generate(request))
 
-                if response.success and response.data:
+                # Async adapter: initial submit returns task_id, poll for result
+                if response.task_id and hasattr(adapter, 'check_task'):
+                    shot.image_task_id = response.task_id
+                    shot.image_status = "processing"
+                    session.commit()
+
+                    max_wait = 300
+                    interval = 5
+                    elapsed = 0
+                    while elapsed < max_wait:
+                        time.sleep(interval)
+                        elapsed += interval
+                        poll = run_async(adapter.check_task(response.task_id, request=request))
+                        if poll.success and poll.data:
+                            status = poll.data.get("status", "").lower()
+                            if status in ("completed", "succeeded"):
+                                image_url = poll.data.get("image_url") or poll.data.get("url")
+                                if image_url:
+                                    import httpx
+                                    img_resp = httpx.get(image_url, timeout=60)
+                                    filename = f"shot_{shot_id}_{int(time.time())}.png"
+                                    filepath = upload_dir / filename
+                                    filepath.write_bytes(img_resp.content)
+                                    shot.image_path = str(filepath)
+                                    shot.image_status = "completed"
+                                    shot.image_task_id = response.task_id
+                                    logger.info(f"Image saved for shot {shot_id} (async): {shot.image_path}")
+                                break
+                            elif status == "failed":
+                                shot.image_status = "failed"
+                                logger.error(f"Shot {shot_id}: async image task failed")
+                                break
+                        elif not poll.success:
+                            shot.image_status = "failed"
+                            logger.error(f"Shot {shot_id}: poll failed: {poll.error}")
+                            break
+                    else:
+                        shot.image_status = "failed"
+                        logger.error(f"Shot {shot_id}: timeout waiting for image generation")
+
+                elif response.success and response.data:
                     # Save image data
                     image_data = response.data
                     saved = False
@@ -549,9 +728,17 @@ def generate_videos_for_shots(
     provider: str | None,
     model: str | None,
     workflow_step_id: int,
+    user_id: int | None = None,
 ):
     """Generate videos for a list of shots using the specified AI provider."""
     total = len(shot_ids)
+
+    # Resolve user config overrides
+    vid_overrides = {}
+    if user_id:
+        with get_sync_session() as session:
+            vid_overrides = _resolve_overrides(session, user_id, "image_to_video")
+
     adapter = registry.get_provider(provider) if provider else None
 
     if not adapter:
@@ -622,6 +809,7 @@ def generate_videos_for_shots(
                     service_type=ServiceType.IMAGE_TO_VIDEO,
                     model=model,
                     image_url=image_url,
+                    **vid_overrides,
                 )
 
                 response = run_async(adapter.generate(request))
@@ -758,8 +946,19 @@ def auto_generate_pipeline(
     project_id: int,
     script_params: dict,
     workflow_step_id: int,
+    user_id: int | None = None,
 ):
     """一键爆款：从空白项目自动完成 脚本→人物提示词→分镜提示词→人物图→分镜图→分镜视频→合成。"""
+
+    # Pre-resolve all user config overrides
+    auto_text_overrides = {}
+    auto_img_overrides = {}
+    auto_vid_overrides = {}
+    if user_id:
+        with get_sync_session() as session:
+            auto_text_overrides = _resolve_overrides(session, user_id, "text_generation")
+            auto_img_overrides = _resolve_overrides(session, user_id, "text_to_image")
+            auto_vid_overrides = _resolve_overrides(session, user_id, "image_to_video")
 
     # ── Step 1: AI 生成脚本 (0% → 10%) ──────────────────────────────────────
     self.update_progress(workflow_step_id, 0, "步骤 1/7: 正在生成脚本...")
@@ -803,6 +1002,7 @@ def auto_generate_pipeline(
                         prompt=f"请为以下角色生成一段详细的中文人物肖像文生图提示词，包含外貌、穿着等所有细节：{prompt}",
                         service_type=ServiceType.TEXT_GENERATION,
                         params={"temperature": 0.6, "max_tokens": 512},
+                        **auto_text_overrides,
                     )
                     response = run_async(text_adapter.generate(request))
                     if response.success and response.data:
@@ -879,6 +1079,7 @@ def auto_generate_pipeline(
                         prompt=prompt,
                         service_type=ServiceType.TEXT_GENERATION,
                         params={"temperature": 0.7, "max_tokens": 1024},
+                        **auto_text_overrides,
                     )
                     response = run_async(text_adapter.generate(request))
                     if response.success and response.data:
@@ -907,8 +1108,15 @@ def auto_generate_pipeline(
     # ── Step 4: 生成人物参照图片 (20% → 35%) ────────────────────────────────
     self.update_progress(workflow_step_id, 20, "步骤 4/7: 正在生成人物参照图片...")
     try:
-        img_providers = registry.get_providers_for_service(ServiceType.TEXT_TO_IMAGE)
-        img_adapter = img_providers[0] if img_providers else None
+        # Extract provider/model from user config for adapter routing
+        auto_img_provider = auto_img_overrides.pop("override_provider", None)
+        auto_img_model = auto_img_overrides.pop("override_model", None)
+        auto_img_adapter_config = auto_img_overrides.pop("_adapter_config", {})
+
+        img_adapter = registry.get_provider(auto_img_provider) if auto_img_provider else None
+        if not img_adapter:
+            img_providers = registry.get_providers_for_service(ServiceType.TEXT_TO_IMAGE)
+            img_adapter = img_providers[0] if img_providers else None
 
         if img_adapter:
             with get_sync_session() as session:
@@ -934,11 +1142,44 @@ def auto_generate_pipeline(
                         request = AIRequest(
                             prompt=prompt,
                             service_type=ServiceType.TEXT_TO_IMAGE,
-                            params={"size": "1088x1920"},
+                            model=auto_img_model,
+                            params={"size": "1088x1920", "adapter_config": auto_img_adapter_config},
+                            **auto_img_overrides,
                         )
                         response = run_async(img_adapter.generate(request))
 
-                        if response.success and response.data:
+                        # Async adapter: poll for result
+                        if response.task_id and hasattr(img_adapter, 'check_task'):
+                            max_wait = 300
+                            interval = 5
+                            elapsed = 0
+                            while elapsed < max_wait:
+                                time.sleep(interval)
+                                elapsed += interval
+                                poll = run_async(img_adapter.check_task(response.task_id, request=request))
+                                if poll.success and poll.data:
+                                    status = poll.data.get("status", "").lower()
+                                    if status in ("completed", "succeeded"):
+                                        image_url = poll.data.get("image_url") or poll.data.get("url")
+                                        if image_url:
+                                            import httpx
+                                            img_resp = httpx.get(image_url, timeout=60)
+                                            filename = f"char_{char.id}_{int(time.time())}.png"
+                                            filepath = upload_dir / filename
+                                            filepath.write_bytes(img_resp.content)
+                                            character.reference_image_path = str(filepath)
+                                            logger.info(f"[AutoGenerate] Character image generated (async): {char.id}")
+                                        break
+                                    elif status == "failed":
+                                        logger.error(f"[AutoGenerate] Character image async task failed for {char.id}")
+                                        break
+                                elif not poll.success:
+                                    logger.error(f"[AutoGenerate] Character image poll failed for {char.id}: {poll.error}")
+                                    break
+                            else:
+                                logger.error(f"[AutoGenerate] Character image timeout for {char.id}")
+
+                        elif response.success and response.data:
                             image_data = response.data
                             if "url" in image_data or "image_url" in image_data:
                                 import httpx
@@ -1021,15 +1262,60 @@ def auto_generate_pipeline(
                             shot.image_status = "skipped"
                             completed += 1
                             continue
-                        ref_image_b64 = _find_char_ref_for_shot(shot, char_ref_map)
+                        ref_images_b64 = _find_char_refs_for_shot(shot, char_ref_map)
+                        ref_image_b64 = ref_images_b64[0] if ref_images_b64 else None
                         service_type = ServiceType.IMAGE_TO_IMAGE if ref_image_b64 else ServiceType.TEXT_TO_IMAGE
                         request = AIRequest(
                             prompt=prompt, service_type=service_type,
+                            model=auto_img_model,
                             image_base64=ref_image_b64,
-                            params={"size": "1088x1920"},
+                            params={
+                                "size": "1088x1920",
+                                "adapter_config": auto_img_adapter_config,
+                                "extra_ref_images": ref_images_b64[1:] if len(ref_images_b64) > 1 else [],
+                            },
+                            **auto_img_overrides,
                         )
                         response = run_async(adapter.generate(request))
-                        if response.success and response.data:
+
+                        # Async adapter: poll for result
+                        if response.task_id and hasattr(adapter, 'check_task'):
+                            shot.image_task_id = response.task_id
+                            shot.image_status = "processing"
+                            session.commit()
+
+                            max_wait = 300
+                            interval = 5
+                            elapsed = 0
+                            while elapsed < max_wait:
+                                time.sleep(interval)
+                                elapsed += interval
+                                poll = run_async(adapter.check_task(response.task_id, request=request))
+                                if poll.success and poll.data:
+                                    status = poll.data.get("status", "").lower()
+                                    if status in ("completed", "succeeded"):
+                                        image_url = poll.data.get("image_url") or poll.data.get("url")
+                                        if image_url:
+                                            import httpx
+                                            img_resp = httpx.get(image_url, timeout=60)
+                                            filename = f"shot_{shot_id}_{int(time.time())}.png"
+                                            filepath = upload_dir / filename
+                                            filepath.write_bytes(img_resp.content)
+                                            shot.image_path = str(filepath)
+                                            shot.image_status = "completed"
+                                            shot.image_task_id = response.task_id
+                                            logger.info(f"[AutoGenerate] Shot image saved (async): {shot_id}")
+                                        break
+                                    elif status == "failed":
+                                        shot.image_status = "failed"
+                                        break
+                                elif not poll.success:
+                                    shot.image_status = "failed"
+                                    break
+                            else:
+                                shot.image_status = "failed"
+
+                        elif response.success and response.data:
                             image_data = response.data
                             saved = False
                             if "url" in image_data or "image_url" in image_data:
@@ -1095,8 +1381,15 @@ def auto_generate_pipeline(
             shot_ids = [s.id for s in pending_video_shots]
             total = len(shot_ids)
 
-            vid_providers = registry.get_providers_for_service(ServiceType.IMAGE_TO_VIDEO)
-            vid_adapter = vid_providers[0] if vid_providers else None
+            # Extract provider/model from user config for video adapter routing
+            auto_vid_provider = auto_vid_overrides.pop("override_provider", None)
+            auto_vid_model = auto_vid_overrides.pop("override_model", None)
+            auto_vid_adapter_config = auto_vid_overrides.pop("_adapter_config", {})
+
+            vid_adapter = registry.get_provider(auto_vid_provider) if auto_vid_provider else None
+            if not vid_adapter:
+                vid_providers = registry.get_providers_for_service(ServiceType.IMAGE_TO_VIDEO)
+                vid_adapter = vid_providers[0] if vid_providers else None
             if not vid_adapter:
                 raise ValueError("No IMAGE_TO_VIDEO provider available")
 
@@ -1152,7 +1445,10 @@ def auto_generate_pipeline(
                         request = AIRequest(
                             prompt=prompt,
                             service_type=ServiceType.IMAGE_TO_VIDEO,
+                            model=auto_vid_model,
                             image_url=image_url,
+                            params={"adapter_config": auto_vid_adapter_config},
+                            **auto_vid_overrides,
                         )
                         response = run_async(vid_adapter.generate(request))
 

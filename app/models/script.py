@@ -57,6 +57,7 @@ class Shot(Base, TimestampMixin):
     mood: Mapped[str | None] = mapped_column(String(50))
     dialog: Mapped[str | None] = mapped_column(Text)
     dialog_lang: Mapped[str | None] = mapped_column(String(10))
+    characters: Mapped[str | None] = mapped_column(String(500))
 
     # Image generation
     image_prompt: Mapped[str | None] = mapped_column(Text)

@@ -15,14 +15,15 @@ class SeedanceAdapter(BaseAdapter):
         self.api_key = settings.SEEDANCE_API_KEY
 
     async def generate(self, request: AIRequest) -> AIResponse:
-        api_key = self.api_key
+        api_key = request.override_api_key or self.api_key
         if not api_key:
             return AIResponse(success=False, error="Seedance API key not configured")
 
         if not request.image_url:
             return AIResponse(success=False, error="image_url (first frame) is required for Seedance")
 
-        url = f"{SEEDANCE_BASE_URL}/tasks"
+        base_url = request.override_base_url or SEEDANCE_BASE_URL
+        url = f"{base_url}/tasks"
         headers = {
             "Content-Type": "application/json",
             "Authorization": f"Bearer {api_key}",
@@ -78,12 +79,13 @@ class SeedanceAdapter(BaseAdapter):
             logger.error(f"Seedance error: {e}")
             return AIResponse(success=False, error=str(e))
 
-    async def check_task(self, task_id: str) -> AIResponse:
-        api_key = self.api_key
+    async def check_task(self, task_id: str, *, request: AIRequest | None = None) -> AIResponse:
+        api_key = (request.override_api_key if request else None) or self.api_key
         if not api_key:
             return AIResponse(success=False, error="Seedance API key not configured")
 
-        url = f"{SEEDANCE_BASE_URL}/tasks/{task_id}"
+        base_url = (request.override_base_url if request else None) or SEEDANCE_BASE_URL
+        url = f"{base_url}/tasks/{task_id}"
         headers = {
             "Authorization": f"Bearer {api_key}",
         }

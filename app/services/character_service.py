@@ -99,14 +99,30 @@ class CharacterService:
         }
 
     async def generate_reference_image(
-        self, character_id: int, provider: str | None = None, aspect_ratio: str = "9:16"
+        self, character_id: int, provider: str | None = None, aspect_ratio: str = "9:16",
+        user_id: int | None = None,
     ) -> dict:
         """Generate character reference image using AI. Returns result info."""
         character = await self.get_character(character_id)
         if not character:
             raise ValueError("Character not found")
 
-        adapter = registry.get_provider(provider) if provider else None
+        # Resolve user config overrides
+        overrides = {}
+        adapter_config = {}
+        if user_id:
+            from app.worker.tasks.generation import _resolve_overrides
+            from app.worker.db import get_sync_session
+            with get_sync_session() as session:
+                overrides = _resolve_overrides(session, user_id, "text_to_image")
+            resolved_provider = provider or overrides.pop("override_provider", None)
+            resolved_model = overrides.pop("override_model", None)
+            adapter_config = overrides.pop("_adapter_config", {})
+        else:
+            resolved_provider = provider
+            resolved_model = None
+
+        adapter = registry.get_provider(resolved_provider) if resolved_provider else None
         if not adapter:
             providers = registry.get_providers_for_service(ServiceType.TEXT_TO_IMAGE)
             if providers:
@@ -143,7 +159,9 @@ class CharacterService:
         request = AIRequest(
             prompt=prompt,
             service_type=ServiceType.TEXT_TO_IMAGE,
-            params={"size": size},
+            model=resolved_model,
+            params={"size": size, "adapter_config": adapter_config},
+            **overrides,
         )
 
         response = await adapter.generate(request)
@@ -151,11 +169,41 @@ class CharacterService:
         if not response.success:
             raise RuntimeError(f"Image generation failed: {response.error}")
 
-        # Save the generated image
-        if response.data:
-            upload_dir = __import__("pathlib").Path("data/uploads")
-            upload_dir.mkdir(parents=True, exist_ok=True)
+        upload_dir = __import__("pathlib").Path("data/uploads")
+        upload_dir.mkdir(parents=True, exist_ok=True)
 
+        # Async adapter: poll for result
+        if response.task_id and hasattr(adapter, 'check_task'):
+            import asyncio
+            max_wait = 300
+            interval = 5
+            elapsed = 0
+            while elapsed < max_wait:
+                await asyncio.sleep(interval)
+                elapsed += interval
+                poll = await adapter.check_task(response.task_id, request=request)
+                if poll.success and poll.data:
+                    status = poll.data.get("status", "").lower()
+                    if status in ("completed", "succeeded"):
+                        image_url = poll.data.get("image_url") or poll.data.get("url")
+                        if image_url:
+                            import httpx
+                            img_resp = httpx.get(image_url, timeout=60)
+                            filename = f"char_{character_id}_{int(time.time())}.png"
+                            filepath = upload_dir / filename
+                            filepath.write_bytes(img_resp.content)
+                            character.reference_image_path = str(filepath)
+                            await self.db.commit()
+                            return {"character_id": character_id, "reference_image_path": str(filepath), "status": "completed"}
+                        break
+                    elif status == "failed":
+                        raise RuntimeError("Async image generation task failed")
+                elif not poll.success:
+                    raise RuntimeError(f"Image poll failed: {poll.error}")
+            raise RuntimeError("Image generation timed out")
+
+        # Save the generated image (sync adapter)
+        if response.data:
             if "url" in response.data or "image_url" in response.data:
                 import httpx
                 img_url = response.data.get("url") or response.data.get("image_url")

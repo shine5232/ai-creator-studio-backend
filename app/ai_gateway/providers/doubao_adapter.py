@@ -18,11 +18,12 @@ class DoubaoAdapter(BaseAdapter):
         self.endpoint_id = settings.DOUBAO_ENDPOINT_ID
 
     async def generate(self, request: AIRequest) -> AIResponse:
-        api_key = self.api_key
+        api_key = request.override_api_key or self.api_key
         if not api_key:
             return AIResponse(success=False, error="Doubao API key not configured")
 
-        url = f"{self.BASE_URL}/images/generations"
+        base_url = request.override_base_url or self.BASE_URL
+        url = f"{base_url}/images/generations"
         headers = {
             "Content-Type": "application/json",
             "Authorization": f"Bearer {api_key}",

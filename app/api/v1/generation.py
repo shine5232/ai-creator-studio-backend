@@ -29,6 +29,7 @@ async def batch_generate_images(
     service = GenerationService(db)
     return await service.generate_images_batch(
         project_id, data.provider, data.model, data.shot_ids,
+        user_id=current_user.id,
     )
 
 
@@ -45,6 +46,7 @@ async def batch_generate_videos(
     service = GenerationService(db)
     return await service.generate_videos_batch(
         project_id, data.provider, data.model, data.shot_ids,
+        user_id=current_user.id,
     )
 
 
@@ -210,6 +212,7 @@ async def retry_generation_task(
             provider=params.get("provider"),
             model=params.get("model"),
             workflow_step_id=new_step.id,
+            user_id=current_user.id,
         )
     elif step.step_name == "generate_videos":
         shot_ids = params.get("shot_ids", [])
@@ -219,6 +222,7 @@ async def retry_generation_task(
             provider=params.get("provider"),
             model=params.get("model"),
             workflow_step_id=new_step.id,
+            user_id=current_user.id,
         )
     elif step.step_name == "merge_videos":
         new_result = merge_project_videos.delay(
@@ -285,6 +289,7 @@ async def auto_generate(
         project_id=project_id,
         script_params=script_params,
         workflow_step_id=step.id,
+        user_id=current_user.id,
     )
 
     step.celery_task_id = result.id

@@ -26,12 +26,16 @@ async def lifespan(app: FastAPI):
     from app.ai_gateway.providers.seedance_adapter import SeedanceAdapter
     from app.ai_gateway.providers.nano_banana_adapter import NanoBananaAdapter
     from app.ai_gateway.providers.glm_adapter import QwenAdapter
+    from app.ai_gateway.providers.grok_adapter import GrokAdapter
+    from app.ai_gateway.providers.generic_adapter import GenericAdapter
 
     registry.register(DoubaoAdapter())
     registry.register(WanxAdapter())
     registry.register(SeedanceAdapter())
     registry.register(NanoBananaAdapter())
     registry.register(QwenAdapter())
+    registry.register(GrokAdapter())
+    registry.register(GenericAdapter())
     logger.info(f"Registered {len(registry.list_providers())} AI providers")
 
     yield
@@ -102,6 +106,7 @@ from app.api.v1.knowledge import router as knowledge_router  # noqa: E402
 from app.api.v1.analytics import router as analytics_router  # noqa: E402
 from app.api.v1.ai_gateway import router as ai_gateway_router  # noqa: E402
 from app.api.v1.cookies import router as cookies_router  # noqa: E402
+from app.api.v1.user_ai_config import router as user_ai_config_router  # noqa: E402
 
 app.include_router(auth_router, prefix="/api/v1")
 app.include_router(projects_router, prefix="/api/v1")
@@ -115,6 +120,7 @@ app.include_router(knowledge_router, prefix="/api/v1")
 app.include_router(analytics_router, prefix="/api/v1")
 app.include_router(ai_gateway_router, prefix="/api/v1/ai")
 app.include_router(cookies_router, prefix="/api/v1")
+app.include_router(user_ai_config_router, prefix="/api/v1")
 
 # Static files for analysis thumbnails and reports
 Path("data/analysis").mkdir(parents=True, exist_ok=True)
