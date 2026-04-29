@@ -208,7 +208,7 @@ class GenerationService:
         self, project_id: int, aspect_ratio: str = "9:16",
         user_id: int | None = None,
     ) -> dict:
-        """批量生成该项目所有人物的参考图。"""
+        """批量生成该项目所有人物的多角度参考图。"""
         result = await self.db.execute(
             select(Character).where(Character.project_id == project_id)
         )
@@ -228,9 +228,9 @@ class GenerationService:
         self.db.add(step)
         await self.db.commit()
 
-        from app.worker.tasks.generation import generate_character_images
+        from app.worker.tasks.generation import generate_character_multi_angle_images
 
-        celery_result = generate_character_images.delay(
+        celery_result = generate_character_multi_angle_images.delay(
             character_ids=[c.id for c in characters],
             project_id=project_id,
             aspect_ratio=aspect_ratio,
@@ -241,7 +241,7 @@ class GenerationService:
         step.celery_task_id = celery_result.id
         await self.db.commit()
 
-        logger.info(f"Dispatched character image task {celery_result.id}: {len(characters)} characters for project {project_id}")
+        logger.info(f"Dispatched multi-angle character image task {celery_result.id}: {len(characters)} characters for project {project_id}")
         return {
             "task_id": celery_result.id,
             "task_type": "generate_character_images",

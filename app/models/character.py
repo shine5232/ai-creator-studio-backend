@@ -24,12 +24,32 @@ class Character(Base, TimestampMixin):
     reference_image_path: Mapped[str | None] = mapped_column(String(500))
     reference_prompt_cn: Mapped[str | None] = mapped_column(Text)
     reference_prompt_en: Mapped[str | None] = mapped_column(Text)
+    detailed_description: Mapped[str | None] = mapped_column(Text)
 
     project: Mapped["Project"] = relationship(back_populates="characters")  # noqa: F821
     periods: Mapped[list["CharacterPeriod"]] = relationship(
         back_populates="character", order_by="CharacterPeriod.sort_order",
         cascade="all, delete-orphan", lazy="selectin",
     )
+    reference_images: Mapped[list["CharacterReferenceImage"]] = relationship(
+        back_populates="character", cascade="all, delete-orphan", lazy="selectin",
+    )
+
+
+class CharacterReferenceImage(Base, TimestampMixin):
+    __tablename__ = "character_reference_images"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    character_id: Mapped[int] = mapped_column(
+        Integer, ForeignKey("characters.id", ondelete="CASCADE"), nullable=False,
+    )
+    angle: Mapped[str] = mapped_column(String(20), nullable=False)  # "front"|"left"|"right"|"back"
+    image_path: Mapped[str | None] = mapped_column(String(500))
+    prompt_cn: Mapped[str | None] = mapped_column(Text)
+    prompt_en: Mapped[str | None] = mapped_column(Text)
+    status: Mapped[str] = mapped_column(String(20), default="pending")  # pending|processing|completed|failed
+
+    character: Mapped["Character"] = relationship(back_populates="reference_images")
 
 
 class CharacterPeriod(Base):

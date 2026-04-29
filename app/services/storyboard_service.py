@@ -190,6 +190,13 @@ class StoryboardService:
             "- time_range: 时间范围，如 '0-3s'（可选）\n"
             "- shot_type: 镜头类型，如 close_up/medium/wide/establishing（可选）\n"
             "- characters: 该镜头中出现的人物名称，逗号分隔（可选）\n"
+            "- character_angles: 人物角度指定，格式 '人物名:角度'，用逗号分隔多个。角度可选 front/left/right/back。"
+            " 根据镜头中人物的朝向和动作判断最合适的观察角度。\n"
+            "  角度选择规则：\n"
+            "  - 正面(front)：人物面向观众，情感表达镜头\n"
+            "  - 左侧(left)：人物面向右侧（观众看到左脸），侧面叙事\n"
+            "  - 右侧(right)：人物面向左侧（观众看到右脸），侧面叙事\n"
+            "  - 背面(back)：人物背对观众，离场、远望、悬念镜头\n"
             "- description: 镜头画面描述（必填，中文，包含人物外貌、动作、环境细节）\n"
             "- tone: 画面色调（可选）\n"
             "- mood: 情绪氛围（可选）\n"
@@ -247,6 +254,7 @@ class StoryboardService:
                 shot_type=sd.get("shot_type"),
                 description=sd.get("description", f"Shot {i}"),
                 characters=characters,
+                character_angles=sd.get("character_angles"),
                 tone=sd.get("tone"),
                 mood=sd.get("mood"),
                 image_prompt=sd.get("image_prompt"),

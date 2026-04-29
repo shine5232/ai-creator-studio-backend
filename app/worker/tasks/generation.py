@@ -10,6 +10,7 @@ from app.ai_gateway.base import AIRequest, ServiceType
 from app.ai_gateway.registry import registry
 from app.ai_gateway.user_config_resolver import resolve_user_config
 from app.models.character import Character
+from app.models.character import CharacterReferenceImage
 from app.models.script import Script, Shot, Storyboard
 from app.utils.logger import logger
 from app.worker.celery_app import celery_app
@@ -354,6 +355,111 @@ def _build_char_prompt(character, aspect_ratio: str = "9:16") -> str:
     return prompt_cn
 
 
+def _generate_detailed_char_description_sync(
+    character_id: int, text_overrides: dict,
+) -> dict | None:
+    """Sync version: generate detailed character description using AI (for Celery tasks)."""
+    providers = registry.get_providers_for_service(ServiceType.TEXT_GENERATION)
+    if not providers:
+        return None
+    adapter = providers[0]
+
+    with get_sync_session() as session:
+        character = session.get(Character, character_id)
+        if not character:
+            return None
+
+        attr_parts = []
+        if character.gender:
+            attr_parts.append(f"性别: {character.gender}")
+        if character.age:
+            attr_parts.append(f"年龄: {character.age}岁")
+        if character.nationality:
+            attr_parts.append(f"国籍/种族: {character.nationality}")
+        if character.skin_tone:
+            attr_parts.append(f"肤色: {character.skin_tone}")
+        if character.appearance:
+            attr_parts.append(f"外貌: {character.appearance}")
+        if character.ethnic_features:
+            attr_parts.append(f"种族特征: {character.ethnic_features}")
+        if character.clothing:
+            attr_parts.append(f"穿着: {character.clothing}")
+        if character.personality:
+            attr_parts.append(f"性格: {character.personality}")
+        attr_text = "\n".join(attr_parts)
+
+        prompt = (
+            f"你是一个专业的AI人物肖像描述专家。请根据以下人物基本信息，生成一份详细的人物肖像描述，"
+            f"包含面容、发型、肤色质感、体型、独特标记、整体气质等细节。同时为该人物的4个角度"
+            f"（正面/front、左侧/left、右侧/right、背面/back）各生成一段文生图提示词。\n\n"
+            f"人物名称: {character.name}\n"
+            f"基本信息:\n{attr_text}\n\n"
+            f"请严格按照以下 JSON 格式返回（不要包含任何其他文字）:\n"
+            f'{{\n'
+            f'  "detailed_description": "一段详细的中文人物肖像描述，200-400字",\n'
+            f'  "angle_prompts": {{\n'
+            f'    "front": "正面全身/半身肖像文生图提示词，中文，包含面部细节、穿着、光影",\n'
+            f'    "left": "左侧角度全身/半身肖像文生图提示词",\n'
+            f'    "right": "右侧角度全身/半身肖像文生图提示词",\n'
+            f'    "back": "背面全身肖像文生图提示词"\n'
+            f'  }}\n'
+            f'}}\n'
+        )
+        request = AIRequest(
+            prompt=prompt,
+            service_type=ServiceType.TEXT_GENERATION,
+            params={"temperature": 0.7, "max_tokens": 2048},
+            **text_overrides,
+        )
+        response = run_async(adapter.generate(request))
+        if not response.success or not response.data:
+            logger.warning(f"AI description generation failed for char {character_id}: {response.error}")
+            return None
+
+        text = response.data.get("text", "").strip()
+        start = text.find("{")
+        end = text.rfind("}") + 1
+        if start < 0 or end <= start:
+            return None
+        try:
+            parsed = json.loads(text[start:end])
+        except json.JSONDecodeError:
+            return None
+
+        detailed_description = parsed.get("detailed_description", "")
+        angle_prompts = parsed.get("angle_prompts", {})
+
+        character.detailed_description = detailed_description
+
+        for angle in ("front", "left", "right", "back"):
+            prompt_cn = angle_prompts.get(angle, "")
+            if not prompt_cn:
+                continue
+            result = session.execute(
+                select(CharacterReferenceImage).where(
+                    CharacterReferenceImage.character_id == character_id,
+                    CharacterReferenceImage.angle == angle,
+                )
+            )
+            ref_img = result.scalar_one_or_none()
+            if ref_img:
+                ref_img.prompt_cn = prompt_cn
+                if ref_img.status != "completed":
+                    ref_img.status = "pending"
+            else:
+                ref_img = CharacterReferenceImage(
+                    character_id=character_id,
+                    angle=angle,
+                    prompt_cn=prompt_cn,
+                    status="pending",
+                )
+                session.add(ref_img)
+
+        session.commit()
+        logger.info(f"[SyncDesc] Generated detailed description for character {character_id}")
+        return {"detailed_description": detailed_description, "angle_prompts": angle_prompts}
+
+
 @celery_app.task(
     bind=True, base=BaseWorkflowTask,
     name="app.worker.tasks.generation.generate_character_images",
@@ -485,10 +591,205 @@ def generate_character_images(
     logger.info(f"Character image generation complete: {completed}/{total} for project {project_id}")
 
 
-def _find_char_refs_for_shot(shot: Shot, char_ref_map: dict[str, str]) -> list[str]:
+def _save_generated_image(image_data: dict, upload_dir: Path, filename: str) -> str | None:
+    """Save generated image from AI response to disk, return file path or None."""
+    if "url" in image_data or "image_url" in image_data:
+        import httpx
+        img_url = image_data.get("url") or image_data.get("image_url")
+        img_resp = httpx.get(img_url, timeout=60)
+        filepath = upload_dir / filename
+        filepath.write_bytes(img_resp.content)
+        return str(filepath)
+    elif "base64" in image_data or "image_b64" in image_data:
+        import base64
+        b64_data = image_data.get("base64") or image_data.get("image_b64")
+        filepath = upload_dir / filename
+        filepath.write_bytes(base64.b64decode(b64_data))
+        return str(filepath)
+    elif "local_path" in image_data:
+        return image_data["local_path"]
+    return None
+
+
+def _generate_single_image(adapter, prompt: str, resolved_model: str | None,
+                           adapter_config: dict, img_overrides: dict,
+                           upload_dir: Path, filename: str) -> str | None:
+    """Generate a single image via adapter, handle sync/async, return saved file path."""
+    request = AIRequest(
+        prompt=prompt,
+        service_type=ServiceType.TEXT_TO_IMAGE,
+        model=resolved_model,
+        params={"size": "1088x1920", "adapter_config": adapter_config},
+        **img_overrides,
+    )
+    response = run_async(adapter.generate(request))
+
+    # Async adapter: poll for result
+    if response.task_id and hasattr(adapter, 'check_task'):
+        max_wait = 300
+        interval = 5
+        elapsed = 0
+        while elapsed < max_wait:
+            time.sleep(interval)
+            elapsed += interval
+            poll = run_async(adapter.check_task(response.task_id, request=request))
+            if poll.success and poll.data:
+                status = poll.data.get("status", "").lower()
+                if status in ("completed", "succeeded"):
+                    image_url = poll.data.get("image_url") or poll.data.get("url")
+                    if image_url:
+                        import httpx
+                        img_resp = httpx.get(image_url, timeout=60)
+                        filepath = upload_dir / filename
+                        filepath.write_bytes(img_resp.content)
+                        return str(filepath)
+                    break
+                elif status == "failed":
+                    return None
+            elif not poll.success:
+                return None
+        return None
+
+    # Sync adapter
+    if response.success and response.data:
+        return _save_generated_image(response.data, upload_dir, filename)
+    return None
+
+
+@celery_app.task(
+    bind=True, base=BaseWorkflowTask,
+    name="app.worker.tasks.generation.generate_character_multi_angle_images",
+    soft_time_limit=1200, time_limit=1800,
+)
+def generate_character_multi_angle_images(
+    self,
+    character_ids: list[int],
+    project_id: int,
+    aspect_ratio: str = "9:16",
+    workflow_step_id: int = 0,
+    user_id: int | None = None,
+):
+    """为每个角色生成4个角度（front/left/right/back）的参照图。"""
+    angles = ["front", "left", "right", "back"]
+    total = len(character_ids) * len(angles)
+
+    # Resolve user config overrides
+    img_overrides = {}
+    if user_id:
+        with get_sync_session() as session:
+            img_overrides = _resolve_overrides(session, user_id, "text_to_image")
+
+    resolved_provider = img_overrides.pop("override_provider", None)
+    resolved_model = img_overrides.pop("override_model", None)
+    adapter_config = img_overrides.pop("_adapter_config", {})
+
+    adapter = registry.get_provider(resolved_provider) if resolved_provider else None
+    if not adapter:
+        providers = registry.get_providers_for_service(ServiceType.TEXT_TO_IMAGE)
+        if providers:
+            adapter = providers[0]
+        else:
+            raise ValueError("No AI provider found for image generation")
+
+    upload_dir = Path("data/uploads")
+    upload_dir.mkdir(parents=True, exist_ok=True)
+
+    completed = 0
+    for char_id in character_ids:
+        with get_sync_session() as session:
+            char_result = session.execute(
+                select(CharacterReferenceImage).where(
+                    CharacterReferenceImage.character_id == char_id,
+                )
+            )
+            ref_images = {r.angle: r for r in char_result.scalars().all()}
+
+        for angle in angles:
+            try:
+                with get_sync_session() as session:
+                    ref_img = session.execute(
+                        select(CharacterReferenceImage).where(
+                            CharacterReferenceImage.character_id == char_id,
+                            CharacterReferenceImage.angle == angle,
+                        )
+                    ).scalar_one_or_none()
+
+                    if not ref_img or ref_img.status == "completed":
+                        completed += 1
+                        continue
+
+                    # Use angle-specific prompt, fallback to basic prompt
+                    if ref_img.prompt_cn:
+                        prompt = ref_img.prompt_cn
+                    else:
+                        character = session.get(Character, char_id)
+                        prompt = _build_char_prompt(character, aspect_ratio)
+
+                    ref_img.status = "processing"
+                    session.commit()
+
+                filename = f"char_{char_id}_{angle}_{int(time.time())}.png"
+                saved_path = _generate_single_image(
+                    adapter, prompt, resolved_model, adapter_config,
+                    img_overrides, upload_dir, filename,
+                )
+
+                with get_sync_session() as session:
+                    ref_img = session.execute(
+                        select(CharacterReferenceImage).where(
+                            CharacterReferenceImage.character_id == char_id,
+                            CharacterReferenceImage.angle == angle,
+                        )
+                    ).scalar_one_or_none()
+                    if ref_img:
+                        if saved_path:
+                            ref_img.image_path = saved_path
+                            ref_img.status = "completed"
+                        else:
+                            ref_img.status = "failed"
+                        session.commit()
+
+                    # Backward compat: set front image as character.reference_image_path
+                    if saved_path and angle == "front":
+                        character = session.get(Character, char_id)
+                        if character:
+                            character.reference_image_path = saved_path
+                            session.commit()
+
+            except Exception as e:
+                logger.error(f"Error generating {angle} image for character {char_id}: {e}")
+                try:
+                    with get_sync_session() as session:
+                        ref_img = session.execute(
+                            select(CharacterReferenceImage).where(
+                                CharacterReferenceImage.character_id == char_id,
+                                CharacterReferenceImage.angle == angle,
+                            )
+                        ).scalar_one_or_none()
+                        if ref_img:
+                            ref_img.status = "failed"
+                            session.commit()
+                except Exception:
+                    pass
+
+            completed += 1
+            progress = int(completed / total * 100)
+            self.update_progress(workflow_step_id, progress, f"已完成 {completed}/{total} 个人物角度图片")
+
+    logger.info(f"Multi-angle character image generation complete: {completed}/{total} for project {project_id}")
+
+
+def _find_char_refs_for_shot(
+    shot: Shot,
+    char_ref_map: dict[str, dict[str, str]],
+    legacy_char_ref_map: dict[str, str] | None = None,
+) -> list[str]:
     """从 shot.characters 字段或文本中匹配人物名称，返回所有匹配的参照图 base64 列表。
 
-    优先使用 shot.characters 字段（精确匹配），fallback 到 description 文本子串匹配。
+    char_ref_map: {name: {angle: path}} — 多角度参照图映射
+    legacy_char_ref_map: {name: path} — 旧版单图 fallback
+
+    优先使用 shot.character_angles 指定角度，fallback 到 front → 任意可用角度。
     """
     import base64
 
@@ -498,37 +799,84 @@ def _find_char_refs_for_shot(shot: Shot, char_ref_map: dict[str, str]) -> list[s
             return base64.b64encode(p.read_bytes()).decode()
         return None
 
+    def _pick_best_ref(name: str) -> str | None:
+        """Pick the best reference image for a character, respecting angle preference."""
+        # Parse character_angles to find this character's preferred angle
+        preferred_angle = None
+        if shot.character_angles:
+            for entry in shot.character_angles.split(","):
+                entry = entry.strip()
+                if ":" in entry:
+                    char_name, angle = entry.split(":", 1)
+                    if char_name.strip() == name:
+                        preferred_angle = angle.strip()
+                        break
+
+        angle_map = char_ref_map.get(name)
+        if angle_map:
+            # Priority: specified angle → front → any available
+            if preferred_angle and preferred_angle in angle_map:
+                return angle_map[preferred_angle]
+            if "front" in angle_map:
+                return angle_map["front"]
+            for path in angle_map.values():
+                return path  # first available
+
+        # Legacy fallback
+        if legacy_char_ref_map:
+            return legacy_char_ref_map.get(name)
+
+        return None
+
     matched: list[str] = []
 
-    # 1. 优先使用 shot.characters 字段
+    # 1. Prefer shot.characters field
     if shot.characters:
         for name in shot.characters.split(","):
             name = name.strip()
             if not name:
                 continue
-            # 精确匹配人物名称
-            ref_path = char_ref_map.get(name)
+            ref_path = _pick_best_ref(name)
             if ref_path:
                 b64 = _load_ref(ref_path)
                 if b64:
                     matched.append(b64)
             else:
-                # 尝试别名匹配（如"小明"可能在 map 中是全名"李明"）
-                for map_name, map_path in char_ref_map.items():
+                # Alias matching
+                for map_name, angle_map in char_ref_map.items():
                     if name in map_name or map_name in name:
-                        b64 = _load_ref(map_path)
-                        if b64:
-                            matched.append(b64)
-                            break
+                        # Try front first, then any
+                        path = angle_map.get("front") or next(iter(angle_map.values()), None)
+                        if path:
+                            b64 = _load_ref(path)
+                            if b64:
+                                matched.append(b64)
+                                break
+                if not matched:
+                    if legacy_char_ref_map:
+                        for map_name, map_path in legacy_char_ref_map.items():
+                            if name in map_name or map_name in name:
+                                b64 = _load_ref(map_path)
+                                if b64:
+                                    matched.append(b64)
+                                    break
 
-    # 2. fallback: 从 description 文本中匹配
+    # 2. Fallback: match from description text
     if not matched:
         text = f"{shot.description or ''} {shot.act_name or ''}"
-        for name, ref_path in char_ref_map.items():
+        for name, angle_map in char_ref_map.items():
             if name in text:
-                b64 = _load_ref(ref_path)
-                if b64:
-                    matched.append(b64)
+                path = angle_map.get("front") or next(iter(angle_map.values()), None)
+                if path:
+                    b64 = _load_ref(path)
+                    if b64:
+                        matched.append(b64)
+        if not matched and legacy_char_ref_map:
+            for name, ref_path in legacy_char_ref_map.items():
+                if name in text:
+                    b64 = _load_ref(ref_path)
+                    if b64:
+                        matched.append(b64)
 
     return matched
 
@@ -560,15 +908,23 @@ def generate_images_for_shots(
     resolved_model = model or img_overrides.pop("override_model", None)
     shot_adapter_config = img_overrides.pop("_adapter_config", {})
 
-    # 预加载人物参照图映射 {name: image_path}
-    char_ref_map: dict[str, str] = {}
+    # 预加载人物参照图映射 {name: {angle: path}}
+    char_ref_map: dict[str, dict[str, str]] = {}
+    legacy_char_ref_map: dict[str, str] = {}
     with get_sync_session() as session:
         char_result = session.execute(
             select(Character).where(Character.project_id == project_id)
         )
         for c in char_result.scalars().all():
             if c.reference_image_path:
-                char_ref_map[c.name] = c.reference_image_path
+                legacy_char_ref_map[c.name] = c.reference_image_path
+            # Build angle map from CharacterReferenceImage records
+            angle_map: dict[str, str] = {}
+            for ref in c.reference_images:
+                if ref.image_path and ref.status == "completed":
+                    angle_map[ref.angle] = ref.image_path
+            if angle_map:
+                char_ref_map[c.name] = angle_map
 
     adapter = registry.get_provider(resolved_provider) if resolved_provider else None
 
@@ -598,10 +954,8 @@ def generate_images_for_shots(
                     completed += 1
                     continue
 
-                # 查找匹配的人物参照图（支持多人物）
-                ref_images_b64 = _find_char_refs_for_shot(shot, char_ref_map)
-
-                service_type = ServiceType.TEXT_TO_IMAGE
+                # 查找匹配的人物参照图（支持多人物，角度感知）
+                ref_images_b64 = _find_char_refs_for_shot(shot, char_ref_map, legacy_char_ref_map)
                 ref_image_b64 = None
                 if ref_images_b64:
                     service_type = ServiceType.IMAGE_TO_IMAGE
@@ -981,8 +1335,8 @@ def auto_generate_pipeline(
 
     self.update_progress(workflow_step_id, 10, "步骤 1/7: 脚本生成完成")
 
-    # ── Step 2: 补全人物参照提示词 (10% → 15%) ──────────────────────────────
-    self.update_progress(workflow_step_id, 10, "步骤 2/7: 检查人物参照提示词...")
+    # ── Step 2: AI 生成详细人物描述 + 4角度提示词 (10% → 15%) ──────────────
+    self.update_progress(workflow_step_id, 10, "步骤 2/7: 生成详细人物描述...")
     try:
         providers = registry.get_providers_for_service(ServiceType.TEXT_GENERATION)
         text_adapter = providers[0] if providers else None
@@ -991,35 +1345,24 @@ def auto_generate_pipeline(
             result = session.execute(
                 select(Character).where(Character.project_id == project_id)
             )
-            chars_no_prompt = [c for c in result.scalars().all() if not c.reference_prompt_cn]
+            chars_no_desc = [c for c in result.scalars().all() if not c.detailed_description]
 
-        if chars_no_prompt and text_adapter:
-            total_chars = len(chars_no_prompt)
-            for i, char in enumerate(chars_no_prompt):
+        if chars_no_desc and text_adapter:
+            total_chars = len(chars_no_desc)
+            for i, char in enumerate(chars_no_desc):
                 try:
-                    prompt = _build_char_prompt(char)
-                    request = AIRequest(
-                        prompt=f"请为以下角色生成一段详细的中文人物肖像文生图提示词，包含外貌、穿着等所有细节：{prompt}",
-                        service_type=ServiceType.TEXT_GENERATION,
-                        params={"temperature": 0.6, "max_tokens": 512},
-                        **auto_text_overrides,
+                    desc_result = _generate_detailed_char_description_sync(
+                        char.id, auto_text_overrides,
                     )
-                    response = run_async(text_adapter.generate(request))
-                    if response.success and response.data:
-                        cn_prompt = response.data.get("text", "").strip()
-                        if cn_prompt:
-                            with get_sync_session() as session:
-                                db_char = session.get(Character, char.id)
-                                if db_char:
-                                    db_char.reference_prompt_cn = cn_prompt
-                                    session.commit()
+                    if desc_result:
+                        logger.info(f"[AutoGenerate] Detailed desc generated for char {char.id}")
                 except Exception as e:
-                    logger.warning(f"[AutoGenerate] Char prompt failed for {char.id}: {e}")
+                    logger.warning(f"[AutoGenerate] Detailed desc failed for {char.id}: {e}")
 
                 prog = _calc_progress(10, 15, i + 1, total_chars)
-                self.update_progress(workflow_step_id, prog, f"步骤 2/7: 人物提示词 {i+1}/{total_chars}")
+                self.update_progress(workflow_step_id, prog, f"步骤 2/7: 人物描述 {i+1}/{total_chars}")
         else:
-            logger.info("[AutoGenerate] Step 2 skipped: all characters have prompts or no text provider")
+            logger.info("[AutoGenerate] Step 2 skipped: all characters have descriptions or no text provider")
     except Exception as e:
         logger.error(f"[AutoGenerate] Step 2 failed (non-fatal): {e}")
 
@@ -1105,8 +1448,8 @@ def auto_generate_pipeline(
 
     self.update_progress(workflow_step_id, 20, "步骤 3/7: 分镜提示词完成")
 
-    # ── Step 4: 生成人物参照图片 (20% → 35%) ────────────────────────────────
-    self.update_progress(workflow_step_id, 20, "步骤 4/7: 正在生成人物参照图片...")
+    # ── Step 4: 生成人物多角度参照图片 (20% → 35%) ─────────────────────────
+    self.update_progress(workflow_step_id, 20, "步骤 4/7: 正在生成人物多角度参照图片...")
     try:
         # Extract provider/model from user config for adapter routing
         auto_img_provider = auto_img_overrides.pop("override_provider", None)
@@ -1119,93 +1462,101 @@ def auto_generate_pipeline(
             img_adapter = img_providers[0] if img_providers else None
 
         if img_adapter:
+            angles = ["front", "left", "right", "back"]
             with get_sync_session() as session:
                 result = session.execute(
                     select(Character).where(Character.project_id == project_id)
                 )
-                characters = [c for c in result.scalars().all() if not c.reference_image_path]
+                characters = list(result.scalars().all())
+                # Filter to characters that have pending reference images
+                char_ids_needing_images = []
+                for c in characters:
+                    if not c.reference_image_path:
+                        char_ids_needing_images.append(c.id)
+                        continue
+                    # Check if multi-angle images exist
+                    completed_angles = [
+                        r.angle for r in c.reference_images
+                        if r.status == "completed" and r.image_path
+                    ]
+                    if len(completed_angles) < 4:
+                        char_ids_needing_images.append(c.id)
 
             upload_dir = Path("data/uploads")
             upload_dir.mkdir(parents=True, exist_ok=True)
-            total_chars = len(characters)
+            total_items = len(char_ids_needing_images) * 4  # 4 angles per character
+            completed = 0
 
-            for i, char in enumerate(characters):
-                try:
-                    with get_sync_session() as session:
-                        character = session.get(Character, char.id)
-                        if not character:
-                            continue
-                        prompt = character.reference_prompt_cn or _build_char_prompt(character)
-                        if not character.reference_prompt_cn:
-                            character.reference_prompt_cn = prompt
+            for char_id in char_ids_needing_images:
+                for angle in angles:
+                    try:
+                        with get_sync_session() as session:
+                            ref_img = session.execute(
+                                select(CharacterReferenceImage).where(
+                                    CharacterReferenceImage.character_id == char_id,
+                                    CharacterReferenceImage.angle == angle,
+                                )
+                            ).scalar_one_or_none()
 
-                        request = AIRequest(
-                            prompt=prompt,
-                            service_type=ServiceType.TEXT_TO_IMAGE,
-                            model=auto_img_model,
-                            params={"size": "1088x1920", "adapter_config": auto_img_adapter_config},
-                            **auto_img_overrides,
-                        )
-                        response = run_async(img_adapter.generate(request))
+                            if ref_img and ref_img.status == "completed" and ref_img.image_path:
+                                completed += 1
+                                continue
 
-                        # Async adapter: poll for result
-                        if response.task_id and hasattr(img_adapter, 'check_task'):
-                            max_wait = 300
-                            interval = 5
-                            elapsed = 0
-                            while elapsed < max_wait:
-                                time.sleep(interval)
-                                elapsed += interval
-                                poll = run_async(img_adapter.check_task(response.task_id, request=request))
-                                if poll.success and poll.data:
-                                    status = poll.data.get("status", "").lower()
-                                    if status in ("completed", "succeeded"):
-                                        image_url = poll.data.get("image_url") or poll.data.get("url")
-                                        if image_url:
-                                            import httpx
-                                            img_resp = httpx.get(image_url, timeout=60)
-                                            filename = f"char_{char.id}_{int(time.time())}.png"
-                                            filepath = upload_dir / filename
-                                            filepath.write_bytes(img_resp.content)
-                                            character.reference_image_path = str(filepath)
-                                            logger.info(f"[AutoGenerate] Character image generated (async): {char.id}")
-                                        break
-                                    elif status == "failed":
-                                        logger.error(f"[AutoGenerate] Character image async task failed for {char.id}")
-                                        break
-                                elif not poll.success:
-                                    logger.error(f"[AutoGenerate] Character image poll failed for {char.id}: {poll.error}")
-                                    break
+                            # Get prompt
+                            if ref_img and ref_img.prompt_cn:
+                                prompt = ref_img.prompt_cn
                             else:
-                                logger.error(f"[AutoGenerate] Character image timeout for {char.id}")
+                                character = session.get(Character, char_id)
+                                prompt = _build_char_prompt(character)
 
-                        elif response.success and response.data:
-                            image_data = response.data
-                            if "url" in image_data or "image_url" in image_data:
-                                import httpx
-                                img_url = image_data.get("url") or image_data.get("image_url")
-                                img_resp = httpx.get(img_url, timeout=60)
-                                filename = f"char_{char.id}_{int(time.time())}.png"
-                                filepath = upload_dir / filename
-                                filepath.write_bytes(img_resp.content)
-                                character.reference_image_path = str(filepath)
-                            elif "base64" in image_data or "image_b64" in image_data:
-                                import base64
-                                b64_data = image_data.get("base64") or image_data.get("image_b64")
-                                filename = f"char_{char.id}_{int(time.time())}.png"
-                                filepath = upload_dir / filename
-                                filepath.write_bytes(base64.b64decode(b64_data))
-                                character.reference_image_path = str(filepath)
-                            elif "local_path" in image_data:
-                                character.reference_image_path = image_data["local_path"]
-                            logger.info(f"[AutoGenerate] Character image generated: {char.id}")
-                        else:
-                            logger.error(f"[AutoGenerate] Character image failed for {char.id}: {response.error}")
-                except Exception as e:
-                    logger.error(f"[AutoGenerate] Char image error {char.id}: {e}")
+                            if ref_img:
+                                ref_img.status = "processing"
+                                session.commit()
 
-                prog = _calc_progress(20, 35, i + 1, total_chars)
-                self.update_progress(workflow_step_id, prog, f"步骤 4/7: 人物图片 {i+1}/{total_chars}")
+                        filename = f"char_{char_id}_{angle}_{int(time.time())}.png"
+                        saved_path = _generate_single_image(
+                            img_adapter, prompt, auto_img_model, auto_img_adapter_config,
+                            auto_img_overrides, upload_dir, filename,
+                        )
+
+                        with get_sync_session() as session:
+                            ref_img = session.execute(
+                                select(CharacterReferenceImage).where(
+                                    CharacterReferenceImage.character_id == char_id,
+                                    CharacterReferenceImage.angle == angle,
+                                )
+                            ).scalar_one_or_none()
+
+                            if saved_path:
+                                if not ref_img:
+                                    ref_img = CharacterReferenceImage(
+                                        character_id=char_id,
+                                        angle=angle,
+                                        image_path=saved_path,
+                                        status="completed",
+                                    )
+                                    session.add(ref_img)
+                                else:
+                                    ref_img.image_path = saved_path
+                                    ref_img.status = "completed"
+
+                                # Backward compat for front angle
+                                if angle == "front":
+                                    character = session.get(Character, char_id)
+                                    if character:
+                                        character.reference_image_path = saved_path
+                            else:
+                                if ref_img:
+                                    ref_img.status = "failed"
+                            session.commit()
+
+                    except Exception as e:
+                        logger.error(f"[AutoGenerate] Char {char_id} angle {angle} error: {e}")
+
+                    completed += 1
+                    if total_items > 0:
+                        prog = _calc_progress(20, 35, completed, total_items)
+                        self.update_progress(workflow_step_id, prog, f"步骤 4/7: 人物图片 {completed}/{total_items}")
         else:
             logger.warning("[AutoGenerate] Step 4 skipped: no TEXT_TO_IMAGE provider")
     except Exception as e:
@@ -1232,15 +1583,22 @@ def auto_generate_pipeline(
             shot_ids = [s.id for s in pending_image_shots]
             total = len(shot_ids)
 
-            # 复用 generate_images_for_shots 的内部逻辑
-            char_ref_map: dict[str, str] = {}
+            # 复用 generate_images_for_shots 的内部逻辑（角度感知）
+            char_ref_map: dict[str, dict[str, str]] = {}
+            legacy_char_ref_map: dict[str, str] = {}
             with get_sync_session() as session:
                 char_result = session.execute(
                     select(Character).where(Character.project_id == project_id)
                 )
                 for c in char_result.scalars().all():
                     if c.reference_image_path:
-                        char_ref_map[c.name] = c.reference_image_path
+                        legacy_char_ref_map[c.name] = c.reference_image_path
+                    angle_map: dict[str, str] = {}
+                    for ref in c.reference_images:
+                        if ref.image_path and ref.status == "completed":
+                            angle_map[ref.angle] = ref.image_path
+                    if angle_map:
+                        char_ref_map[c.name] = angle_map
 
             adapter = img_adapter or (registry.get_providers_for_service(ServiceType.TEXT_TO_IMAGE) or [None])[0]
             if not adapter:
@@ -1262,7 +1620,7 @@ def auto_generate_pipeline(
                             shot.image_status = "skipped"
                             completed += 1
                             continue
-                        ref_images_b64 = _find_char_refs_for_shot(shot, char_ref_map)
+                        ref_images_b64 = _find_char_refs_for_shot(shot, char_ref_map, legacy_char_ref_map)
                         ref_image_b64 = ref_images_b64[0] if ref_images_b64 else None
                         service_type = ServiceType.IMAGE_TO_IMAGE if ref_image_b64 else ServiceType.TEXT_TO_IMAGE
                         request = AIRequest(

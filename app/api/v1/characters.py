@@ -1,9 +1,12 @@
+from datetime import datetime
+
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database import get_db
 from app.api.deps import get_current_user
 from app.models.user import User
+from app.models.project import WorkflowStep
 from app.schemas.character import (
     CharacterResponse, CreateCharacterRequest,
     GenerateReferenceRequest, UpdateCharacterRequest,
@@ -120,3 +123,39 @@ async def generate_reference(
         return await service.generate_reference_image(character_id, provider, aspect_ratio, user_id=current_user.id)
     except ValueError as e:
         raise HTTPException(status_code=404, detail=str(e))
+
+
+@router.post("/characters/{character_id}/generate-description")
+async def generate_detailed_description(
+    character_id: int,
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    """Generate detailed character description and angle-specific prompts using AI."""
+    service = CharacterService(db)
+    try:
+        return await service.generate_detailed_character_description(character_id)
+    except ValueError as e:
+        raise HTTPException(status_code=404, detail=str(e))
+    except RuntimeError as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.post("/projects/{project_id}/characters/generate-multi-angle")
+async def generate_multi_angle_references(
+    project_id: int,
+    data: GenerateReferenceRequest | None = None,
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    """Generate 4-angle reference images for all characters in a project."""
+    project = await ProjectService(db).get_project(project_id)
+    if not project or project.user_id != current_user.id:
+        raise HTTPException(status_code=404, detail="Project not found")
+
+    from app.services.generation_service import GenerationService
+    service = GenerationService(db)
+    aspect_ratio = data.aspect_ratio if data else "9:16"
+    return await service.batch_generate_character_images(
+        project_id, aspect_ratio, user_id=current_user.id,
+    )

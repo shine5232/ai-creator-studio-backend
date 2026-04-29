@@ -58,6 +58,7 @@ class Shot(Base, TimestampMixin):
     dialog: Mapped[str | None] = mapped_column(Text)
     dialog_lang: Mapped[str | None] = mapped_column(String(10))
     characters: Mapped[str | None] = mapped_column(String(500))
+    character_angles: Mapped[str | None] = mapped_column(String(500))  # "小明:front,小红:left"
 
     # Image generation
     image_prompt: Mapped[str | None] = mapped_column(Text)

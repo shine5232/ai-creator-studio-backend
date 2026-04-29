@@ -32,6 +32,7 @@ class UpdateCharacterRequest(BaseModel):
     clothing: str | None = None
     symbol_meaning: str | None = None
     reference_prompt_cn: str | None = None
+    detailed_description: str | None = None
 
 
 class GenerateReferenceRequest(BaseModel):
@@ -54,6 +55,18 @@ class CharacterPeriodResponse(BaseModel):
     model_config = {"from_attributes": True}
 
 
+class CharacterReferenceImageResponse(BaseModel):
+    id: int
+    character_id: int
+    angle: str
+    image_path: str | None
+    prompt_cn: str | None
+    prompt_en: str | None
+    status: str
+
+    model_config = {"from_attributes": True}
+
+
 class CharacterResponse(BaseModel):
     id: int
     name: str
@@ -69,7 +82,9 @@ class CharacterResponse(BaseModel):
     symbol_meaning: str | None
     reference_image_path: str | None
     reference_prompt_cn: str | None
+    detailed_description: str | None
     periods: list[CharacterPeriodResponse] = []
+    reference_images: list[CharacterReferenceImageResponse] = []
     created_at: datetime | None
     updated_at: datetime | None
 

@@ -7536,3 +7536,55 @@ kombu.exceptions.OperationalError: MISCONF Redis is configured to save RDB snaps
 2026-04-28 17:56:48.604 | INFO     | app.ai_gateway.providers.grok_adapter:check_task:186 - [GrokAdapter] check_task response: {'code': 200, 'data': {'actual_time': 19, 'completed': 1777370202, 'created': 1777370183, 'estimated_time': 60, 'id': 'task_01KQ9R9DADEE2KQPYJRY44YWXT', 'progress': 100, 'result': {'images': [{'expires_at': 1777456602, 'url': ['https://upload.apimart.ai/f/image/9998222629798621-f2c44f28-2488-471e-a972-77d19565c9cd-image_task_01KQ9R9YW5V0FN2HN1HVTVWV48_0.jpg']}]}, 'status': 'completed'}}
 2026-04-28 17:56:50.765 | INFO     | app.worker.tasks.generation:generate_images_for_shots:651 - Image saved for shot 18 (async): data\uploads\shot_18_1777370210.png
 2026-04-28 17:56:50.777 | INFO     | app.worker.tasks.generation:generate_images_for_shots:717 - Image generation complete: 1/1 shots for project 2
+2026-04-29 01:14:07.761 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-29 01:14:08.215 | INFO     | app.main:lifespan:39 - Registered 7 AI providers
+2026-04-29 04:12:48.717 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-29 04:12:49.103 | INFO     | app.main:lifespan:39 - Registered 7 AI providers
+2026-04-29 04:12:53.746 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-29 04:12:54.093 | INFO     | app.main:lifespan:39 - Registered 7 AI providers
+2026-04-29 04:13:07.212 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-29 04:13:07.566 | INFO     | app.main:lifespan:39 - Registered 7 AI providers
+2026-04-29 04:13:34.055 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-29 04:13:34.401 | INFO     | app.main:lifespan:39 - Registered 7 AI providers
+2026-04-29 04:13:46.850 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-29 04:13:47.202 | INFO     | app.main:lifespan:39 - Registered 7 AI providers
+2026-04-29 04:14:11.053 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-29 04:14:11.406 | INFO     | app.main:lifespan:39 - Registered 7 AI providers
+2026-04-29 04:14:15.857 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-29 04:14:16.211 | INFO     | app.main:lifespan:39 - Registered 7 AI providers
+2026-04-29 04:14:40.764 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-29 04:14:41.115 | INFO     | app.main:lifespan:39 - Registered 7 AI providers
+2026-04-29 04:15:34.556 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-29 04:15:34.907 | INFO     | app.main:lifespan:39 - Registered 7 AI providers
+2026-04-29 04:15:50.526 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-29 04:15:50.874 | INFO     | app.main:lifespan:39 - Registered 7 AI providers
+2026-04-29 04:16:29.996 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-29 04:16:30.349 | INFO     | app.main:lifespan:39 - Registered 7 AI providers
+2026-04-29 04:16:37.836 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-29 04:16:38.186 | INFO     | app.main:lifespan:39 - Registered 7 AI providers
+2026-04-29 04:17:19.486 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-29 04:17:19.846 | INFO     | app.main:lifespan:39 - Registered 7 AI providers
+2026-04-29 04:17:35.478 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-29 04:17:35.832 | INFO     | app.main:lifespan:39 - Registered 7 AI providers
+2026-04-29 04:17:47.956 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-29 04:17:48.303 | INFO     | app.main:lifespan:39 - Registered 7 AI providers
+2026-04-29 04:18:06.797 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-29 04:18:07.147 | INFO     | app.main:lifespan:39 - Registered 7 AI providers
+2026-04-29 04:18:16.521 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-29 04:18:16.871 | INFO     | app.main:lifespan:39 - Registered 7 AI providers
+2026-04-29 04:18:31.925 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-29 04:18:32.277 | INFO     | app.main:lifespan:39 - Registered 7 AI providers
+2026-04-29 04:19:04.070 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-29 04:19:04.430 | INFO     | app.main:lifespan:39 - Registered 7 AI providers
+2026-04-29 04:19:51.241 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-29 04:19:51.603 | INFO     | app.main:lifespan:39 - Registered 7 AI providers
+2026-04-29 04:20:10.932 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-29 04:20:11.284 | INFO     | app.main:lifespan:39 - Registered 7 AI providers
+2026-04-29 04:20:18.041 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-29 04:20:18.396 | INFO     | app.main:lifespan:39 - Registered 7 AI providers
+2026-04-29 04:20:26.313 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-29 04:20:26.672 | INFO     | app.main:lifespan:39 - Registered 7 AI providers
+2026-04-29 04:20:33.500 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-29 04:20:33.858 | INFO     | app.main:lifespan:39 - Registered 7 AI providers
+2026-04-29 04:20:50.910 | INFO     | app.main:lifespan:21 - Database initialized
+2026-04-29 04:20:51.261 | INFO     | app.main:lifespan:39 - Registered 7 AI providers

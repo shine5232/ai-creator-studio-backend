@@ -1,3 +1,4 @@
+import json
 import time
 
 from sqlalchemy import select
@@ -5,7 +6,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.ai_gateway.base import AIRequest, ServiceType
 from app.ai_gateway.registry import registry
-from app.models.character import Character, CharacterPeriod
+from app.models.character import Character, CharacterPeriod, CharacterReferenceImage
 from app.schemas.character import CreateCharacterRequest, UpdateCharacterRequest
 from app.utils.logger import logger
 
@@ -231,4 +232,118 @@ class CharacterService:
             "character_id": character_id,
             "status": "completed",
             "image_path": character.reference_image_path,
+        }
+
+    async def generate_detailed_character_description(self, character_id: int) -> dict:
+        """Use AI to generate detailed character portrait description and angle-specific prompts."""
+        character = await self.get_character(character_id)
+        if not character:
+            raise ValueError("Character not found")
+
+        providers = registry.get_providers_for_service(ServiceType.TEXT_GENERATION)
+        if not providers:
+            raise ValueError("No text generation provider available")
+        adapter = providers[0]
+
+        # Build a summary of character attributes for the AI
+        attr_parts = []
+        if character.gender:
+            attr_parts.append(f"性别: {character.gender}")
+        if character.age:
+            attr_parts.append(f"年龄: {character.age}岁")
+        if character.nationality:
+            attr_parts.append(f"国籍/种族: {character.nationality}")
+        if character.skin_tone:
+            attr_parts.append(f"肤色: {character.skin_tone}")
+        if character.appearance:
+            attr_parts.append(f"外貌: {character.appearance}")
+        if character.ethnic_features:
+            attr_parts.append(f"种族特征: {character.ethnic_features}")
+        if character.clothing:
+            attr_parts.append(f"穿着: {character.clothing}")
+        if character.personality:
+            attr_parts.append(f"性格: {character.personality}")
+        attr_text = "\n".join(attr_parts)
+
+        prompt = (
+            f"你是一个专业的AI人物肖像描述专家。请根据以下人物基本信息，生成一份详细的人物肖像描述，"
+            f"包含面容、发型、肤色质感、体型、独特标记、整体气质等细节。同时为该人物的4个角度"
+            f"（正面/front、左侧/left、右侧/right、背面/back）各生成一段文生图提示词。\n\n"
+            f"人物名称: {character.name}\n"
+            f"基本信息:\n{attr_text}\n\n"
+            f"请严格按照以下 JSON 格式返回（不要包含任何其他文字）:\n"
+            f"{{\n"
+            f'  "detailed_description": "一段详细的中文人物肖像描述，200-400字",\n'
+            f'  "angle_prompts": {{\n'
+            f'    "front": "正面全身/半身肖像文生图提示词，中文，包含面部细节、穿着、光影",\n'
+            f'    "left": "左侧角度全身/半身肖像文生图提示词",\n'
+            f'    "right": "右侧角度全身/半身肖像文生图提示词",\n'
+            f'    "back": "背面全身肖像文生图提示词"\n'
+            f'  }}\n'
+            f"}}\n"
+        )
+
+        request = AIRequest(
+            prompt=prompt,
+            service_type=ServiceType.TEXT_GENERATION,
+            params={"temperature": 0.7, "max_tokens": 2048},
+        )
+        response = await adapter.generate(request)
+
+        if not response.success or not response.data:
+            raise RuntimeError(f"AI description generation failed: {response.error}")
+
+        text = response.data.get("text", "").strip()
+        # Parse JSON from response
+        start = text.find("{")
+        end = text.rfind("}") + 1
+        if start < 0 or end <= start:
+            raise ValueError("Failed to parse AI response as JSON")
+
+        try:
+            parsed = json.loads(text[start:end])
+        except json.JSONDecodeError:
+            raise ValueError("Failed to parse AI response as JSON")
+
+        detailed_description = parsed.get("detailed_description", "")
+        angle_prompts = parsed.get("angle_prompts", {})
+
+        # Save detailed description
+        character.detailed_description = detailed_description
+
+        # Create/update CharacterReferenceImage records for each angle
+        for angle in ("front", "left", "right", "back"):
+            prompt_cn = angle_prompts.get(angle, "")
+            if not prompt_cn:
+                continue
+
+            # Check if record already exists
+            result = await self.db.execute(
+                select(CharacterReferenceImage).where(
+                    CharacterReferenceImage.character_id == character_id,
+                    CharacterReferenceImage.angle == angle,
+                )
+            )
+            ref_img = result.scalar_one_or_none()
+            if ref_img:
+                ref_img.prompt_cn = prompt_cn
+                if ref_img.status not in ("completed",):
+                    ref_img.status = "pending"
+            else:
+                ref_img = CharacterReferenceImage(
+                    character_id=character_id,
+                    angle=angle,
+                    prompt_cn=prompt_cn,
+                    status="pending",
+                )
+                self.db.add(ref_img)
+
+        await self.db.commit()
+        await self.db.refresh(character)
+
+        logger.info(f"Generated detailed description for character {character_id}")
+        return {
+            "character_id": character_id,
+            "detailed_description": detailed_description,
+            "angle_prompts": angle_prompts,
         }
